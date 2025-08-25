@@ -5,7 +5,7 @@ const API_BASE_URL = '/api/v1';
 function checkAuth() {
     const token = localStorage.getItem('adminToken');
     if (token && window.location.pathname.endsWith('admin-login.html')) {
-        window.location.href = '/admin/dashboard';
+        window.location.href = 'dashboard.html';
     } else if (!token && !window.location.pathname.endsWith('admin-login.html') && 
               !window.location.pathname.includes('admin-login.html')) {
         window.location.href = '/admin-login.html';
@@ -56,7 +56,7 @@ function handleLoginForm() {
             // Save token and redirect
             if (data.token) {
                 localStorage.setItem('adminToken', data.token);
-                window.location.href = '/admin/dashboard';
+                window.location.href = 'dashboard.html';
             } else {
                 throw new Error('No authentication token received');
             }
@@ -139,7 +139,7 @@ function handleSignupForm() {
             // Save token and redirect
             if (data.token) {
                 localStorage.setItem('adminToken', data.token);
-                window.location.href = '/admin/dashboard';
+                window.location.href = 'dashboard.html';
             } else {
                 throw new Error('Registration successful but no authentication token received');
             }

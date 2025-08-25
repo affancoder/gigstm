@@ -214,7 +214,7 @@
             // Check if user is already logged in
             const token = localStorage.getItem('adminToken');
             if (token) {
-                window.location.href = 'admin-dashboard.html';
+                window.location.href = 'dashboard.html';
             }
         });
         
@@ -239,7 +239,7 @@
             // Check if user is already logged in
             const token = localStorage.getItem('adminToken');
             if (token) {
-                window.location.href = 'admin-dashboard.html';
+                window.location.href = 'dashboard.html';
                 return;
             }
             
@@ -303,7 +303,7 @@
                     if (data.token) {
                         console.log('Login successful, storing token...');
                         localStorage.setItem('adminToken', data.token);
-                        window.location.href = '/admin/dashboard';
+                        window.location.href = 'dashboard.html';
                     } else {
                         console.error('No token in response:', data);
                         throw new Error('No authentication token received');
