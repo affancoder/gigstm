@@ -94,6 +94,16 @@
     </div>
 
     <script>
+        // Check if user is authenticated
+        const TOKEN_KEY = 'adminToken';
+        const token = localStorage.getItem(TOKEN_KEY);
+        
+        if (!token) {
+            window.location.href = 'admin-login.html';
+            // Prevent further execution
+            throw new Error('Not authenticated');
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             // DOM Elements
             const usersTableBody = document.getElementById('users-table-body');
@@ -239,10 +249,28 @@
                 refreshBtn?.addEventListener('click', loadUsers);
 
                 // Logout button
-                logoutBtn?.addEventListener('click', () => {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('authToken');
-                    window.location.href = 'index.html';
+                logoutBtn.addEventListener('click', async () => {
+                    try {
+                        // Call the logout API
+                        const response = await fetch('http://localhost:3001/api/v1/auth/admin/logout', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            credentials: 'include'
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error('Logout failed');
+                        }
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                    } finally {
+                        // Always clear local storage and redirect
+                        localStorage.removeItem(TOKEN_KEY);
+                        window.location.href = 'admin-login.html';
+                    }
                 });
             };
 
