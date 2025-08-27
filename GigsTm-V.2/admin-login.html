@@ -111,6 +111,7 @@
             
             <!-- Signup Form -->
             <div id="signup-tab" class="tab-content">
+                <div id="signup-error" style="display:none; margin-bottom:1rem; padding:0.75rem; background-color:#fef2f2; border-left:4px solid #ef4444; color:#b91c1c;"></div>
                 <form id="adminSignupForm" class="space-y-4">
                     <div>
                         <label for="signup-name" class="block text-sm font-medium text-gray-700">Full Name</label>
@@ -202,7 +203,7 @@
             window.location.hash = tabName;
         }
         
-        // Check URL hash on page load
+        // Remove the token check from the load event listener
         window.addEventListener('load', function() {
             const hash = window.location.hash.substring(1);
             if (hash === 'signup') {
@@ -210,47 +211,38 @@
             } else {
                 showTab('login');
             }
-            
-            // Check if user is already logged in
-            const token = localStorage.getItem('adminToken');
-            if (token) {
-                window.location.href = 'dashboard.html';
-            }
         });
-        
-        // Show error message function
-        function showError(message) {
-            const errorDiv = document.getElementById('login-error');
-            if (errorDiv) {
-                errorDiv.textContent = message;
-                errorDiv.style.display = 'block';
+
+        // Add token validation function
+        async function validateToken(token) {
+            try {
+                const response = await fetch('http://localhost:3000/api/admin/validate-token', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
                 
-                // Auto-hide after 5 seconds
-                setTimeout(() => {
-                    errorDiv.style.display = 'none';
-                }, 5000);
+                if (response.ok) {
+                    return true;
+                }
+                // If token is invalid, remove it
+                localStorage.removeItem('adminToken');
+                return false;
+            } catch (error) {
+                console.error('Token validation error:', error);
+                localStorage.removeItem('adminToken');
+                return false;
             }
         }
-        
-        // Initialize form submission handlers
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, initializing admin login form...');
+
+        document.addEventListener('DOMContentLoaded', async function() {
+        console.log('DOM loaded, initializing admin login form...');
             
-            // Check if user is already logged in
-            const token = localStorage.getItem('adminToken');
-            if (token) {
-                window.location.href = 'dashboard.html';
-                return;
-            }
-            
-            // Login form submission
-            const loginForm = document.getElementById('adminLoginForm');
-            if (!loginForm) {
-                console.error('Login form not found!');
-                return;
-            }
-            
-            console.log('Login form found, adding event listener...');
+        // Login form submission
+        const loginForm = document.getElementById('adminLoginForm');
+        if (loginForm) {
             loginForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 console.log('Login form submitted');
@@ -259,185 +251,145 @@
                 const password = document.getElementById('login-password').value;
                 const submitBtn = this.querySelector('button[type="submit"]');
                 const errorElement = document.getElementById('login-error');
-                const originalBtnText = submitBtn.innerHTML;
                 
                 // Basic validation
                 if (!email || !password) {
-                    errorElement.textContent = 'Please enter both email and password';
-                    errorElement.classList.remove('hidden');
+                    showError('Please enter both email and password');
                     return;
                 }
                 
                 // Show loading state
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = 'Signing in...';
-                errorElement.classList.add('hidden');
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+                errorElement.style.display = 'none';
                 
-                console.log('Sending login request...');
                 try {
-                    const response = await fetch('/api/v1/auth/admin/login', {
+                    console.log('Sending login request...');
+                    const response = await fetch('http://localhost:3000/api/auth/admin/login', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
+                            'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({ email, password }),
                         credentials: 'include'
                     });
                     
-                    console.log('Response status:', response.status);
-                    let data;
-                    try {
-                        data = await response.json();
-                        console.log('Response data:', data);
-                    } catch (jsonError) {
-                        console.error('Error parsing JSON:', jsonError);
-                        throw new Error('Invalid server response');
-                    }
+                    const data = await response.json();
+                    console.log('Login response:', data);
                     
-                    if (!response.ok) {
-                        throw new Error(data.message || `Login failed with status ${response.status}`);
-                    }
-                    
-                    // Store the token and redirect
-                    if (data.token) {
-                        console.log('Login successful, storing token...');
+                    if (response.ok && data.token) {
+                        // Store token
                         localStorage.setItem('adminToken', data.token);
-                        window.location.href = 'dashboard.html';
+                        
+                        // Show success message
+                        errorElement.textContent = 'Login successful! Redirecting...';
+                        errorElement.style.display = 'block';
+                        errorElement.classList.remove('text-red-600');
+                        errorElement.classList.add('text-green-600');
+                        
+                        // Redirect to dashboard
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1000);
                     } else {
-                        console.error('No token in response:', data);
-                        throw new Error('No authentication token received');
+                        throw new Error(data.message || 'Login failed');
                     }
                 } catch (error) {
                     console.error('Login error:', error);
-                    errorElement.textContent = error.message || 'Login failed. Please try again.';
-                    errorElement.classList.remove('hidden');
+                    showError(error.message || 'Login failed. Please try again.');
                 } finally {
-                    // Reset button state
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.innerHTML = 'Sign In';
                 }
             });
-            
-            console.log('Admin login form initialization complete');
-            
-            // Signup form submission
-            const signupForm = document.getElementById('adminSignupForm');
-            if (signupForm) {
-                signupForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    
-                    const name = document.getElementById('signup-name').value.trim();
-                    const email = document.getElementById('signup-email').value.trim();
-                    const password = document.getElementById('signup-password').value;
-                    const confirmPassword = document.getElementById('confirm-password').value;
-                    const errorElement = document.getElementById('signup-error');
-                    const submitBtn = signupForm.querySelector('button[type="submit"]');
-                    const originalBtnText = submitBtn.innerHTML;
-                    
-                    // Basic validation
-                    if (!name || !email || !password || !confirmPassword) {
-                        errorElement.textContent = 'All fields are required';
-                        errorElement.classList.remove('hidden');
-                        return;
-                    }
-                    
-                    if (password !== confirmPassword) {
-                        errorElement.textContent = 'Passwords do not match';
-                        errorElement.classList.remove('hidden');
-                        return;
-                    }
-                    
-                    if (password.length < 8) {
-                        errorElement.textContent = 'Password must be at least 8 characters';
-                        errorElement.classList.remove('hidden');
-                        return;
-                    }
-                    
-                    // Show loading state
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = 'Creating Account...';
-                    errorElement.classList.add('hidden');
-                    
-                    try {
-                        console.log('Sending signup request...');
-                        const response = await fetch('/api/v1/admin/register', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                name,
-                                email,
-                                password
-                            }),
-                            credentials: 'include'
-                        });
-                        
-                        console.log('Signup response status:', response.status);
-                        let data;
-                        try {
-                            data = await response.json();
-                            console.log('Signup response data:', data);
-                        } catch (jsonError) {
-                            console.error('Error parsing signup response:', jsonError);
-                            throw new Error('Invalid server response');
-                        }
-                        
-                        if (!response.ok) {
-                            throw new Error(data.message || `Registration failed with status ${response.status}`);
-                        }
-                        
-                        // Redirect to login with success message
-                        showTab('login');
-                        const loginError = document.getElementById('login-error');
-                        loginError.textContent = 'Account created successfully! Please sign in.';
-                        loginError.classList.remove('hidden', 'text-red-600');
-                        loginError.classList.add('text-green-600');
-                        
-                        // Clear form
-                        signupForm.reset();
-                        
-                        // Auto-fill login form
-                        document.getElementById('login-email').value = email;
-                        
-                    } catch (error) {
-                        console.error('Signup error:', error);
-                        errorElement.textContent = error.message || 'Failed to create account. Please try again.';
-                        errorElement.classList.remove('hidden');
-                    } finally {
-                        // Reset button state
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalBtnText;
-                    }
-                });
-            }
-            
-            // Forgot password link
-            const forgotPasswordLink = document.getElementById('forgot-password-link');
-            if (forgotPasswordLink) {
-                forgotPasswordLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const email = document.getElementById('login-email').value;
-                    const modal = document.getElementById('forgot-password-modal');
-                    const emailInput = document.getElementById('reset-email');
-                    
-                    if (email) {
-                        emailInput.value = email;
-                    }
-                    
-                    modal.classList.remove('hidden');
-                    modal.classList.add('flex');
-                    
-                    // Focus the email input
-                    setTimeout(() => {
-                        emailInput.focus();
-                    }, 100);
-                });
-            }
-        });
+        }
         
+        // Signup form submission
+        const signupForm = document.getElementById('adminSignupForm');
+        if (signupForm) {
+            signupForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('signup-name').value.trim();
+                const email = document.getElementById('signup-email').value.trim();
+                const password = document.getElementById('signup-password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+                const errorElement = document.getElementById('signup-error');
+                const submitBtn = this.querySelector('button[type="submit"]');
+                
+                // Validation
+                if (!name || !email || !password || !confirmPassword) {
+                    errorElement.textContent = 'All fields are required';
+                    errorElement.style.display = 'block';
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    errorElement.textContent = 'Passwords do not match';
+                    errorElement.style.display = 'block';
+                    return;
+                }
+                
+                if (password.length < 8) {
+                    errorElement.textContent = 'Password must be at least 8 characters';
+                    errorElement.style.display = 'block';
+                    return;
+                }
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+                errorElement.style.display = 'none';
+                
+                try {
+                    console.log('Sending signup request...');
+                    const response = await fetch('http://localhost:3000/api/auth/admin/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name,
+                            email,
+                            password
+                        }),
+                        credentials: 'include'
+                    });
+                    
+                    const data = await response.json();
+                    console.log('Signup response:', data);
+                    
+                    if (response.ok) {
+                        // Store token if provided
+                        if (data.token) {
+                            localStorage.setItem('adminToken', data.token);
+                        }
+                        
+                        // Show success message
+                        errorElement.textContent = 'Account created successfully! Redirecting...';
+                        errorElement.style.display = 'block';
+                        errorElement.classList.remove('text-red-600');
+                        errorElement.classList.add('text-green-600');
+                        
+                        // Redirect to dashboard
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1500);
+                    } else {
+                        throw new Error(data.message || 'Registration failed');
+                    }
+                } catch (error) {
+                    console.error('Signup error:', error);
+                    errorElement.textContent = error.message || 'Failed to create account. Please try again.';
+                    errorElement.style.display = 'block';
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Create Account';
+                }
+            });
+        }
+    });
+
         // Handle password reset
         async function handlePasswordReset() {
             const email = document.getElementById('reset-email').value.trim();
@@ -457,6 +409,59 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+                
+                const data = await response.json().catch(() => ({
+                    message: 'Invalid server response'
+                }));
+                
+                if (response.ok) {
+                    messageElement.textContent = data.message || 'Password reset link has been sent to your email.';
+                    messageElement.classList.remove('hidden', 'text-red-600');
+                    messageElement.classList.add('text-green-600');
+                    
+                    // Clear the email field after successful submission
+                    document.getElementById('reset-email').value = '';
+                    
+                    // Close the modal after 3 seconds
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                        messageElement.classList.add('hidden');
+                    }, 3000);
+                } else {
+                    throw new Error(data.message || 'Failed to send reset link');
+                }
+            } catch (error) {
+                console.error('Password reset error:', error);
+                messageElement.textContent = error.message || 'Failed to send reset link. Please try again.';
+                messageElement.classList.remove('hidden', 'text-green-600');
+                messageElement.classList.add('text-red-600');
+            }
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('forgot-password-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+                this.classList.remove('flex');
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            const modal = document.getElementById('forgot-password-modal');
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        });
+    </script>
+</body>
+</html>
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({ email })
