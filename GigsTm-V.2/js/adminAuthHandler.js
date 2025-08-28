@@ -53,10 +53,11 @@ function handleLoginForm() {
                 throw new Error(data.message || 'Login failed. Please check your credentials.');
             }
 
-            // Save token and redirect
+            // Save token and update UI
             if (data.token) {
                 localStorage.setItem('adminToken', data.token);
-                window.location.href = 'dashboard.html';
+                // Show success message or update UI as needed
+                showSuccess('Login successful!');
             } else {
                 throw new Error('No authentication token received');
             }
@@ -77,6 +78,22 @@ function showError(message) {
     if (errorDiv) {
         errorDiv.textContent = message;
         errorDiv.style.display = 'block';
+        errorDiv.className = 'error-message';
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            errorDiv.style.display = 'none';
+        }, 5000);
+    }
+}
+
+// Show success message
+function showSuccess(message) {
+    const errorDiv = document.getElementById('login-error');
+    if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        errorDiv.className = 'success-message';
         
         // Auto-hide after 5 seconds
         setTimeout(() => {
@@ -136,10 +153,11 @@ function handleSignupForm() {
                 throw new Error(data.message || 'Registration failed. Please try again.');
             }
 
-            // Save token and redirect
+            // Save token and update UI
             if (data.token) {
                 localStorage.setItem('adminToken', data.token);
-                window.location.href = 'dashboard.html';
+                // Show success message or update UI as needed
+                showSuccess('Account created successfully!');
             } else {
                 throw new Error('Registration successful but no authentication token received');
             }

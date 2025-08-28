@@ -117,7 +117,19 @@
                 try {
                     const token = localStorage.getItem('token') || localStorage.getItem('authToken');
                     if (!token) {
-                        window.location.href = 'index.html';
+                        usersTableBody.innerHTML = `
+                            <tr>
+                                <td colspan="5" class="px-6 py-8 text-center">
+                                    <div class="flex flex-col items-center justify-center space-y-4">
+                                        <i class="fas fa-sign-in-alt text-4xl text-blue-500"></i>
+                                        <p class="text-lg font-medium">Authentication Required</p>
+                                        <p class="text-gray-500">Please log in to view users.</p>
+                                        <a href="index.html" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                                            Go to Login
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>`;
                         return;
                     }
 
@@ -249,8 +261,13 @@
             // Update user info in the header
             const updateUserInfo = async () => {
                 const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                const userEmailElement = document.getElementById('user-email');
+                
                 if (!token) {
-                    window.location.href = 'index.html';
+                    if (userEmailElement) {
+                        userEmailElement.textContent = 'Not logged in';
+                        userEmailElement.classList.add('text-red-500');
+                    }
                     return false;
                 }
                 
@@ -260,7 +277,6 @@
                     if (tokenParts.length !== 3) throw new Error('Invalid token format');
                     
                     const payload = JSON.parse(atob(tokenParts[1]));
-                    const userEmailElement = document.getElementById('user-email');
                     const userAvatar = document.getElementById('user-avatar');
                     
                     if (userEmailElement) {
