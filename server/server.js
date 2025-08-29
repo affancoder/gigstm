@@ -18,28 +18,52 @@ const allowedOrigins = [
   'http://localhost',
   'http://127.0.0.1',
   'http://localhost:5500',
-  'http://127.0.0.1:5500'
+  'http://127.0.0.1:5500',
+  'https://gigstm.onrender.com', // Add your Render frontend URL here
+  'https://gigstm-api.onrender.com' // Add your Render backend URL here
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+    // Allow requests with no origin (like mobile apps, curl, postman)
+    if (!origin) return callback(null, true);
+    
+    // Check if the origin is in the allowed list or is a subdomain of your Render app
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.endsWith('.onrender.com') || // Allow all Render deployments
+      process.env.NODE_ENV === 'development' // Allow all in development
+    ) {
+      return callback(null, true);
     }
+    
+    return callback(new Error(`Not allowed by CORS: ${origin}`));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Content-Length', 'Accept'],
-  exposedHeaders: ['Set-Cookie'],
-  maxAge: 3600 // 1 hour
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'X-Requested-With', 
+    'Content-Length', 
+    'Accept',
+    'X-Access-Token',
+    'Access-Control-Allow-Origin'
+  ],
+  exposedHeaders: [
+    'Set-Cookie',
+    'Access-Control-Allow-Credentials'
+  ],
+  maxAge: 3600, // 1 hour
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 };
 
+// Apply CORS middleware
 app.use(cors(corsOptions));
 
 // Handle preflight requests
-app.options('*', cors());
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

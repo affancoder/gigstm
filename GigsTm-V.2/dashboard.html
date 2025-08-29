@@ -94,6 +94,7 @@
             </div>
 
     <script>
+<<<<<<< HEAD
         // State
         let currentState = {
             currentPage: 1,
@@ -113,6 +114,19 @@
         };
 
         document.addEventListener('DOMContentLoaded', function() {
+=======
+        // Check if user is authenticated
+        const TOKEN_KEY = 'adminToken';
+        const token = localStorage.getItem(TOKEN_KEY);
+        
+        if (!token) {
+            window.location.href = 'admin-login.html';
+            // Prevent further execution
+            throw new Error('Not authenticated');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+>>>>>>> 368aa66eb132679624d2baca1e6421ae57cd0d6c
             // DOM Elements
             const usersTableBody = document.getElementById('users-table-body');
             const searchInput = document.getElementById('search-users');
@@ -298,11 +312,40 @@
                         loadUsers();
                     }
                 });
+<<<<<<< HEAD
                 
                 dom.nextPageBtn.addEventListener('click', () => {
                     if ((currentPage * itemsPerPage) < totalUsers) {
                         currentPage++;
                         loadUsers();
+=======
+
+                // Refresh button
+                refreshBtn?.addEventListener('click', loadUsers);
+
+                // Logout button
+                logoutBtn.addEventListener('click', async () => {
+                    try {
+                        // Call the logout API
+                        const response = await fetch('http://localhost:3001/api/v1/auth/admin/logout', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            credentials: 'include'
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error('Logout failed');
+                        }
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                    } finally {
+                        // Always clear local storage and redirect
+                        localStorage.removeItem(TOKEN_KEY);
+                        window.location.href = 'admin-login.html';
+>>>>>>> 368aa66eb132679624d2baca1e6421ae57cd0d6c
                     }
                 });
             }
