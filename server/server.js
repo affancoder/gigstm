@@ -48,7 +48,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../GigsTm-V.2')));
 
 // Serve static files for admin routes
-app.use('/admin', express.static(path.join(__dirname, '../GigsTm-V.2')));
+// app.use('/admin', express.static(path.join(__dirname, '../GigsTm-V.2')));
 
 // Log all requests for debugging
 app.use((req, res, next) => {

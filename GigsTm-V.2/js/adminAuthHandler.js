@@ -175,8 +175,8 @@ function handleSignupForm() {
 // Check authentication on page load
 document.addEventListener('DOMContentLoaded', function() {
     checkAuth();
-    handleLoginForm();
-    handleSignupForm();
+    // handleLoginForm();
+    // handleSignupForm();
 });
 
 // Logout function

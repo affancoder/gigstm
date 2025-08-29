@@ -13,6 +13,7 @@ exports.protect = async (req, res, next) => {
     else if (req.cookies && req.cookies.adminToken) {
         token = req.cookies.adminToken;
     }
+    console.log(token);
 
     // Check if token exists
     if (!token) {
@@ -51,9 +52,12 @@ exports.protect = async (req, res, next) => {
 
 // Middleware to check if user is admin
 exports.isAdmin = (req, res, next) => {
+    console.log("isadmin call")
     if (req.user && req.user.role === 'admin') {
+        console.log("isadmin")
         next();
     } else {
+        console.log("not admin")
         res.status(403).json({
             success: false,
             message: 'Not authorized as an admin'

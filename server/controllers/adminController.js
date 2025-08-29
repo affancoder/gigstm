@@ -1,5 +1,55 @@
 const User = require('../models/User');
 
+// @desc    Get all users
+// @route   GET /api/admin/users
+// @access  Private/Admin
+exports.getUsers = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        const search = req.query.search || '';
+
+        // Build query
+        const query = { role: 'user' };
+        
+        if (search) {
+            query.$or = [
+                { fullName: { $regex: search, $options: 'i' } },
+                { email: { $regex: search, $options: 'i' } },
+                { phoneNumber: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        // Get users with pagination and populate profile data
+        const users = await User.find(query)
+            .select('fullName email phoneNumber isActive lastLogin createdAt')
+            .populate('profile', 'personalInfo documents address about')
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        // Get total count for pagination
+        const total = await User.countDocuments(query);
+
+        res.status(200).json({
+            success: true,
+            count: users.length,
+            total,
+            totalPages: Math.ceil(total / limit),
+            currentPage: page,
+            data: users
+        });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error',
+            error: error.message
+        });
+    }
+};
+
 // @desc    Get dashboard stats
 // @route   GET /api/admin/dashboard-stats
 // @access  Private/Admin

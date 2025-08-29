@@ -51,50 +51,68 @@
                 </div>
             </div>
 
-            <!-- Users Table -->
+            <!-- User Forms Table -->
             <div class="bg-white rounded-lg shadow overflow-hidden">
-                <div class="p-6 border-b flex justify-between items-center">
-                    <h2 class="text-xl font-semibold">All Users</h2>
-                    <div class="flex items-center space-x-4">
-                        <div class="relative">
-                            <input type="text" id="search-users" placeholder="Search users..." 
-                                   class="pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                        </div>
-                        <button id="refresh-users" class="p-2 text-gray-600 hover:text-blue-600">
-                            <i class="fas fa-sync-alt"></i>
-                        </button>
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-lg font-medium text-gray-900">User Form Submissions</h2>
+                        <a href="userform.html" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-plus-circle mr-2"></i>Add New User
+                        </a>
                     </div>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Basic Info</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documents</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td colspan="5" class="px-6 py-8 text-center text-gray-500">
-                                    <div class="flex flex-col items-center justify-center space-y-2">
-                                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                                        <p>Loading user data...</p>
-                                    </div>
+                            <tr id="loading-row">
+                                <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
+                                    <i class="fas fa-spinner fa-spin mr-2"></i> Loading user forms...
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                <div class="bg-white px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+                    <div class="text-sm text-gray-500">
+                        Showing <span id="showing-from">0</span> to <span id="showing-to">0</span> of <span id="total-users">0</span> users
+                    </div>
+                    <div class="flex space-x-2">
+                        <button id="prev-page" class="px-3 py-1 border rounded-md text-sm font-medium disabled:opacity-50" disabled>Previous</button>
+                        <button id="next-page" class="px-3 py-1 border rounded-md text-sm font-medium disabled:opacity-50" disabled>Next</button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        // State
+        let currentState = {
+            currentPage: 1,
+            itemsPerPage: 10,
+            searchQuery: ''
+        };
+
+        // DOM Elements
+        const dom = {
+            usersTableBody: document.getElementById('users-table-body'),
+            loadingRow: document.getElementById('loading-row'),
+            prevPageBtn: document.getElementById('prev-page'),
+            nextPageBtn: document.getElementById('next-page'),
+            showingFrom: document.getElementById('showing-from'),
+            showingTo: document.getElementById('showing-to'),
+            totalUsersEl: document.getElementById('total-users')
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
             // DOM Elements
             const usersTableBody = document.getElementById('users-table-body');
             const searchInput = document.getElementById('search-users');
@@ -113,162 +131,211 @@
             };
 
             // Load users from the server
-            const loadUsers = async () => {
+            async function loadUsers() {
                 try {
-                    const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                    showLoading(true);
+                    
+                    // Get the token from localStorage
+                    const token = localStorage.getItem('token');
                     if (!token) {
-                        usersTableBody.innerHTML = `
-                            <tr>
-                                <td colspan="5" class="px-6 py-8 text-center">
-                                    <div class="flex flex-col items-center justify-center space-y-4">
-                                        <i class="fas fa-sign-in-alt text-4xl text-blue-500"></i>
-                                        <p class="text-lg font-medium">Authentication Required</p>
-                                        <p class="text-gray-500">Please log in to view users.</p>
-                                        <a href="index.html" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                                            Go to Login
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>`;
-                        return;
-                    }
-
-                    const response = await fetch('/api/profile/all', {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (response.status === 403) {
-                        // User doesn't have admin access
-                        usersTableBody.innerHTML = `
-                            <tr>
-                                <td colspan="5" class="px-6 py-8 text-center">
-                                    <div class="flex flex-col items-center justify-center space-y-4">
-                                        <i class="fas fa-lock text-4xl text-yellow-500"></i>
-                                        <p class="text-lg font-medium">Admin Access Required</p>
-                                        <p class="text-gray-500">You don't have permission to view all users.</p>
-                                        <a href="userform.html" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                                            Go to My Profile
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>`;
-                        return;
-                    }
-
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({}));
-                        throw new Error(errorData.message || 'Failed to load users');
+                        throw new Error('No authentication token found. Please log in again.');
                     }
                     
-                    const result = await response.json();
-                    if (result.success && result.data) {
-                        allUsers = result.data;
+                    console.log('Fetching users from:', `/api/admin/users?page=${currentPage}&limit=${itemsPerPage}`);
+                    console.log('Using token:', token ? 'Token exists' : 'No token');
+                    
+                    const response = await fetch(`/api/admin/users?page=${currentPage}&limit=${itemsPerPage}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        credentials: 'include'
+                    });
+                    
+                    console.log('Response status:', response.status);
+                    
+                    if (response.status === 401) {
+                        // Handle unauthorized
+                        window.location.href = 'admin-login.html';
+                        return;
+                    }
+                    
+                    const data = await response.json().catch(err => {
+                        console.error('Error parsing JSON response:', err);
+                        throw new Error('Invalid response from server');
+                    });
+                    
+                    console.log('Response data:', data);
+                    
+                    if (!response.ok) {
+                        throw new Error(data.message || `Server returned ${response.status} status`);
+                    }
+                    
+                    if (data.success) {
+                        allUsers = data.data || [];
+                        totalUsers = data.total || 0;
+                        
+                        if (allUsers.length === 0) {
+                            console.log('No users found');
+                        } else {
+                            console.log(`Loaded ${allUsers.length} users`);
+                        }
+                        
                         renderUsers(allUsers);
+                        updatePagination();
+                    } else {
+                        throw new Error(data.message || 'Failed to load users: Unknown error');
                     }
                 } catch (error) {
-                    console.error('Error loading users:', error);
-                    usersTableBody.innerHTML = `
-                        <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-red-500">
-                                Error loading users: ${error.message}
-                            </td>
-                        </tr>`;
+                    console.error('Error in loadUsers:', {
+                        error: error.message,
+                        stack: error.stack,
+                        currentPage,
+                        itemsPerPage
+                    });
+                    showError(`Error: ${error.message}`);
+                } finally {
+                    showLoading(false);
                 }
-            };
-
+            }
+            
             // Render users in the table
-            const renderUsers = (users) => {
-                if (!users || users.length === 0) {
-                    usersTableBody.innerHTML = `
+            function renderUsers(users) {
+                const tbody = dom.usersTableBody;
+                
+                if (users.length === 0) {
+                    tbody.innerHTML = `
                         <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                                No users found
+                            <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
+                                No user forms found
                             </td>
                         </tr>`;
                     return;
                 }
-
-                usersTableBody.innerHTML = users.map(user => `
+                
+                tbody.innerHTML = users.map(user => {
+                    const profile = user.profile || {};
+                    const personalInfo = profile.personalInfo || {};
+                    const documents = profile.documents || {};
+                    const address = profile.address || {};
+                    
+                    return `
                     <tr class="hover:bg-gray-50">
+                        <!-- Basic Info -->
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                    <span class="text-blue-600 font-medium">${user.name ? user.name.charAt(0).toUpperCase() : 'U'}</span>
+                                    <span class="text-blue-600 font-medium">${user.fullName ? user.fullName.charAt(0).toUpperCase() : 'U'}</span>
                                 </div>
                                 <div class="ml-4">
-                                    <div class="text-sm font-medium text-gray-900">${user.name || 'N/A'}</div>
-                                    <div class="text-sm text-gray-500">${user.role || 'user'}</div>
+                                    <div class="text-sm font-medium text-gray-900">${personalInfo.name || user.fullName || 'N/A'}</div>
+                                    <div class="text-sm text-gray-500">${personalInfo.jobRole || 'N/A'}</div>
                                 </div>
                             </div>
                         </td>
+                        
+                        <!-- Contact Info -->
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">${user.email || 'N/A'}</div>
-                            <div class="text-sm text-gray-500">${user.mobile || 'N/A'}</div>
+                            <div class="text-sm text-gray-500">${personalInfo.mobile || user.phoneNumber || 'N/A'}</div>
                         </td>
+                        
+                        <!-- Documents -->
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                ${user.role === 'admin' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}">
-                                ${user.role || 'user'}
+                            <div class="text-sm text-gray-900">
+                                <span class="font-medium">Aadhaar:</span> ${documents.aadhaar ? '•••• ' + documents.aadhaar.slice(-4) : 'N/A'}
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                <span class="font-medium">PAN:</span> ${documents.pan || 'N/A'}
+                            </div>
+                        </td>
+                        
+                        <!-- Address -->
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900">${address.street || 'N/A'}</div>
+                            <div class="text-sm text-gray-500">
+                                ${[address.city, address.state, address.pincode].filter(Boolean).join(', ') || 'N/A'}
+                            </div>
+                        </td>
+                        
+                        <!-- Status -->
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${user.isActive ? 'Active' : 'Inactive'}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                Active
-                            </span>
+                        
+                        <!-- Actions -->
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button onclick="viewUserDetails('${user._id}')" class="text-blue-600 hover:text-blue-900 mr-3">View</button>
+                            <button onclick="editUser('${user._id}')" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</button>
+                            <button onclick="deleteUser('${user._id}')" class="text-red-600 hover:text-red-900">Delete</button>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button onclick="viewUserDetails('${user._id}')" class="text-blue-600 hover:text-blue-900 mr-3">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button onclick="editUser('${user._id}')" class="text-indigo-600 hover:text-indigo-900 mr-3">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button onclick="deleteUser('${user._id}')" class="text-red-600 hover:text-red-900">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-            };
-
-            // Setup event listeners
-            const setupEventListeners = () => {
-                // Search functionality
-                searchInput?.addEventListener('input', (e) => {
-                    const searchTerm = e.target.value.toLowerCase();
-                    const filtered = allUsers.filter(user => 
-                        (user.name && user.name.toLowerCase().includes(searchTerm)) ||
-                        (user.email && user.email.toLowerCase().includes(searchTerm)) ||
-                        (user.mobile && user.mobile.includes(searchTerm))
-                    );
-                    renderUsers(filtered);
-                });
-
-                // Refresh button
-                refreshBtn?.addEventListener('click', loadUsers);
-
-                // Logout button
-                logoutBtn?.addEventListener('click', () => {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('authToken');
-                    window.location.href = 'index.html';
-                });
-            };
-
-            // Update user info in the header
-            const updateUserInfo = async () => {
-                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
-                const userEmailElement = document.getElementById('user-email');
+                    </tr>`;
+                }).join('');
+            }
+            
+            // Update pagination controls
+            function updatePagination() {
+                const start = (currentPage - 1) * itemsPerPage + 1;
+                const end = Math.min(currentPage * itemsPerPage, totalUsers);
                 
-                if (!token) {
-                    if (userEmailElement) {
-                        userEmailElement.textContent = 'Not logged in';
-                        userEmailElement.classList.add('text-red-500');
+                dom.showingFrom.textContent = start;
+                dom.showingTo.textContent = end;
+                dom.totalUsersEl.textContent = totalUsers;
+                
+                dom.prevPageBtn.disabled = currentPage <= 1;
+                dom.nextPageBtn.disabled = end >= totalUsers;
+            }
+            
+            // Setup event listeners
+            function setupEventListeners() {
+                // Pagination
+                dom.prevPageBtn.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        loadUsers();
                     }
-                    return false;
+                });
+                
+                dom.nextPageBtn.addEventListener('click', () => {
+                    if ((currentPage * itemsPerPage) < totalUsers) {
+                        currentPage++;
+                        loadUsers();
+                    }
+                });
+            }
+            
+            // Show loading state
+            function showLoading(show) {
+                if (show) {
+                    dom.loadingRow.style.display = '';
+                } else if (dom.loadingRow) {
+                    dom.loadingRow.style.display = 'none';
+                }
+            }
+            
+            // Show error message
+            function showError(message) {
+                const tbody = dom.usersTableBody;
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-sm text-red-500">
+                            <i class="fas fa-exclamation-circle mr-2"></i> ${message}
+                        </td>
+                    </tr>`;
+            }
+            
+            // Update user info in the header
+            function updateUserInfo() {
+                // Get user info from localStorage or your authentication system
+                const userEmail = localStorage.getItem('userEmail');
+                const userName = localStorage.getItem('userName');
+                
+                // Update user info in the header
+                if (userEmail) {
+                    document.getElementById('user-email').textContent = userEmail;
                 }
                 
                 try {
@@ -332,9 +399,155 @@
                 }
             };
 
-            // Initialize the dashboard
-            initDashboard();
+            // Load users when the page loads
+            loadUsers();
+            
+            // Setup event listeners
+            setupEventListeners();
         });
+
+        // Load users from the server
+        async function loadUsers() {
+            try {
+                showLoading(true);
+                
+                const response = await fetch(`/api/admin/users?page=${currentState.currentPage}&limit=${currentState.itemsPerPage}&search=${encodeURIComponent(currentState.searchQuery)}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) throw new Error('Failed to fetch users');
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    renderUsers(data.data);
+                } else {
+                    throw new Error(data.message || 'Failed to load users');
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showError('Failed to load users. Please try again.');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Format date to display
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Render users in the table with form data
+        function renderUsers(users) {
+            const tbody = dom.usersTableBody;
+            dom.loadingRow?.remove();
+            
+            if (users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-4 py-4 text-center text-sm text-gray-500">
+                            No user forms found
+                        </td>
+                    </tr>`;
+                return;
+            }
+            
+            tbody.innerHTML = users.map(user => {
+                const profile = user.profile || {};
+                const personalInfo = profile.personalInfo || {};
+                const documents = profile.documents || {};
+                const address = profile.address || {};
+                const about = profile.about || 'No additional information provided';
+                
+                return `
+                <tr class="hover:bg-gray-50 border-t">
+                    <!-- Personal Info Column -->
+                    <td class="px-4 py-4">
+                        <div class="text-sm font-medium text-gray-900">${personalInfo.name || 'N/A'}</div>
+                        <div class="text-sm text-gray-500">${user.email || 'N/A'}</div>
+                        <div class="text-sm text-gray-500">${personalInfo.mobile || user.phoneNumber || 'N/A'}</div>
+                        <div class="mt-1 text-xs text-gray-500">
+                            <span class="font-medium">Role:</span> ${personalInfo.jobRole || 'N/A'}<br>
+                            <span class="font-medium">Gender:</span> ${personalInfo.gender || 'N/A'}<br>
+                            <span class="font-medium">DOB:</span> ${formatDate(personalInfo.dob)}
+                        </div>
+                    </td>
+                    
+                    <!-- Documents Column -->
+                    <td class="px-4 py-4 text-sm text-gray-500">
+                        <div><span class="font-medium">Aadhaar:</span> ${documents.aadhaar ? '****' + documents.aadhaar.slice(-4) : 'N/A'}</div>
+                        <div><span class="font-medium">PAN:</span> ${documents.pan || 'N/A'}</div>
+                    </td>
+                    
+                    <!-- Address Column -->
+                    <td class="px-4 py-4 text-sm text-gray-500">
+                        <div>${address.street || 'N/A'}</div>
+                        <div>${address.city ? address.city + ',' : ''} ${address.state || ''} ${address.pincode || ''}</div>
+                        <div>${address.country || 'N/A'}</div>
+                    </td>
+                    
+                    <!-- Status Column -->
+                    <td class="px-4 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            ${user.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                        <div class="mt-1 text-xs text-gray-500">
+                            Joined: ${formatDate(user.createdAt)}
+                        </div>
+                    </td>
+                    
+                    <!-- Actions Column -->
+                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="viewUserDetails('${user._id}')" class="text-blue-600 hover:text-blue-900 block mb-2">View Details</button>
+                        <button onclick="editUser('${user._id}')" class="text-indigo-600 hover:text-indigo-900 block mb-2">Edit</button>
+                        <button onclick="deleteUser('${user._id}')" class="text-red-600 hover:text-red-900 block">Delete</button>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        // Show loading state
+        function showLoading(show) {
+            if (show) {
+                dom.loadingRow.style.display = '';
+            } else if (dom.loadingRow) {
+                dom.loadingRow.style.display = 'none';
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const tbody = dom.usersTableBody;
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-sm text-red-500">
+                        <i class="fas fa-exclamation-circle mr-2"></i> ${message}
+                    </td>
+                </tr>`;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Search input
+            if (dom.searchInput) {
+                let searchTimeout;
+                dom.searchInput.addEventListener('input', (e) => {
+                    clearTimeout(searchTimeout);
+                    currentState.searchQuery = e.target.value;
+                    currentState.currentPage = 1;
+                    
+                    searchTimeout = setTimeout(() => {
+                        loadUsers();
+                    }, 500);
+                });
+            }
+        }
     </script>
 </body>
 </html>

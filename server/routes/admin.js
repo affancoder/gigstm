@@ -8,7 +8,7 @@ const {
     getMe,
     logout
 } = require('../controllers/adminAuthController');
-const { getDashboardStats } = require('../controllers/adminController');
+const { getDashboardStats, getUsers } = require('../controllers/adminController');
 const { getRecentActivities } = require('../controllers/activityController');
 
 // Public routes
@@ -20,6 +20,9 @@ router.use(protect);
 router.use(isAdmin);
 
 // Admin routes
+router.get('/users', getUsers);
+
+// Admin routes
 router.route('/me')
     .get(getMe);
 
@@ -27,9 +30,9 @@ router.route('/logout')
     .get(logout);
 
 // Dashboard stats API - Protected by admin middleware
-router.get('/dashboard-stats', protect, isAdmin, getDashboardStats);
+router.get('/dashboard-stats', getDashboardStats);
 
 // Recent activities API
-router.get('/recent-activities', protect, isAdmin, getRecentActivities);
+router.get('/recent-activities', getRecentActivities);
 
 module.exports = router;
