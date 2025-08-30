@@ -86,7 +86,7 @@ exports.login = async (req, res, next) => {
         const token = user.getSignedJwtToken();
         
         // Set cookie options
-        const options = {
+        const cookieOptions = {
             expires: new Date(
                 Date.now() + (process.env.JWT_COOKIE_EXPIRE || 30) * 24 * 60 * 60 * 1000
             ),
@@ -94,19 +94,19 @@ exports.login = async (req, res, next) => {
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
             path: '/',
-            domain: 'localhost'
+            domain: process.env.NODE_ENV === 'production' ? 'yourdomain.com' : 'localhost'
         };
+
+        // Set cookie
+        res.cookie('token', token, cookieOptions);
 
         // Remove password from output
         user.password = undefined;
         
-        // Set cookie and send response
-        res
-            .status(200)
-            .cookie('adminToken', token, options)
-            .json({
-                success: true,
-                token,
+        // Send response
+        res.status(200).json({
+            success: true,
+            token,
                 user: {
                     id: user._id,
                     name: user.fullName || user.name,

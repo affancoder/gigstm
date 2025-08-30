@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' http://localhost:3001 https:; connect-src 'self' http://localhost:3001 https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:;">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' http://localhost:3001 https:; connect-src 'self' http://localhost:3001 https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:;">
     <link rel="icon" href="https://gigstm.com/images/logo/favicon.ico" type="image/x-icon">
     <title>Admin Portal - GigsTM</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         :root {
             --primary-color: #4f46e5;
@@ -23,13 +27,13 @@
             --gray-400: #9ca3af;
             --gray-600: #4b5563;
         }
-        
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-        
+
         .auth-container {
             max-width: 440px;
             margin: 3rem auto;
@@ -38,13 +42,13 @@
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-        
+
         .auth-tabs {
             display: flex;
             margin-bottom: 1.5rem;
             border-bottom: 1px solid var(--border-color);
         }
-        
+
         .auth-tab {
             padding: 0.75rem 1.5rem;
             cursor: pointer;
@@ -55,26 +59,26 @@
             border-bottom: 2px solid transparent;
             transition: all 0.2s ease-in-out;
         }
-        
+
         .auth-tab.active {
             color: var(--primary-color);
             border-bottom-color: var(--primary-color);
         }
-        
+
         .auth-tab:not(.active):hover {
             color: var(--gray-600);
             border-bottom-color: var(--gray-400);
         }
-        
+
         .tab-content {
             display: none;
             animation: fadeIn 0.3s ease-in-out;
         }
-        
+
         .tab-content.active {
             display: block;
         }
-        
+
         .error-message {
             display: none;
             margin-bottom: 1rem;
@@ -85,18 +89,18 @@
             border-radius: 0.25rem;
             font-size: 0.875rem;
         }
-        
+
         .success-message {
             background-color: #ecfdf5;
             border-left-color: var(--success-color);
             color: var(--success-color);
         }
-        
+
         .input-group {
             position: relative;
             margin-bottom: 1.25rem;
         }
-        
+
         .input-icon {
             position: absolute;
             left: 0.75rem;
@@ -105,7 +109,7 @@
             color: var(--gray-400);
             pointer-events: none;
         }
-        
+
         .input-field {
             width: 100%;
             padding: 0.5rem 1rem 0.5rem 2.5rem;
@@ -114,13 +118,13 @@
             font-size: 0.9375rem;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-        
+
         .input-field:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
-        
+
         .btn {
             display: inline-flex;
             align-items: center;
@@ -134,21 +138,21 @@
             font-size: 0.9375rem;
             width: 100%;
         }
-        
+
         .btn-primary {
             background-color: var(--primary-color);
             color: white;
         }
-        
+
         .btn-primary:hover:not(:disabled) {
             background-color: #4338ca;
         }
-        
+
         .btn:disabled {
             opacity: 0.7;
             cursor: not-allowed;
         }
-        
+
         .loading {
             display: inline-block;
             width: 1.25rem;
@@ -159,17 +163,27 @@
             animation: spin 1s ease-in-out infinite;
             margin-right: 0.5rem;
         }
-        
+
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="min-h-screen flex items-center justify-center px-4 py-8">
         <div class="auth-container">
@@ -177,12 +191,12 @@
                 <h1 class="text-3xl font-bold">Admin Portal</h1>
                 <p class="text-gray-600 mt-2">Manage your admin account</p>
             </div>
-            
+
             <div class="auth-tabs">
                 <div class="auth-tab active" data-tab="login">Sign In</div>
                 <div class="auth-tab" data-tab="signup">Create Account</div>
             </div>
-            
+
             <!-- Login Form -->
             <div id="login-tab" class="tab-content active">
                 <div id="login-error" class="error-message"></div>
@@ -191,13 +205,8 @@
                         <label for="login-email" class="block text-sm font-medium mb-1">Email</label>
                         <div class="relative">
                             <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" 
-                                   id="login-email" 
-                                   name="email" 
-                                   required
-                                   class="input-field"
-                                   placeholder="admin@example.com"
-                                   autocomplete="username">
+                            <input type="email" id="login-email" name="email" required class="input-field"
+                                placeholder="admin@example.com" autocomplete="username">
                         </div>
                     </div>
 
@@ -205,13 +214,8 @@
                         <label for="login-password" class="block text-sm font-medium mb-1">Password</label>
                         <div class="relative">
                             <i class="fas fa-lock input-icon"></i>
-                            <input type="password" 
-                                   id="login-password" 
-                                   name="password" 
-                                   required
-                                   class="input-field"
-                                   placeholder="••••••••"
-                                   autocomplete="current-password">
+                            <input type="password" id="login-password" name="password" required class="input-field"
+                                placeholder="••••••••" autocomplete="current-password">
                         </div>
                     </div>
 
@@ -223,7 +227,7 @@
                     </div>
                 </form>
             </div>
-            
+
             <!-- Signup Form -->
             <div id="signup-tab" class="tab-content">
                 <div id="signup-error" class="error-message"></div>
@@ -232,13 +236,8 @@
                         <label for="signup-name" class="block text-sm font-medium mb-1">Full Name</label>
                         <div class="relative">
                             <i class="fas fa-user input-icon"></i>
-                            <input type="text" 
-                                   id="signup-name" 
-                                   name="name" 
-                                   required
-                                   class="input-field"
-                                   placeholder="John Doe"
-                                   autocomplete="name">
+                            <input type="text" id="signup-name" name="name" required class="input-field"
+                                placeholder="John Doe" autocomplete="name">
                         </div>
                     </div>
 
@@ -246,13 +245,8 @@
                         <label for="signup-email" class="block text-sm font-medium mb-1">Email</label>
                         <div class="relative">
                             <i class="fas fa-envelope input-icon"></i>
-                            <input type="email" 
-                                   id="signup-email" 
-                                   name="email" 
-                                   required
-                                   class="input-field"
-                                   placeholder="admin@example.com"
-                                   autocomplete="email">
+                            <input type="email" id="signup-email" name="email" required class="input-field"
+                                placeholder="admin@example.com" autocomplete="email">
                         </div>
                     </div>
 
@@ -260,14 +254,8 @@
                         <label for="signup-password" class="block text-sm font-medium mb-1">Password</label>
                         <div class="relative">
                             <i class="fas fa-lock input-icon"></i>
-                            <input type="password" 
-                                   id="signup-password" 
-                                   name="password" 
-                                   required 
-                                   minlength="8"
-                                   class="input-field"
-                                   placeholder="••••••••"
-                                   autocomplete="new-password">
+                            <input type="password" id="signup-password" name="password" required minlength="8"
+                                class="input-field" placeholder="••••••••" autocomplete="new-password">
                         </div>
                         <p class="mt-1 text-xs text-gray-500">Must be at least 8 characters</p>
                     </div>
@@ -276,14 +264,8 @@
                         <label for="confirm-password" class="block text-sm font-medium mb-1">Confirm Password</label>
                         <div class="relative">
                             <i class="fas fa-lock input-icon"></i>
-                            <input type="password" 
-                                   id="confirm-password" 
-                                   name="confirmPassword" 
-                                   required 
-                                   minlength="8"
-                                   class="input-field"
-                                   placeholder="••••••••"
-                                   autocomplete="new-password">
+                            <input type="password" id="confirm-password" name="confirmPassword" required minlength="8"
+                                class="input-field" placeholder="••••••••" autocomplete="new-password">
                         </div>
                     </div>
 
@@ -302,31 +284,31 @@
         // Configuration
         const API_BASE_URL = 'http://localhost:3001/api/v1/auth/admin';
         const TOKEN_KEY = 'adminToken';
-        
+
         // DOM Elements
         let loginForm, signupForm;
-        
+
         // Initialize the application
         document.addEventListener('DOMContentLoaded', () => {
-            initializeForms();
             setupTabNavigation();
             checkAuthStatus();
+            initializeForms();
         });
-        
+
         // Initialize form event listeners
         function initializeForms() {
             loginForm = document.getElementById('adminLoginForm');
             signupForm = document.getElementById('adminSignupForm');
-            
+
             if (loginForm) {
                 loginForm.addEventListener('submit', handleLogin);
             }
-            
+
             if (signupForm) {
                 signupForm.addEventListener('submit', handleSignup);
             }
         }
-        
+
         // Setup tab navigation
         function setupTabNavigation() {
             // Handle tab clicks
@@ -336,37 +318,37 @@
                     showTab(tabName);
                 });
             });
-            
+
             // Show initial tab based on URL hash
             const hash = window.location.hash.substring(1);
             showTab(hash === 'signup' ? 'signup' : 'login');
         }
-        
+
         // Show tab content
         function showTab(tabName) {
             // Hide all tab contents and deactivate tabs
             document.querySelectorAll('.tab-content, .auth-tab').forEach(el => {
                 el.classList.remove('active');
             });
-            
+
             // Show selected tab and content
             const tabContent = document.getElementById(`${tabName}-tab`);
             const tabButton = document.querySelector(`.auth-tab[data-tab="${tabName}"]`);
-                
+
             if (tabContent) tabContent.classList.add('active');
             if (tabButton) tabButton.classList.add('active');
-            
+
             // Update URL hash
             window.history.replaceState(null, null, `#${tabName}`);
         }
-        
+
         // Check if user is already authenticated
         async function checkAuthStatus() {
             const token = localStorage.getItem(TOKEN_KEY);
             if (!token) return false;
-            
+
             try {
-                const response = await fetch(`${API_BASE_URL}/validate-token`, {
+                const response = await fetch(`${API_BASE_URL}/me`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -374,7 +356,7 @@
                     },
                     credentials: 'include'
                 });
-                
+
                 if (response.ok) {
                     window.location.href = 'dashboard.html';
                     return true;
@@ -388,244 +370,104 @@
                 return false;
             }
         }
-<<<<<<< HEAD
 
-        document.addEventListener('DOMContentLoaded', async function() {
-        console.log('DOM loaded, initializing admin login form...');
-            
-        // Login form submission
-        const loginForm = document.getElementById('adminLoginForm');
-        if (loginForm) {
-            loginForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                console.log('Login form submitted');
-                
-                const email = document.getElementById('login-email').value.trim();
-                const password = document.getElementById('login-password').value;
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const errorElement = document.getElementById('login-error');
-                
-                // Basic validation
-                if (!email || !password) {
-                    showError('Please enter both email and password');
-                    return;
-                }
-                
-                // Show loading state
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-                errorElement.style.display = 'none';
-                
-                try {
-                    console.log('Sending login request...');
-                    const response = await fetch('http://localhost:3001/api/v1/auth/admin/login', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ email, password }),
-                        credentials: 'include'
-                    });
-                    
-                    const data = await response.json();
-                    console.log('Login response:', data);
-                    
-                    if (response.ok && data.token) {
-                        // Store token
-                        localStorage.setItem('adminToken', data.token);
-                        
-                        // Show success message
-                        errorElement.textContent = 'Login successful! Redirecting...';
-                        errorElement.style.display = 'block';
-                        errorElement.classList.remove('text-red-600');
-                        errorElement.classList.add('text-green-600');
-                        
-                        // Redirect to dashboard
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 1000);
-                    } else {
-                        throw new Error(data.message || 'Login failed');
-                    }
-                } catch (error) {
-                    console.error('Login error:', error);
-                    showError(error.message || 'Login failed. Please try again.');
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Sign In';
-                }
-            });
-        }
-        
-        // Signup form submission
-        const signupForm = document.getElementById('adminSignupForm');
-        if (signupForm) {
-            signupForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const name = document.getElementById('signup-name').value.trim();
-                const email = document.getElementById('signup-email').value.trim();
-                const password = document.getElementById('signup-password').value;
-                const confirmPassword = document.getElementById('confirm-password').value;
-                const errorElement = document.getElementById('signup-error');
-                const submitBtn = this.querySelector('button[type="submit"]');
-                
-                // Validation
-                if (!name || !email || !password || !confirmPassword) {
-                    errorElement.textContent = 'All fields are required';
-                    errorElement.style.display = 'block';
-                    return;
-                }
-                
-                if (password !== confirmPassword) {
-                    errorElement.textContent = 'Passwords do not match';
-                    errorElement.style.display = 'block';
-                    return;
-                }
-                
-                if (password.length < 8) {
-                    errorElement.textContent = 'Password must be at least 8 characters';
-                    errorElement.style.display = 'block';
-                    return;
-                }
-                
-                // Show loading state
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
-                errorElement.style.display = 'none';
-                
-                try {
-                    console.log('Sending signup request...');
-                    const response = await fetch('http://localhost:3001/api/v1/auth/admin/register', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            name,
-                            email,
-                            password
-                        }),
-                        credentials: 'include'
-                    });
-                    
-                    const data = await response.json();
-                    console.log('Signup response:', data);
-                    
-                    if (response.ok) {
-                        // Store token if provided
-                        if (data.token) {
-                            localStorage.setItem('adminToken', data.token);
-                        }
-                        
-                        // Show success message
-                        errorElement.textContent = 'Account created successfully! Redirecting...';
-                        errorElement.style.display = 'block';
-                        errorElement.classList.remove('text-red-600');
-                        errorElement.classList.add('text-green-600');
-                        
-                        // Redirect to dashboard
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 1500);
-                    } else {
-                        throw new Error(data.message || 'Registration failed');
-                    }
-                } catch (error) {
-                    console.error('Signup error:', error);
-                    errorElement.textContent = error.message || 'Failed to create account. Please try again.';
-                    errorElement.style.display = 'block';
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Create Account';
-                }
-            });
-        }
-    });
-
-        // Handle password reset
-        async function handlePasswordReset() {
-            const email = document.getElementById('reset-email').value.trim();
-            const messageElement = document.getElementById('reset-message');
-            const modal = document.getElementById('forgot-password-modal');
-=======
-        
         // Handle login form submission
         async function handleLogin(e) {
             e.preventDefault();
->>>>>>> 368aa66eb132679624d2baca1e6421ae57cd0d6c
-            
+            console.log('Login form submitted');
+
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
             const submitBtn = this.querySelector('button[type="submit"]');
             const errorElement = document.getElementById('login-error');
-            
+
             // Basic validation
             if (!email || !password) {
                 showError('Please enter both email and password', errorElement);
                 return;
             }
-            
+
             // Show loading state
-            setLoadingState(submitBtn, true);
+            setLoadingState(submitBtn, true, 'Signing in');
             hideError(errorElement);
-            
+
             try {
+                console.log('Sending login request...');
                 const response = await fetch(`${API_BASE_URL}/login`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({ email, password }),
                     credentials: 'include'
                 });
-                
+
                 const data = await response.json();
-                
-                if (response.ok && data.token) {
-                    localStorage.setItem(TOKEN_KEY, data.token);
-                    showSuccess('Login successful! Redirecting...', errorElement);
-                    setTimeout(() => window.location.href = 'dashboard.html', 1000);
-                } else {
+                console.log('Login response:', data);
+
+                if (!response.ok) {
                     throw new Error(data.message || 'Login failed');
+                }
+
+                // Store token
+                if (data.token) {
+                    localStorage.setItem(TOKEN_KEY, data.token);
+
+                    // Show success message
+                    showSuccess('Login successful! Redirecting...', errorElement);
+
+                    // Redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    throw new Error('No token received');
                 }
             } catch (error) {
                 console.error('Login error:', error);
                 showError(error.message || 'Login failed. Please try again.', errorElement);
             } finally {
-                setLoadingState(submitBtn, false);
+                setLoadingState(submitBtn, false, 'Sign In');
             }
         }
-        
+
+        // Handle password reset
+        async function handlePasswordReset() {
+            // Implementation will go here
+        }
+
+
         // Handle signup form submission
         async function handleSignup(e) {
             e.preventDefault();
-            
+
             const name = document.getElementById('signup-name').value.trim();
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             const submitBtn = this.querySelector('button[type="submit"]');
             const errorElement = document.getElementById('signup-error');
-            
+
             // Validation
             if (!name || !email || !password || !confirmPassword) {
                 showError('All fields are required', errorElement);
                 return;
             }
-            
+
             if (password !== confirmPassword) {
                 showError('Passwords do not match', errorElement);
                 return;
             }
-            
+
             if (password.length < 8) {
                 showError('Password must be at least 8 characters', errorElement);
                 return;
             }
-            
+
             // Show loading state
-            setLoadingState(submitBtn, true);
+            setLoadingState(submitBtn, true, 'Creating Account');
             hideError(errorElement);
-            
+
             try {
                 const response = await fetch(`${API_BASE_URL}/register`, {
                     method: 'POST',
@@ -633,10 +475,11 @@
                     body: JSON.stringify({ name, email, password }),
                     credentials: 'include'
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (response.ok) {
+                    // Store token if provided
                     if (data.token) {
                         localStorage.setItem(TOKEN_KEY, data.token);
                     }
@@ -652,12 +495,12 @@
                 setLoadingState(submitBtn, false, 'Create Account');
             }
         }
-        
+
         // Helper functions
         function setLoadingState(button, isLoading, defaultText = null) {
             const btnText = button.querySelector('.btn-text');
             const loadingIcon = button.querySelector('.loading');
-            
+
             if (isLoading) {
                 button.disabled = true;
                 btnText.textContent = defaultText ? `${defaultText}...` : 'Processing...';
@@ -668,7 +511,7 @@
                 loadingIcon.classList.add('hidden');
             }
         }
-        
+
         function showError(message, element) {
             if (!element) return;
             element.textContent = message;
@@ -676,7 +519,7 @@
             element.classList.remove('success-message');
             element.classList.add('error-message');
         }
-        
+
         function showSuccess(message, element) {
             if (!element) return;
             element.textContent = message;
@@ -684,12 +527,15 @@
             element.classList.remove('error-message');
             element.classList.add('success-message');
         }
-        
+
         function hideError(element) {
             if (element) {
                 element.style.display = 'none';
             }
         }
+
+
     </script>
 </body>
+
 </html>
