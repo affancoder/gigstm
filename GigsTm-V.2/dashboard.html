@@ -1,464 +1,531 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="https://gigstm.com/images/logo/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="https://gigstm.com/images/logo/favicon.ico" type="image/x-icon">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="https://gigstm.com/images/logo/favicon.ico"
+      type="image/x-icon"
+    />
+    <link
+      rel="icon"
+      href="https://gigstm.com/images/logo/favicon.ico"
+      type="image/x-icon"
+    />
     <title>User Dashboard - GigsTM</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
-        :root { --primary: #4F46E5; }
-        body { background-color: #F9FAFB; }
-        .sidebar { width: 250px; }
-        .main-content { margin-left: 250px; }
-        @media (max-width: 768px) {
-            .sidebar, .main-content { width: 100%; margin-left: 0; }
+      :root {
+        --primary: #4f46e5;
+      }
+      body {
+        background-color: #f9fafb;
+      }
+      .sidebar {
+        width: 250px;
+      }
+      .main-content {
+        margin-left: 250px;
+      }
+      @media (max-width: 768px) {
+        .sidebar,
+        .main-content {
+          width: 100%;
+          margin-left: 0;
         }
+      }
     </style>
-</head>
-<body class="font-sans">
+  </head>
+  <body class="font-sans">
     <div class="min-h-screen flex">
-        <!-- Sidebar -->
-        <div class="sidebar bg-white shadow-md fixed h-full">
-            <div class="p-4 border-b">
-                <img src="./GigsTm_files/lgo_project1.png" alt="GigsTM" class="h-10">
+      <!-- Sidebar -->
+      <div class="sidebar bg-white shadow-md fixed h-full">
+        <div class="p-4 border-b">
+          <img
+            src="./GigsTm_files/lgo_project1.png"
+            alt="GigsTM"
+            class="h-10"
+          />
+        </div>
+        <nav class="mt-4">
+          <a
+            href="#"
+            class="flex items-center px-4 py-3 text-gray-700 bg-blue-50 border-r-4 border-blue-500"
+          >
+            <i class="fas fa-users w-6"></i>
+            <span class="ml-3">All Users</span>
+          </a>
+          <a
+            href="userform.html"
+            class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50"
+          >
+            <i class="fas fa-user-plus w-6"></i>
+            <span class="ml-3">Add New User</span>
+          </a>
+          <a
+            href="#"
+            id="logout-btn"
+            class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 mt-auto"
+          >
+            <i class="fas fa-sign-out-alt w-6"></i>
+            <span class="ml-3">Logout</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content flex-1 p-8">
+        <div class="flex justify-between items-center mb-8">
+          <h1 class="text-2xl font-bold">User Management Dashboard</h1>
+          <div class="flex items-center space-x-4">
+            <div
+              id="user-avatar"
+              class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold"
+            >
+              A
             </div>
-            <nav class="mt-4">
-                <a href="#" class="flex items-center px-4 py-3 text-gray-700 bg-blue-50 border-r-4 border-blue-500">
-                    <i class="fas fa-users w-6"></i>
-                    <span class="ml-3">All Users</span>
-                </a>
-                <a href="userform.html" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50">
-                    <i class="fas fa-user-plus w-6"></i>
-                    <span class="ml-3">Add New User</span>
-                </a>
-                <a href="#" id="logout-btn" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 mt-auto">
-                    <i class="fas fa-sign-out-alt w-6"></i>
-                    <span class="ml-3">Logout</span>
-                </a>
-            </nav>
+            <span id="user-email" class="text-gray-700">Loading...</span>
+          </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="main-content flex-1 p-8">
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-2xl font-bold">User Management Dashboard</h1>
-                <div class="flex items-center space-x-4">
-                    <div id="user-avatar" class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold">A</div>
-                    <span id="user-email" class="text-gray-700">Loading...</span>
-                </div>
-            </div>
-
-            <!-- Search and Filter -->
-            <div class="mb-6 flex justify-between items-center">
-                <div class="relative w-64">
-                    <input id="search-input" type="text" placeholder="Search users..." class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                </div>
-                <button id="refresh-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
-                    <i class="fas fa-sync-alt mr-2"></i> Refresh
-                </button>
-            </div>
-
-            <!-- Users Table -->
-            <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Personal Info</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Documents</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
-                        <!-- Loading row -->
-                        <tr id="loading-row">
-                            <td colspan="5" class="px-4 py-4 text-center text-sm text-gray-500">
-                                <i class="fas fa-spinner fa-spin mr-2"></i> Loading users...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <!-- Pagination -->
-                <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-gray-700">
-                                Showing <span id="showing-from" class="font-medium">1</span> to <span id="showing-to" class="font-medium">10</span> of <span id="total-users" class="font-medium">0</span> results
-                            </p>
-                        </div>
-                        <div>
-                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                                <button id="prev-page-btn" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Previous</span>
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <button id="next-page-btn" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">Next</span>
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Search and Filter -->
+        <div class="mb-6 flex justify-between items-center">
+          <div class="relative w-64">
+            <input
+              id="search-input"
+              type="text"
+              placeholder="Search users..."
+              class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+          </div>
+          <button
+            id="refresh-btn"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center"
+          >
+            <i class="fas fa-sync-alt mr-2"></i> Refresh
+          </button>
         </div>
+
+        <!-- Simple User Details List -->
+        <div id="users-list" class="bg-white shadow-md rounded-lg p-6">
+          <h2 class="text-lg font-semibold mb-4">All User Details</h2>
+          <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Personal Info
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Documents
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Address
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Status
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
+                <!-- User rows will render here -->
+                <!-- ...existing loading row code if needed... -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // DOM Elements
-            const dom = {
-                usersTableBody: document.getElementById('users-table-body'),
-                loadingRow: document.getElementById('loading-row'),
-                prevPageBtn: document.getElementById('prev-page-btn'),
-                nextPageBtn: document.getElementById('next-page-btn'),
-                showingFrom: document.getElementById('showing-from'),
-                showingTo: document.getElementById('showing-to'),
-                totalUsersEl: document.getElementById('total-users'),
-                searchInput: document.getElementById('search-input'),
-                refreshBtn: document.getElementById('refresh-btn'),
-                logoutBtn: document.getElementById('logout-btn'),
-                userEmailElement: document.getElementById('user-email')
+      // Global state
+      const currentState = {
+        currentPage: 1,
+        itemsPerPage: 10,
+        totalUsers: 0,
+        totalPages: 0,
+        searchQuery: "",
+        allUsers: [],
+      };
+
+      // Utility: safe DOM getters (used by functions that may run before DOMContentLoaded)
+      function $id(id) {
+        return document.getElementById(id);
+      }
+
+      // Show/hide the loading row
+      function showLoading(show) {
+        const loadingRow = $id("loading-row");
+        if (!loadingRow) return;
+        loadingRow.style.display = show ? "" : "none";
+      }
+
+      // Show a table-level error message
+      function showError(message) {
+        const tbody = $id("users-table-body");
+        if (!tbody) return;
+        tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="px-6 py-4 text-center text-sm text-red-500">
+          <i class="fas fa-exclamation-circle mr-2"></i> ${message}
+        </td>
+      </tr>`;
+        console.error(message);
+      }
+
+      // Normalize different backend response shapes into { users: [], total, totalPages }
+      function normalizeResponse(data) {
+        if (!data) return { users: [], total: 0, totalPages: 0 };
+        // common shapes:
+        // { success: true, data: [...], total, totalPages }
+        if (Array.isArray(data)) return { users: data, total: data.length, totalPages: 1 };
+        if (data.data && Array.isArray(data.data)) {
+          return {
+            users: data.data,
+            total: data.total ?? data.count ?? data.data.length,
+            totalPages: data.totalPages ?? Math.ceil((data.total ?? data.data.length) / currentState.itemsPerPage),
+          };
+        }
+        if (data.users && Array.isArray(data.users)) {
+          return {
+            users: data.users,
+            total: data.total ?? data.count ?? data.users.length,
+            totalPages: data.totalPages ?? Math.ceil((data.total ?? data.users.length) / currentState.itemsPerPage),
+          };
+        }
+        // fallback: if response is wrapped in { success: true, ...otherFields}
+        for (const k of Object.keys(data)) {
+          if (Array.isArray(data[k])) {
+            return {
+              users: data[k],
+              total: data.total ?? data.count ?? data[k].length,
+              totalPages: data.totalPages ?? Math.ceil((data.total ?? data[k].length) / currentState.itemsPerPage),
             };
-            
-            // Constants
-            const TOKEN_KEY = 'adminToken';
-            const token = localStorage.getItem(TOKEN_KEY);
-            
-            // Check if token exists, if not redirect to login
-            if (!token) {
-                window.location.href = 'admin-login.html';
-                return;
-            }
-            
-            // State
-            const currentState = {
-                currentPage: 1,
-                itemsPerPage: 10,
-                totalUsers: 0,
-                totalPages: 0,
-                searchQuery: '',
-                allUsers: []
-            };
-            
-            // Update user info in the header
-            updateUserInfo();
-            
-            // Setup event listeners
-            setupEventListeners();
-            
-            // Load users when the page loads
-            loadUsers();
-            
-            // Update pagination controls
-            function updatePagination() {
-                const start = (currentState.currentPage - 1) * currentState.itemsPerPage + 1;
-                const end = Math.min(currentState.currentPage * currentState.itemsPerPage, currentState.totalUsers);
-                
-                dom.showingFrom.textContent = start;
-                dom.showingTo.textContent = end;
-                dom.totalUsersEl.textContent = currentState.totalUsers;
-                
-                dom.prevPageBtn.disabled = currentState.currentPage <= 1;
-                dom.nextPageBtn.disabled = currentState.currentPage >= currentState.totalPages;
-            }
-            
-            // Setup event listeners
-            function setupEventListeners() {
-                // Pagination
-                dom.prevPageBtn.addEventListener('click', () => {
-                    if (currentState.currentPage > 1) {
-                        currentState.currentPage--;
-                        loadUsers();
-                    }
-                });
-                
-                dom.nextPageBtn.addEventListener('click', () => {
-                    if (currentState.currentPage < currentState.totalPages) {
-                        currentState.currentPage++;
-                        loadUsers();
-                    }
-                });
+          }
+        }
+        return { users: [], total: 0, totalPages: 0 };
+      }
 
-                // Refresh button
-                dom.refreshBtn?.addEventListener('click', loadUsers);
+      // Try multiple endpoint paths (hosted on same origin/port) until one returns data
+      async function fetchWithFallback(pathCandidates, queryString, token) {
+        const host = "http://localhost:3001"; // adjust if your backend runs elsewhere
+        for (const path of pathCandidates) {
+          const url = `${host}${path}${queryString}`;
+          try {
+            console.log("Trying API:", url);
+            const res = await fetch(url, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json",
+              },
+              credentials: "include",
+            });
 
-                // Logout button
-                dom.logoutBtn.addEventListener('click', async () => {
-                    try {
-                        // Call the logout API
-                        const response = await fetch('http://localhost:3001/api/v1/auth/admin/logout', {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
-                            },
-                            credentials: 'include'
-                        });
-                        
-                        if (!response.ok) {
-                            throw new Error('Logout failed');
-                        }
-                    } catch (error) {
-                        console.error('Logout error:', error);
-                    } finally {
-                        // Always clear local storage and redirect
-                        localStorage.removeItem(TOKEN_KEY);
-                        window.location.href = 'admin-login.html';
-                    }
-                });
-                
-                // Search input
-                if (dom.searchInput) {
-                    let searchTimeout;
-                    dom.searchInput.addEventListener('input', (e) => {
-                        clearTimeout(searchTimeout);
-                        currentState.searchQuery = e.target.value;
-                        currentState.currentPage = 1;
-                        
-                        searchTimeout = setTimeout(() => {
-                            loadUsers();
-                        }, 500);
-                    });
-                }
-            }
-            
-            // Show loading state
-            function showLoading(show) {
-                if (show) {
-                    dom.loadingRow.style.display = '';
-                } else if (dom.loadingRow) {
-                    dom.loadingRow.style.display = 'none';
-                }
-            }
-            
-            // Show error message
-            function showError(message) {
-                const tbody = dom.usersTableBody;
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-sm text-red-500">
-                            <i class="fas fa-exclamation-circle mr-2"></i> ${message}
-                        </td>
-                    </tr>`;
-            }
-            
-            // Update user info in the header
-            function updateUserInfo() {
-                try {
-                    // Parse the JWT token to get user info
-                    const tokenParts = token.split('.');
-                    if (tokenParts.length !== 3) throw new Error('Invalid token format');
-                    
-                    const payload = JSON.parse(atob(tokenParts[1]));
-                    const userAvatar = document.getElementById('user-avatar');
-                    
-                    if (dom.userEmailElement) {
-                        dom.userEmailElement.textContent = payload.email || 'Admin User';
-                    }
-                    
-                    if (userAvatar && payload.email) {
-                        userAvatar.textContent = payload.email.charAt(0).toUpperCase();
-                    }
-                    
-                    return true;
-                } catch (error) {
-                    console.error('Error updating user info:', error);
-                    return false;
-                }
+            console.log("Status for", path, res.status);
+
+            if (res.status === 401) {
+              // unauthorized — stop and force login
+              localStorage.removeItem("adminToken");
+              window.location.href = "admin-login.html";
+              throw new Error("Unauthorized");
             }
 
-            // Global functions for user actions
-            window.viewUserDetails = (userId) => {
-                const user = currentState.allUsers.find(u => u._id === userId);
-                if (user) {
-                    alert(`Viewing details for: ${user.fullName || 'User'}`);
-                    // In a real app, you would open a modal or navigate to a details page
-                }
-            };
+            if (res.status === 404) {
+              // try next candidate
+              continue;
+            }
 
-            window.editUser = (userId) => {
-                window.location.href = `userform.html?edit=${userId}`;
-            };
+            // If server returns other non-ok, attempt to parse message and throw
+            const bodyText = await res.text();
+            let parsed;
+            try { parsed = JSON.parse(bodyText); } catch (e) { parsed = bodyText; }
 
-            window.deleteUser = async (userId) => {
-                if (confirm('Are you sure you want to delete this user?')) {
-                    try {
-                        const response = await fetch(`http://localhost:3001/api/v1/admin/users/${userId}`, {
-                            method: 'DELETE',
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
-                            },
-                            credentials: 'include'
-                        });
+            if (!res.ok) {
+              const msg = (parsed && parsed.message) ? parsed.message : `Server error ${res.status}`;
+              throw new Error(msg);
+            }
 
-                        if (response.ok) {
-                            alert('User deleted successfully');
-                            loadUsers();
-                        } else {
-                            throw new Error('Failed to delete user');
-                        }
-                    } catch (error) {
-                        console.error('Error deleting user:', error);
-                        alert('Error deleting user: ' + error.message);
-                    }
-                }
-            };
+            // success -> return parsed body
+            return parsed;
+          } catch (err) {
+            console.warn("Endpoint", path, "failed:", err.message);
+            // try next
+          }
+        }
+        throw new Error("No working API endpoint found (tried multiple paths).");
+      }
+
+      // Global pagination updater (reads DOM elements each time)
+      function updatePagination() {
+        const showingFrom = $id("showing-from");
+        const showingTo = $id("showing-to");
+        const totalUsersEl = $id("total-users");
+        if (!showingFrom || !showingTo || !totalUsersEl) return;
+
+        const start = currentState.totalUsers === 0 ? 0 : (currentState.currentPage - 1) * currentState.itemsPerPage + 1;
+        const end = Math.min(currentState.currentPage * currentState.itemsPerPage, currentState.totalUsers);
+
+        showingFrom.textContent = start;
+        showingTo.textContent = end;
+        totalUsersEl.textContent = currentState.totalUsers;
+
+        const prevBtn = $id("prev-page-btn");
+        const nextBtn = $id("next-page-btn");
+        if (prevBtn) prevBtn.disabled = currentState.currentPage <= 1;
+        if (nextBtn) nextBtn.disabled = currentState.currentPage >= currentState.totalPages;
+      }
+
+      // Load users (tries multiple admin/user endpoints)
+      async function loadUsers() {
+        try {
+          showLoading(true);
+          const token = localStorage.getItem("adminToken");
+          // Use the dedicated endpoint for fetching all user details
+          const apiUrl = "http://localhost:3001/api/v1/user-forms-all";
+          const response = await fetch(apiUrl, {
+            method: "GET",
+            headers: token
+              ? { Authorization: `Bearer ${token}`, Accept: "application/json" }
+              : { Accept: "application/json" },
+            credentials: "include",
+          });
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `Server error: ${response.status}`);
+          }
+          const data = await response.json();
+          currentState.allUsers = Array.isArray(data) ? data : data.data || [];
+          currentState.totalUsers = currentState.allUsers.length;
+          currentState.totalPages = 1;
+          renderUsers(currentState.allUsers);
+          updatePagination();
+        } catch (err) {
+          console.error("Error loading users:", err);
+          const listBody = document.getElementById("users-list-body");
+          if (listBody) {
+            listBody.innerHTML = `<div class="text-red-500 text-center">${err.message}</div>`;
+          }
+        } finally {
+          showLoading(false);
+        }
+      }
+
+      // Format date to display
+      function formatDate(dateString) {
+        if (!dateString) return "N/A";
+        const options = { year: "numeric", month: "short", day: "numeric" };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+      }
+
+      // Render users in the table with form data
+      function renderUsers(users) {
+    const tbody = document.getElementById("users-table-body");
+    if (!tbody) return;
+    if (!users || users.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" class="px-4 py-4 text-center text-sm text-gray-500">
+                    No users found
+                </td>
+            </tr>`;
+        return;
+    }
+    tbody.innerHTML = users.map(user => {
+       const profile = user.profile || {};
+       const personalInfo = profile.personalInfo || {};
+       const documents = profile.documents || {};
+       const address = profile.address || {};
+       return `
+            <tr class="hover:bg-gray-50 border-t">
+                <td class="px-4 py-4">
+                    <div class="text-sm font-medium text-gray-900">${personalInfo.name || user.fullName || "N/A"}</div>
+                    <div class="text-sm text-gray-500">${user.email || personalInfo.email || "N/A"}</div>
+                    <div class="text-sm text-gray-500">${personalInfo.mobile || user.phoneNumber || "N/A"}</div>
+                </td>
+                <td class="px-4 py-4 text-sm text-gray-500">
+                    <div><span class="font-medium">Aadhaar:</span> ${documents.aadhaar ? "****" + documents.aadhaar.slice(-4) : "N/A"}</div>
+                    <div><span class="font-medium">PAN:</span> ${documents.pan || "N/A"}</div>
+                </td>
+                <td class="px-4 py-4 text-sm text-gray-500">
+                    <div>${address.street || "N/A"}</div>
+                    <div>${address.city ? address.city + "," : ""} ${address.state || ""} ${address.pincode || ""}</div>
+                    <div>${address.country || "N/A"}</div>
+                </td>
+                <td class="px-4 py-4 whitespace-nowrap">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}">
+                        ${user.isActive ? "Active" : "Inactive"}
+                    </span>
+                    <div class="mt-1 text-xs text-gray-500">Joined: ${new Date(user.createdAt).toLocaleDateString()}</div>
+                </td>
+                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                    <button onclick="viewUserDetails('${user._id}')" class="text-blue-600 hover:text-blue-900 block mb-2">View Details</button>
+                    <button onclick="editUser('${user._id}')" class="text-indigo-600 hover:text-indigo-900 block mb-2">Edit</button>
+                    <button onclick="deleteUser('${user._id}')" class="text-red-600 hover:text-red-900 block">Delete</button>
+                </td>
+            </tr>
+       `;
+    }).join("");
+}
+
+      // Wire up events after DOM ready
+      document.addEventListener("DOMContentLoaded", () => {
+    const prevBtn = $id("prev-page-btn");
+    const nextBtn = $id("next-page-btn");
+    const refreshBtn = $id("refresh-btn");
+    const logoutBtn = $id("logout-btn");
+    const searchInput = $id("search-input");
+
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            if (currentState.currentPage > 1) {
+                currentState.currentPage--;
+                loadUsers();
+            }
         });
-
-        // Load users from the server
-        async function loadUsers() {
+    }
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            if (currentState.currentPage < currentState.totalPages) {
+                currentState.currentPage++;
+                loadUsers();
+            }
+        });
+    }
+    if (refreshBtn) {
+        refreshBtn.addEventListener("click", loadUsers);
+    }
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", async () => {
+            const token = localStorage.getItem("adminToken");
             try {
-                showLoading(true);
-                
-                const token = localStorage.getItem('adminToken');
-                console.log('Using token:', token ? 'Token exists' : 'No token');
-                console.log('Fetching users from API endpoint...');
-                
-                const response = await fetch(`http://localhost:3001/api/v1/admin/users?page=${currentState.currentPage}&limit=${currentState.itemsPerPage}&search=${encodeURIComponent(currentState.searchQuery)}`, {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
+                await fetch("http://localhost:3001/api/v1/auth/admin/logout", {
+                    method: "POST",
+                    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+                    credentials: "include",
                 });
-                
-                console.log('Response status:', response.status);
-                
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('Error response:', errorText);
-                    throw new Error(`Failed to fetch users: ${response.status} ${response.statusText}`);
-                }
-                
-                const data = await response.json();
-                console.log('Response data:', data);
-                
-                if (data.success) {
-                    // Store all users for reference
-                    currentState.allUsers = data.data;
-                    renderUsers(data.data);
-                    // Update pagination information
-                    currentState.totalUsers = data.total;
-                    currentState.totalPages = data.totalPages;
-                    updatePagination();
-                } else {
-                    throw new Error(data.message || 'Failed to load users');
-                }
-            } catch (error) {
-                console.error('Error loading users:', error);
-                showError('Failed to load users. Please try again.');
+            } catch (e) {
+                console.warn("Logout error:", e);
             } finally {
-                showLoading(false);
+                localStorage.removeItem("adminToken");
+                window.location.href = "admin-login.html";
             }
-        }
+        });
+    }
+    if (searchInput) {
+        let t;
+        searchInput.addEventListener("input", (e) => {
+            clearTimeout(t);
+            currentState.searchQuery = e.target.value || "";
+            currentState.currentPage = 1;
+            t = setTimeout(loadUsers, 400);
+        });
+    }
+    try {
+        updateUserInfo?.();
+    } catch (e) {
+        // ignore if not present
+    }
+    loadUsers();
+});
 
-        // Format date to display
-        function formatDate(dateString) {
-            if (!dateString) return 'N/A';
-            const options = { year: 'numeric', month: 'short', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString(undefined, options);
+      // Global functions for user actions
+      window.viewUserDetails = (userId) => {
+        const user = currentState.allUsers.find((u) => u._id === userId);
+        if (user) {
+          alert(`Viewing details for: ${user.fullName || "User"}`);
+          // In a real app, you would open a modal or navigate to a details page
         }
+      };
 
-        // Render users in the table with form data
-        function renderUsers(users) {
-            const tbody = document.getElementById('users-table-body');
-            const loadingRow = document.getElementById('loading-row');
-            loadingRow?.remove();
-            
-            if (!users || users.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="px-4 py-4 text-center text-sm text-gray-500">
-                            No user forms found
-                        </td>
-                    </tr>`;
-                return;
+      window.editUser = (userId) => {
+        window.location.href = `userform.html?edit=${userId}`;
+      };
+
+      window.deleteUser = async (userId) => {
+        if (confirm("Are you sure you want to delete this user?")) {
+          try {
+            const response = await fetch(
+              `http://localhost:3001/api/v1/admin/users/${userId}`,
+              {
+                method: "DELETE",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+                credentials: "include",
+              }
+            );
+
+            if (response.ok) {
+              alert("User deleted successfully");
+              loadUsers();
+            } else {
+              throw new Error("Failed to delete user");
             }
-            
-            tbody.innerHTML = users.map(user => {
-                // Handle potential missing data with default empty objects
-                const profile = user.profile || {};
-                const personalInfo = profile.personalInfo || {};
-                const documents = profile.documents || {};
-                const address = profile.address || {};
-                const about = profile.about || 'No additional information provided';
-                
-                return `
-                <tr class="hover:bg-gray-50 border-t">
-                    <!-- Personal Info Column -->
-                    <td class="px-4 py-4">
-                        <div class="text-sm font-medium text-gray-900">${personalInfo.name || user.fullName || 'N/A'}</div>
-                        <div class="text-sm text-gray-500">${user.email || personalInfo.email || 'N/A'}</div>
-                        <div class="text-sm text-gray-500">${personalInfo.mobile || user.phoneNumber || 'N/A'}</div>
-                        <div class="mt-1 text-xs text-gray-500">
-                            <span class="font-medium">Role:</span> ${personalInfo.jobRole || 'N/A'}<br>
-                            <span class="font-medium">Gender:</span> ${personalInfo.gender || 'N/A'}<br>
-                            <span class="font-medium">DOB:</span> ${formatDate(personalInfo.dob)}
-                        </div>
-                    </td>
-                    
-                    <!-- Documents Column -->
-                    <td class="px-4 py-4 text-sm text-gray-500">
-                        <div><span class="font-medium">Aadhaar:</span> ${documents.aadhaar ? '****' + documents.aadhaar.slice(-4) : 'N/A'}</div>
-                        <div><span class="font-medium">PAN:</span> ${documents.pan || 'N/A'}</div>
-                    </td>
-                    
-                    <!-- Address Column -->
-                    <td class="px-4 py-4 text-sm text-gray-500">
-                        <div>${address.street || 'N/A'}</div>
-                        <div>${address.city ? address.city + ',' : ''} ${address.state || ''} ${address.pincode || ''}</div>
-                        <div>${address.country || 'N/A'}</div>
-                    </td>
-                    
-                    <!-- Status Column -->
-                    <td class="px-4 py-4 whitespace-nowrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                            ${user.isActive ? 'Active' : 'Inactive'}
-                        </span>
-                        <div class="mt-1 text-xs text-gray-500">
-                            Joined: ${formatDate(user.createdAt)}
-                        </div>
-                    </td>
-                    
-                    <!-- Actions Column -->
-                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="viewUserDetails('${user._id}')" class="text-blue-600 hover:text-blue-900 block mb-2">View Details</button>
-                        <button onclick="editUser('${user._id}')" class="text-indigo-600 hover:text-indigo-900 block mb-2">Edit</button>
-                        <button onclick="deleteUser('${user._id}')" class="text-red-600 hover:text-red-900 block">Delete</button>
-                    </td>
-                </tr>`;
-            }).join('');
+          } catch (error) {
+            console.error("Error deleting user:", error);
+            alert("Error deleting user: " + error.message);
+          }
         }
-
-        // Show loading state
-        function showLoading(show) {
-            const loadingRow = document.getElementById('loading-row');
-            if (show && loadingRow) {
-                loadingRow.style.display = '';
-            } else if (loadingRow) {
-                loadingRow.style.display = 'none';
-            }
-        }
-
-        // Show error message
-        function showError(message) {
-            const tbody = document.getElementById('users-table-body');
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="5" class="px-6 py-4 text-center text-sm text-red-500">
-                        <i class="fas fa-exclamation-circle mr-2"></i> ${message}
-                    </td>
-                </tr>`;
-        }
+      };
     </script>
-</body>
+  </body>
+</html>
+                  "Content-Type": "application/json",
+                },
+                credentials: "include",
+              }
+            );
+
+            if (response.ok) {
+              alert("User deleted successfully");
+              loadUsers();
+            } else {
+              throw new Error("Failed to delete user");
+            }
+          } catch (error) {
+            console.error("Error deleting user:", error);
+            alert("Error deleting user: " + error.message);
+          }
+        }
+      };
+    </script>
+  </body>
+</html>
+          } catch (error) {
+            console.error("Error deleting user:", error);
+            alert("Error deleting user: " + error.message);
+          }
+        }
+      };
+    </script>
+  </body>
 </html>
