@@ -1,0 +1,15 @@
+# Enable Node.js support
+RewriteEngine On
+
+# Handle frontend routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.html [L,QSA]
+
+# Redirect API requests to Node.js application
+RewriteRule ^api/(.*)$ http://localhost:3001/api/$1 [P,L]
+
+# Set headers for CORS
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
