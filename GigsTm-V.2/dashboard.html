@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -64,7 +63,7 @@
 <body class="font-sans">
     <div class="min-h-screen flex">
         <!-- Sidebar -->
-        <div class="sidebar bg-white shadow-md fixed h-full">
+        <div class="w-64 bg-white shadow-md fixed h-full">
             <div class="p-4 border-b">
                 <img src="./GigsTm_files/lgo_project1.png" alt="GigsTM" class="h-10" />
             </div>
@@ -85,511 +84,293 @@
         </div>
 
         <!-- Main Content -->
-        <div class="main-content flex-1 p-8">
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-2xl font-bold">User Management Dashboard</h1>
+        <div class="ml-64 p-8 w-full">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold">User Management</h1>
                 <div class="flex items-center space-x-4">
-                    <div id="user-avatar"
-                        class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold">
-                        A
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Search users..." 
+                               class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                     </div>
-                    <span id="user-email" class="text-gray-700">Loading...</span>
+                    <button id="refreshBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+                        <i class="fas fa-sync-alt mr-2"></i> Refresh
+                    </button>
                 </div>
             </div>
 
-            <!-- Search and Filter -->
-            <div class="mb-6 flex justify-between items-center">
-                <div class="relative w-64">
-                    <input id="search-input" type="text" placeholder="Search users..."
-                        class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                </div>
-                <button id="refresh-btn"
-                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
-                    <i class="fas fa-sync-alt mr-2"></i> Refresh
-                </button>
-            </div>
-
-            <!-- Comprehensive User Details List -->
-            <div id="users-list" class="bg-white shadow-md rounded-lg p-6">
-                <h2 class="text-lg font-semibold mb-4">All User Details</h2>
-                <div class="table-container bg-white shadow-md rounded-lg">
+            <!-- Users Table -->
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="table-container">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                <th scope="col" class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                <th scope="col" class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
-                                <th scope="col" class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skills</th>
-                                <th scope="col" class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Experience</th>
-                                <th scope="col" class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                                <th scope="col" class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
-                                <th scope="col" class="text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skills</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Experience</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
-                            <!-- User rows will render here -->
-                            <tr id="loading-row">
-                                <td colspan="16" class="text-center text-sm text-gray-500">
+                        <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200">
+                            <tr id="loadingRow">
+                                <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
                                     <i class="fas fa-spinner fa-spin mr-2"></i> Loading user data...
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <!-- Pagination info -->
-                <div class="mt-4 flex justify-between items-center text-sm text-gray-600">
-                    <div>
-                        Showing <span id="showing-from">0</span> to <span id="showing-to">0</span> of <span id="total-users">0</span> users
-                    </div>
-                    <div class="flex space-x-2">
-                        <button id="prev-page-btn" class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 disabled:cursor-not-allowed">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button id="next-page-btn" class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 disabled:cursor-not-allowed">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-4 flex justify-between items-center text-sm text-gray-600">
+                <div>
+                    Showing <span id="showingFrom">0</span> to <span id="showingTo">0</span> of <span id="totalUsers">0</span> users
+                </div>
+                <div class="flex space-x-2">
+                    <button id="prevPage" class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button id="nextPage" class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50" disabled>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Global state
-        const currentState = {
-            currentPage: 1,
-            itemsPerPage: 10,
-            totalUsers: 0,
-            totalPages: 0,
-            searchQuery: "",
-            allUsers: [],
-        };
+        // State
+        let users = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let filteredUsers = [];
 
-        // Utility: safe DOM getters (used by functions that may run before DOMContentLoaded)
-        function $id(id) {
-            return document.getElementById(id);
-        }
+        // DOM Elements
+        const usersTableBody = document.getElementById('usersTableBody');
+        const loadingRow = document.getElementById('loadingRow');
+        const searchInput = document.getElementById('searchInput');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const showingFromSpan = document.getElementById('showingFrom');
+        const showingToSpan = document.getElementById('showingTo');
+        const totalUsersSpan = document.getElementById('totalUsers');
 
-        // Show/hide the loading row
-        function showLoading(show) {
-            const loadingRow = $id("loading-row");
-            if (!loadingRow) return;
-            loadingRow.style.display = show ? "" : "none";
-        }
-
-        // Show a table-level error message
-        function showError(message) {
-            const tbody = $id("users-table-body");
-            if (!tbody) return;
-            tbody.innerHTML = `
-      <tr>
-        <td colspan="5" class="px-6 py-4 text-center text-sm text-red-500">
-          <i class="fas fa-exclamation-circle mr-2"></i> ${message}
-        </td>
-      </tr>`;
-            console.error(message);
-        }
-
-        // Normalize different backend response shapes into { users: [], total, totalPages }
-        function normalizeResponse(data) {
-            if (!data) return { users: [], total: 0, totalPages: 0 };
-            // common shapes:
-            // { success: true, data: [...], total, totalPages }
-            if (Array.isArray(data)) return { users: data, total: data.length, totalPages: 1 };
-            if (data.data && Array.isArray(data.data)) {
-                return {
-                    users: data.data,
-                    total: data.total ?? data.count ?? data.data.length,
-                    totalPages: data.totalPages ?? Math.ceil((data.total ?? data.data.length) / currentState.itemsPerPage),
-                };
-            }
-            if (data.users && Array.isArray(data.users)) {
-                return {
-                    users: data.users,
-                    total: data.total ?? data.count ?? data.users.length,
-                    totalPages: data.totalPages ?? Math.ceil((data.total ?? data.users.length) / currentState.itemsPerPage),
-                };
-            }
-            // fallback: if response is wrapped in { success: true, ...otherFields}
-            for (const k of Object.keys(data)) {
-                if (Array.isArray(data[k])) {
-                    return {
-                        users: data[k],
-                        total: data.total ?? data.count ?? data[k].length,
-                        totalPages: data.totalPages ?? Math.ceil((data.total ?? data[k].length) / currentState.itemsPerPage),
-                    };
-                }
-            }
-            return { users: [], total: 0, totalPages: 0 };
-        }
-
-        // Try multiple endpoint paths (hosted on same origin/port) until one returns data
-        async function fetchWithFallback(pathCandidates, queryString, token) {
-            const host = "http://localhost:3001"; // adjust if your backend runs elsewhere
-            for (const path of pathCandidates) {
-                const url = `${host}${path}${queryString}`;
-                try {
-                    console.log("Trying API:", url);
-                    const res = await fetch(url, {
-                        method: "GET",
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            Accept: "application/json",
-                        },
-                        credentials: "include",
-                    });
-
-                    console.log("Status for", path, res.status);
-
-                    if (res.status === 401) {
-                        // unauthorized — stop and force login
-                        localStorage.removeItem("adminToken");
-                        window.location.href = "admin-login.html";
-                        throw new Error("Unauthorized");
-                    }
-
-                    if (res.status === 404) {
-                        // try next candidate
-                        continue;
-                    }
-
-                    // If server returns other non-ok, attempt to parse message and throw
-                    const bodyText = await res.text();
-                    let parsed;
-                    try { parsed = JSON.parse(bodyText); } catch (e) { parsed = bodyText; }
-
-                    if (!res.ok) {
-                        const msg = (parsed && parsed.message) ? parsed.message : `Server error ${res.status}`;
-                        throw new Error(msg);
-                    }
-
-                    // success -> return parsed body
-                    return parsed;
-                } catch (err) {
-                    console.warn("Endpoint", path, "failed:", err.message);
-                    // try next
-                }
-            }
-            throw new Error("No working API endpoint found (tried multiple paths).");
-        }
-
-        // Global pagination updater (reads DOM elements each time)
-        function updatePagination() {
-            const showingFrom = $id("showing-from");
-            const showingTo = $id("showing-to");
-            const totalUsersEl = $id("total-users");
-            if (!showingFrom || !showingTo || !totalUsersEl) return;
-
-            const start = currentState.totalUsers === 0 ? 0 : (currentState.currentPage - 1) * currentState.itemsPerPage + 1;
-            const end = Math.min(currentState.currentPage * currentState.itemsPerPage, currentState.totalUsers);
-
-            showingFrom.textContent = start;
-            showingTo.textContent = end;
-            totalUsersEl.textContent = currentState.totalUsers;
-
-            const prevBtn = $id("prev-page-btn");
-            const nextBtn = $id("next-page-btn");
-            if (prevBtn) prevBtn.disabled = currentState.currentPage <= 1;
-            if (nextBtn) nextBtn.disabled = currentState.currentPage >= currentState.totalPages;
-        }
-
-        // Load users (tries multiple admin/user endpoints)
-        async function loadUsers() {
-            try {
-                showLoading(true);
-                const token = localStorage.getItem("adminToken");
-                
-                // Use the correct port (3000) for the backend server
-                const apiUrl = "http://localhost:3000/api/v1/userforms";
-                console.log("Fetching users from:", apiUrl);
-                
-                // Check if MongoDB is running by attempting to connect
-                // Log the full request details for debugging
-                console.log("Making fetch request to:", apiUrl, "with mode:", 'cors', "and credentials:", 'include');
-                
-                let response;
-                try {
-                    response = await fetch(apiUrl, {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        mode: 'cors'
-                    });
-                    
-                    // Log response headers for debugging CORS issues
-                    console.log("Response status:", response.status);
-                    console.log("Response headers:", [...response.headers.entries()]);
-                    
-                    if (!response.ok) {
-                        console.error(`HTTP error! Status: ${response.status}`);
-                        if (response.status === 0) {
-                            throw new Error('CORS error: The request was blocked. Check browser console for details.');
-                        } else {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                    }
-                } catch (error) {
-                    console.error("Network error:", error);
-                    throw new Error("Failed to connect to the server. Please make sure the backend server is running and CORS is properly configured.");
-                }
-
-                const contentType = response.headers.get("content-type");
-                if (!contentType || !contentType.includes("application/json")) {
-                    throw new Error("Server didn't return JSON. The API endpoint might not be configured correctly.");
-                }
-
-                const data = await response.json().catch(error => {
-                    console.error("JSON parsing error:", error);
-                    throw new Error("Failed to parse server response. The response format might be invalid.");
-                });
-                console.log("Response data:", data);
-
-                if (!data.success && !Array.isArray(data)) {
-                    console.error("Unexpected data format:", data);
-                    throw new Error("Invalid data format received from server. Expected {success: true, data: [...]} or an array.");
-                }
-
-                // Handle both response formats: {success: true, data: [...]} or direct array
-                const userForms = data.success ? data.data : data;
-                
-                if (userForms.length === 0) {
-                    console.warn("No user forms found in the database.");
-                    // Still set the data but show a message to the user
-                    document.getElementById("users-container").innerHTML = `
-                        <div class="alert alert-warning" role="alert">
-                            No user forms found in the database. Please make sure the MongoDB database is populated with data.
-                            <br><br>
-                            <strong>Troubleshooting:</strong>
-                            <ol>
-                                <li>Verify MongoDB is running</li>
-                                <li>Run the seed-data.js script to populate the database</li>
-                                <li>Check server console for more details</li>
-                            </ol>
-                        </div>
-                    `;
-                    showLoading(false);
-                    return;
-                }
-
-                currentState.allUsers = userForms;
-                currentState.totalUsers = userForms.length;
-                currentState.totalPages = 1;
-
-                console.log(`Loaded ${currentState.totalUsers} users`);
-                renderUsers(currentState.allUsers);
-                updatePagination();
-            } catch (err) {
-                console.error("Error loading users:", err);
-                // Display a user-friendly error message
-                // Check if it's a CORS error
-                const isCorsError = err.message.includes('CORS') || 
-                                   err.message.includes('Failed to fetch') || 
-                                   err.message.includes('Network error');
-                
-                let troubleshootingSteps = '';
-                
-                if (isCorsError) {
-                    troubleshootingSteps = `
-                        <ol>
-                            <li>Make sure the backend server (port 5000) is running</li>
-                            <li>Check that CORS is properly configured in app.js</li>
-                            <li>Verify that http://localhost:3001 is in the allowed origins</li>
-                            <li>Check browser console for detailed CORS error messages</li>
-                        </ol>`;
-                } else {
-                    troubleshootingSteps = `
-                        <ol>
-                            <li>MongoDB is running</li>
-                            <li>The userforms collection exists</li>
-                            <li>Both backend servers are running (port 3001 and 5000)</li>
-                            <li>Check server console for more details</li>
-                        </ol>`;
-                }
-                
-                document.getElementById("users-container").innerHTML = `
-                    <div class="alert alert-danger" role="alert">
-                        <h4 class="alert-heading">Failed to fetch user data</h4>
-                        <p>${err.message}</p>
-                        <hr>
-                        <p class="mb-0">Please verify that:</p>
-                        ${troubleshootingSteps}
-                    </div>
-                `;
-                const tbody = document.getElementById("users-table-body");
-                if (tbody) {
-                    tbody.innerHTML = `
-                <tr>
-                    <td colspan="5" class="px-4 py-4 text-center text-sm text-red-500">
-                        <i class="fas fa-exclamation-circle mr-2"></i> 
-                        ${err.message}
-                        <br>
-                        <small>Please verify that:
-                            ${isCorsError ? 
-                            `<br>1. CORS is properly configured
-                             <br>2. Backend server is running
-                             <br>3. Check browser console for details` : 
-                            `<br>1. MongoDB is running
-                             <br>2. The userforms collection exists
-                             <br>3. Check server console for details`}
-                        </small>
-                    </td>
-                </tr>`;
-                }
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        // Format date to display
+        // Format date
         function formatDate(dateString) {
-            if (!dateString) return "N/A";
-            const options = { year: "numeric", month: "short", day: "numeric" };
+            if (!dateString) return 'N/A';
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
             return new Date(dateString).toLocaleDateString(undefined, options);
         }
 
-        // Render users in the table with form data
-        function renderUsers(users) {
-            const tbody = document.getElementById("users-table-body");
-            if (!tbody) return;
-            if (!users || users.length === 0) {
-                tbody.innerHTML = `
-            <tr>
-                <td colspan="8" class="text-center text-sm text-gray-500 py-4">
-                    No users found
-                </td>
-            </tr>`;
+        // Format skills
+        function formatSkills(skills) {
+            if (!skills) return 'N/A';
+            if (Array.isArray(skills)) return skills.join(', ');
+            return skills;
+        }
+
+        // Render users table
+        function renderUsers() {
+            if (users.length === 0) {
+                usersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
+                            No users found
+                        </td>
+                    </tr>`;
                 return;
             }
-            tbody.innerHTML = users.map(user => {
-                // Format skills as a comma-separated list
-                const skillsList = Array.isArray(user.skills) ? user.skills.join(', ') : user.skills || 'N/A';
-                
-                return `
-            <tr class="hover:bg-gray-50 border-t">
-                <td class="text-sm">${user.name || "N/A"}</td>
-                <td class="text-sm">${user.email || "N/A"}</td>
-                <td class="text-sm">${user.phone || "N/A"}</td>
-                <td class="text-sm">${skillsList}</td>
-                <td class="text-sm">${user.experience || "N/A"}</td>
-                <td class="text-sm">${user.location || "N/A"}</td>
-                <td class="text-sm">${formatDate(user.createdAt)}</td>
-                <td class="whitespace-nowrap text-sm font-medium text-right">
-                    <button onclick="viewUserDetails('${user._id}')" class="text-blue-600 hover:text-blue-900 px-2 py-1 rounded">View</button>
-                    <button onclick="editUser('${user._id}')" class="text-indigo-600 hover:text-indigo-900 px-2 py-1 rounded">Edit</button>
-                    <button onclick="deleteUser('${user._id}')" class="text-red-600 hover:text-red-900 px-2 py-1 rounded">Delete</button>
-                </td>
-            </tr>
-       `;
-            }).join("");
-            
+
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedUsers = filteredUsers.slice(start, end);
+
+            usersTableBody.innerHTML = paginatedUsers.map(user => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ${user.name || 'N/A'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${user.email || 'N/A'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${user.phone || 'N/A'}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">
+                        ${formatSkills(user.skills)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${user.experience || 'N/A'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${formatDate(user.createdAt)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button onclick="viewUser('${user._id}')" class="text-blue-600 hover:text-blue-900 mr-3">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button onclick="editUser('${user._id}')" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deleteUser('${user._id}')" class="text-red-600 hover:text-red-900">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
             // Update pagination info
             updatePagination();
         }
 
-        // Wire up events after DOM ready
-        document.addEventListener("DOMContentLoaded", () => {
-            const prevBtn = $id("prev-page-btn");
-            const nextBtn = $id("next-page-btn");
-            const refreshBtn = $id("refresh-btn");
-            const logoutBtn = $id("logout-btn");
-            const searchInput = $id("search-input");
+        // Update pagination controls
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+            const start = filteredUsers.length ? (currentPage - 1) * itemsPerPage + 1 : 0;
+            const end = Math.min(currentPage * itemsPerPage, filteredUsers.length);
 
-            if (prevBtn) {
-                prevBtn.addEventListener("click", () => {
-                    if (currentState.currentPage > 1) {
-                        currentState.currentPage--;
-                        loadUsers();
-                    }
-                });
-            }
-            if (nextBtn) {
-                nextBtn.addEventListener("click", () => {
-                    if (currentState.currentPage < currentState.totalPages) {
-                        currentState.currentPage++;
-                        loadUsers();
-                    }
-                });
-            }
-            if (refreshBtn) {
-                refreshBtn.addEventListener("click", loadUsers);
-            }
-            if (logoutBtn) {
-                logoutBtn.addEventListener("click", async () => {
-                    const token = localStorage.getItem("adminToken");
-                    try {
-                        await fetch("http://localhost:3001/api/v1/auth/admin/logout", {
-                            method: "POST",
-                            headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-                            credentials: "include",
-                        });
-                    } catch (e) {
-                        console.warn("Logout error:", e);
-                    } finally {
-                        localStorage.removeItem("adminToken");
-                        window.location.href = "admin-login.html";
-                    }
-                });
-            }
-            if (searchInput) {
-                let t;
-                searchInput.addEventListener("input", (e) => {
-                    clearTimeout(t);
-                    currentState.searchQuery = e.target.value || "";
-                    currentState.currentPage = 1;
-                    t = setTimeout(loadUsers, 400);
-                });
-            }
+            showingFromSpan.textContent = start;
+            showingToSpan.textContent = end;
+            totalUsersSpan.textContent = filteredUsers.length;
+
+            prevPageBtn.disabled = currentPage <= 1;
+            nextPageBtn.disabled = currentPage >= totalPages;
+        }
+
+        // Filter users based on search input
+        function filterUsers() {
+            const searchTerm = searchInput.value.toLowerCase();
+            filteredUsers = users.filter(user => 
+                (user.name && user.name.toLowerCase().includes(searchTerm)) ||
+                (user.email && user.email.toLowerCase().includes(searchTerm)) ||
+                (user.phone && user.phone.includes(searchTerm)) ||
+                (user.skills && 
+                    (Array.isArray(user.skills) 
+                        ? user.skills.some(skill => skill.toLowerCase().includes(searchTerm))
+                        : user.skills.toLowerCase().includes(searchTerm)
+                    )
+                )
+            );
+            currentPage = 1; // Reset to first page when filtering
+            renderUsers();
+        }
+
+        // Fetch users from API
+        async function fetchUsers() {
             try {
-                updateUserInfo?.();
-            } catch (e) {
-                // ignore if not present
+                loadingRow.style.display = '';
+                
+                const response = await fetch('http://localhost:3001/api/admin/users', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch users');
+                }
+
+                const data = await response.json();
+                users = Array.isArray(data) ? data : (data.data || []);
+                filterUsers();
+                loadingRow.style.display = 'none';
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                usersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center text-sm text-red-500">
+                            Error loading users. Please try again later.
+                        </td>
+                    </tr>`;
+                loadingRow.style.display = 'none';
             }
-            loadUsers();
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is authenticated
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+
+            // Initial fetch
+            fetchUsers();
+
+            // Search functionality
+            searchInput.addEventListener('input', filterUsers);
+
+            // Refresh button
+            refreshBtn.addEventListener('click', fetchUsers);
+
+            // Pagination
+            prevPageBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderUsers();
+                }
+            });
+
+            nextPageBtn.addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderUsers();
+                }
+            });
         });
 
-        // Global functions for user actions
-        window.viewUserDetails = (userId) => {
-            const user = currentState.allUsers.find((u) => u._id === userId);
-            if (user) {
-                alert(`Viewing details for: ${user.fullName || "User"}`);
-                // In a real app, you would open a modal or navigate to a details page
-            }
-        };
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('adminToken');
+            window.location.href = 'admin-login.html';
+        });
 
-        window.editUser = (userId) => {
-            window.location.href = `userform.html?edit=${userId}`;
-        };
+        // Global functions for action buttons
+        function viewUser(userId) {
+            // Implement view functionality
+            console.log('View user:', userId);
+            // window.location.href = `view-user.html?id=${userId}`;
+        }
 
-        window.deleteUser = async (userId) => {
-            if (confirm("Are you sure you want to delete this user?")) {
-                try {
-                    const response = await fetch(
-                        `http://localhost:3001/api/v1/admin/users/${userId}`,
-                        {
-                            method: "DELETE",
-                            headers: {
-                                Authorization: `Bearer ${token}`,
-                                "Content-Type": "application/json",
-                            },
-                            credentials: "include",
-                        }
-                    );
+        function editUser(userId) {
+            // Implement edit functionality
+            console.log('Edit user:', userId);
+            // window.location.href = `userform.html?edit=${userId}`;
+        }
 
-                    if (response.ok) {
-                        alert("User deleted successfully");
-                        loadUsers();
-                    } else {
-                        throw new Error("Failed to delete user");
+        async function deleteUser(userId) {
+            if (!confirm('Are you sure you want to delete this user?')) return;
+            
+            try {
+                const response = await fetch(`http://localhost:3001/api/admin/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
                     }
-                } catch (error) {
-                    console.error("Error deleting user:", error);
-                    alert("Error deleting user: " + error.message);
+                });
+
+                if (response.ok) {
+                    // Remove the user from the local array and re-render
+                    users = users.filter(user => user._id !== userId);
+                    filterUsers();
+                } else {
+                    throw new Error('Failed to delete user');
                 }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                alert('Failed to delete user. Please try again.');
             }
-        };
+        }
     </script>
 </body>
 
