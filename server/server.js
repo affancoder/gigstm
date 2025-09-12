@@ -20,8 +20,10 @@ const allowedOrigins = [
   'http://localhost:5500',
   'http://127.0.0.1:5500',
   'https://gigstm.onrender.com', // Add your Render frontend URL here
-  'https://gigstm-api.onrender.com' // Add your Render backend URL here
-];
+  'https://gigstm-api.onrender.com', // Add your Render backend URL here
+  process.env.PRODUCTION_DOMAIN, // Hostinger domain from environment variables
+  process.env.PRODUCTION_DOMAIN ? `https://www.${process.env.PRODUCTION_DOMAIN.replace('https://', '')}` : null // www subdomain
+].filter(Boolean); // Remove null values
 
 const corsOptions = {
   origin: function (origin, callback) {

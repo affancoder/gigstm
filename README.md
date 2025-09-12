@@ -25,6 +25,29 @@ This project represents countless hours of dedicated work, problem-solving, and 
 - Problem Solving
 - Debugging
 
+## Deployment
+
+This project can be deployed to various hosting platforms. For detailed instructions on deploying to Hostinger, please refer to the following documents:
+
+- [Hostinger Deployment Guide](./HOSTINGER-DEPLOYMENT-GUIDE.md) - Step-by-step instructions for deploying to Hostinger
+- [Deployment Checklist](./DEPLOYMENT-CHECKLIST.md) - A comprehensive checklist to ensure successful deployment
+
+### Quick Deployment Steps
+
+1. Set up environment variables (see `.env.example`)
+2. Configure CORS for your production domain
+3. Upload files to Hostinger
+4. Install dependencies
+5. Start the Node.js application
+
+## Testing Deployment
+
+After deployment, you can test your application using the provided test scripts:
+
+- `verify-mongodb-connection.js` - Test MongoDB connection
+- `test-production-cors.js` - Test CORS configuration with production domain
+- `test-production-cors.html` - Browser-based CORS testing
+
 ## Contact
 
 Feel free to reach out if you have any questions or would like to know more about the project!

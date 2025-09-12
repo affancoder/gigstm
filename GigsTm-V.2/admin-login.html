@@ -163,6 +163,41 @@
             animation: spin 1s ease-in-out infinite;
             margin-right: 0.5rem;
         }
+        
+        .auth-container.loading {
+            position: relative;
+        }
+        
+        .auth-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            border-radius: 0.75rem;
+        }
+        
+        .auth-loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 15px;
+        }
+        
+        .auth-loading p {
+            color: var(--text-color);
+            font-size: 16px;
+            font-weight: 500;
+        }
 
         @keyframes spin {
             to {
@@ -217,6 +252,10 @@
                             <input type="password" id="login-password" name="password" required class="input-field"
                                 placeholder="••••••••" autocomplete="current-password">
                         </div>
+                    </div>
+                    
+                    <div class="text-right mb-2">
+                        <a href="#" id="forgot-password-link" class="text-primary">Forgot Password?</a>
                     </div>
 
                     <div class="mt-6">
@@ -282,7 +321,9 @@
 
     <script>
         // Configuration
-        const API_BASE_URL = 'http://localhost:3001/api/v1/auth/admin';
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:3001/api/v1/auth/admin'
+            : '/api/v1/auth/admin';
         const TOKEN_KEY = 'adminToken';
 
         // DOM Elements
@@ -293,6 +334,35 @@
             setupTabNavigation();
             checkAuthStatus();
             initializeForms();
+            
+            // Set up forgot password link
+            const forgotPasswordLink = document.getElementById('forgot-password-link');
+            if (forgotPasswordLink) {
+                forgotPasswordLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    handlePasswordReset();
+                });
+            }
+            
+            // Set up password toggle buttons
+             const togglePasswordButtons = document.querySelectorAll('.toggle-password');
+             togglePasswordButtons.forEach(button => {
+                 button.addEventListener('click', function() {
+                     const inputField = this.closest('.input-group').querySelector('input');
+                     const icon = this.querySelector('i');
+                     
+                     // Toggle password visibility
+                     if (inputField.type === 'password') {
+                         inputField.type = 'text';
+                         icon.classList.remove('fa-eye');
+                         icon.classList.add('fa-eye-slash');
+                     } else {
+                         inputField.type = 'password';
+                         icon.classList.remove('fa-eye-slash');
+                         icon.classList.add('fa-eye');
+                     }
+                 });
+             });
         });
 
         // Initialize form event listeners
@@ -306,6 +376,37 @@
 
             if (signupForm) {
                 signupForm.addEventListener('submit', handleSignup);
+            }
+        }
+        
+        // Handle logout
+        async function handleLogout() {
+            try {
+                // Clear local storage
+                localStorage.removeItem(TOKEN_KEY);
+                localStorage.removeItem('adminUser');
+                
+                // Call logout API if available
+                try {
+                    const response = await fetch(`${API_BASE_URL}/logout`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include'
+                    });
+                    
+                    // We don't need to check the response here since we're logging out anyway
+                    console.log('Logout API response:', response.ok ? 'Success' : 'Failed');
+                } catch (apiError) {
+                    console.error('Logout API error:', apiError);
+                    // Continue with local logout even if API call fails
+                }
+                
+                // Redirect to login page
+                window.location.href = 'admin-login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                // Force redirect to login page even if there's an error
+                window.location.href = 'admin-login.html';
             }
         }
 
@@ -345,9 +446,22 @@
         // Check if user is already authenticated
         async function checkAuthStatus() {
             const token = localStorage.getItem(TOKEN_KEY);
-            if (!token) return false;
-
+            
+            if (!token) {
+                return; // No token found, user needs to login
+            }
+            
             try {
+                // Show loading indicator
+                const authContainer = document.querySelector('.auth-container');
+                if (authContainer) {
+                    authContainer.classList.add('loading');
+                    const loadingEl = document.createElement('div');
+                    loadingEl.className = 'auth-loading';
+                    loadingEl.innerHTML = '<div class="spinner"></div><p>Checking authentication...</p>';
+                    authContainer.appendChild(loadingEl);
+                }
+                
                 const response = await fetch(`${API_BASE_URL}/me`, {
                     method: 'GET',
                     headers: {
@@ -356,34 +470,77 @@
                     },
                     credentials: 'include'
                 });
-
-                if (response.ok) {
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    // Store user data
+                    localStorage.setItem('adminUser', JSON.stringify(data.data));
+                    // Redirect to dashboard if already authenticated
                     window.location.href = 'dashboard.html';
-                    return true;
                 } else {
+                    // Token invalid or expired
                     localStorage.removeItem(TOKEN_KEY);
-                    return false;
+                    localStorage.removeItem('adminUser');
+                    // Remove loading indicator
+                    if (authContainer) {
+                        const loadingEl = authContainer.querySelector('.auth-loading');
+                        if (loadingEl) {
+                            authContainer.removeChild(loadingEl);
+                        }
+                        authContainer.classList.remove('loading');
+                    }
                 }
             } catch (error) {
                 console.error('Auth check error:', error);
                 localStorage.removeItem(TOKEN_KEY);
-                return false;
+                localStorage.removeItem('adminUser');
+                
+                // Remove loading indicator
+                const authContainer = document.querySelector('.auth-container');
+                if (authContainer) {
+                    const loadingEl = authContainer.querySelector('.auth-loading');
+                    if (loadingEl) {
+                        authContainer.removeChild(loadingEl);
+                    }
+                    authContainer.classList.remove('loading');
+                }
             }
         }
 
+        // Validate login form
+        function validateLoginForm() {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errorElement = document.getElementById('login-error');
+            
+            // Check if fields are empty
+            if (!email || !password) {
+                showError('Please enter both email and password', errorElement);
+                return false;
+            }
+            
+            // Email format validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Please enter a valid email address', errorElement);
+                return false;
+            }
+            
+            return true;
+        }
+        
         // Handle login form submission
         async function handleLogin(e) {
             e.preventDefault();
-            console.log('Login form submitted');
 
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
             const submitBtn = this.querySelector('button[type="submit"]');
             const errorElement = document.getElementById('login-error');
 
-            // Basic validation
-            if (!email || !password) {
-                showError('Please enter both email and password', errorElement);
+            // Validate form
+            if (!validateLoginForm()) {
                 return;
             }
 
@@ -392,7 +549,6 @@
             hideError(errorElement);
 
             try {
-                console.log('Sending login request...');
                 const response = await fetch(`${API_BASE_URL}/login`, {
                     method: 'POST',
                     headers: {
@@ -403,15 +559,19 @@
                 });
 
                 const data = await response.json();
-                console.log('Login response:', data);
 
                 if (!response.ok) {
                     throw new Error(data.message || 'Login failed');
                 }
 
-                // Store token
+                // Store token and user data
                 if (data.token) {
                     localStorage.setItem(TOKEN_KEY, data.token);
+                    
+                    // Store user data if available
+                    if (data.user) {
+                        localStorage.setItem('adminUser', JSON.stringify(data.user));
+                    }
 
                     // Show success message
                     showSuccess('Login successful! Redirecting...', errorElement);
@@ -433,10 +593,102 @@
 
         // Handle password reset
         async function handlePasswordReset() {
-            // Implementation will go here
+            const email = document.getElementById('login-email').value.trim();
+            const errorElement = document.getElementById('login-error');
+            
+            if (!email) {
+                showError('Please enter your email address to reset password', errorElement);
+                return;
+            }
+            
+            // Email format validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Please enter a valid email address', errorElement);
+                return;
+            }
+            
+            try {
+                // Show loading message
+                showSuccess('Processing your request...', errorElement);
+                
+                // In a real implementation, you would call a password reset API endpoint
+                // For now, we'll just show a message
+                setTimeout(() => {
+                    showSuccess('If an account exists with this email, password reset instructions have been sent.', errorElement);
+                }, 1500);
+                
+                // TODO: Implement actual password reset API call when endpoint is available
+                // const response = await fetch(`${API_BASE_URL}/reset-password`, {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ email }),
+                //     credentials: 'include'
+                // });
+                // 
+                // const data = await response.json();
+                // 
+                // if (response.ok) {
+                //     showSuccess('Password reset instructions sent to your email', errorElement);
+                // } else {
+                //     throw new Error(data.message || 'Password reset failed');
+                // }
+            } catch (error) {
+                console.error('Password reset error:', error);
+                showError(error.message || 'Failed to process password reset. Please try again.', errorElement);
+            }
         }
 
 
+        // Validate signup form
+        function validateSignupForm() {
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const errorElement = document.getElementById('signup-error');
+            
+            // Check if fields are empty
+            if (!name || !email || !password || !confirmPassword) {
+                showError('All fields are required', errorElement);
+                return false;
+            }
+            
+            // Name validation
+            if (name.length < 3) {
+                showError('Name must be at least 3 characters', errorElement);
+                return false;
+            }
+            
+            // Email format validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Please enter a valid email address', errorElement);
+                return false;
+            }
+            
+            // Password match validation
+            if (password !== confirmPassword) {
+                showError('Passwords do not match', errorElement);
+                return false;
+            }
+            
+            // Password length validation
+            if (password.length < 8) {
+                showError('Password must be at least 8 characters', errorElement);
+                return false;
+            }
+            
+            // Password strength validation
+            const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordStrengthRegex.test(password)) {
+                showError('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character', errorElement);
+                return false;
+            }
+            
+            return true;
+        }
+        
         // Handle signup form submission
         async function handleSignup(e) {
             e.preventDefault();
@@ -444,23 +696,11 @@
             const name = document.getElementById('signup-name').value.trim();
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
             const submitBtn = this.querySelector('button[type="submit"]');
             const errorElement = document.getElementById('signup-error');
 
-            // Validation
-            if (!name || !email || !password || !confirmPassword) {
-                showError('All fields are required', errorElement);
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                showError('Passwords do not match', errorElement);
-                return;
-            }
-
-            if (password.length < 8) {
-                showError('Password must be at least 8 characters', errorElement);
+            // Validate form
+            if (!validateSignupForm()) {
                 return;
             }
 
@@ -478,15 +718,20 @@
 
                 const data = await response.json();
 
-                if (response.ok) {
+                if (response.ok && data.success) {
                     // Store token if provided
                     if (data.token) {
                         localStorage.setItem(TOKEN_KEY, data.token);
+                        
+                        // Store user data if available
+                        if (data.user) {
+                            localStorage.setItem('adminUser', JSON.stringify(data.user));
+                        }
                     }
                     showSuccess('Account created successfully! Redirecting...', errorElement);
                     setTimeout(() => window.location.href = 'dashboard.html', 1500);
                 } else {
-                    throw new Error(data.message || 'Registration failed');
+                    throw new Error(data.message || 'Registration failed. ' + (data.message || ''));
                 }
             } catch (error) {
                 console.error('Signup error:', error);

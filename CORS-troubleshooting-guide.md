@@ -106,3 +106,25 @@ node check-mongodb.js
 ## Next Steps
 
 If you continue to experience issues after following these steps, please check the server logs for more detailed error messages and ensure all dependencies are correctly installed.
+
+## Schema Validation Issues
+
+If you're experiencing validation errors with the UserForm data, ensure your data matches the required schema:
+
+```javascript
+// UserForm Schema
+{
+  name: String,          // Required
+  email: String,         // Required, valid email format
+  phone: String,         // Required
+  skills: [String],      // Required, array of strings
+  experience: String,    // Required, one of: 'Beginner', 'Intermediate', 'Expert'
+  location: String,      // Required
+  createdAt: Date        // Default: current date
+}
+```
+
+Common validation issues:
+1. Sending `skills` as a string instead of an array
+2. Using an invalid `experience` value (must be one of the enum values)
+3. Missing required fields
