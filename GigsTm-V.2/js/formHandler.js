@@ -203,7 +203,7 @@ async function loadUserProfile() {
         }
     } catch (error) {
         console.error('Error loading profile:', error);
-        showMessage('Failed to load profile data', 'error');
+        // showMessage('Failed to load profile data', 'error');
     }
 }
 
