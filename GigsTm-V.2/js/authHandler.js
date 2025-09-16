@@ -1,5 +1,5 @@
 // API base URL
-const API_BASE_URL = '/api/v1';
+const API_BASE_URL = '/api';
 // expose for inline scripts that may check window.API_BASE_URL
 window.API_BASE_URL = API_BASE_URL;
 
@@ -26,23 +26,28 @@ async function handleLogin(credentials) {
 
         const response = await fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
-            credentials: 'same-origin',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
             body: JSON.stringify({
-                email: credentials.email.trim(),
+                email: credentials.email.trim().toLowerCase(),
                 password: credentials.password
             })
         });
 
         const data = await response.json().catch(() => ({
+            success: false,
             message: 'Invalid server response'
         }));
 
         if (!response.ok) {
-            throw new Error(data.message || 'Login failed. Please check your credentials.');
+            throw new Error(data.message || 'Invalid credentials');
+        }
+
+        if (!data.success) {
+            throw new Error(data.message || 'Login failed');
         }
 
         if (!data.token) {
@@ -59,7 +64,8 @@ async function handleLogin(credentials) {
         return { 
             success: true, 
             data,
-            redirect: data.redirect || '/index.html' // Default redirect
+            message: data.message || 'Login successful',
+            redirect: 'userform.html'
         };
     } catch (error) {
         console.error('Login error:', error);
@@ -73,26 +79,55 @@ async function handleLogin(credentials) {
 // Handle user registration
 async function handleRegister(userData) {
     try {
+        // Validate required fields
+        if (!userData.fullName || !userData.email || !userData.password) {
+            throw new Error('Please provide full name, email, and password');
+        }
+
         const response = await fetch(`${API_BASE_URL}/auth/register`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify({
+                fullName: userData.fullName.trim(),
+                email: userData.email.trim().toLowerCase(),
+                phoneNumber: userData.phoneNumber?.trim(),
+                password: userData.password
+            })
         });
 
-        const data = await response.json();
+        const data = await response.json().catch(() => ({
+            success: false,
+            message: 'Invalid server response'
+        }));
 
         if (!response.ok) {
             throw new Error(data.message || 'Registration failed');
         }
 
-        // Store token and user data (keep both keys for compatibility)
+        if (!data.success) {
+            throw new Error(data.message || 'Registration failed');
+        }
+
+        if (!data.token) {
+            throw new Error('No authentication token received');
+        }
+
+        // Store token and user data
         localStorage.setItem('token', data.token);
         localStorage.setItem('authToken', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        if (data.user) {
+            localStorage.setItem('user', JSON.stringify(data.user));
+        }
         
-        return { success: true, data };
+        return { 
+            success: true, 
+            data,
+            message: 'Account created successfully'
+        };
     } catch (error) {
         console.error('Registration error:', error);
         return { 
@@ -103,7 +138,24 @@ async function handleRegister(userData) {
 }
 
 // Handle user logout
-function handleLogout() {
+async function handleLogout() {
+    try {
+        // Call logout endpoint to clear server-side cookie
+        const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+        if (token) {
+            await fetch(`${API_BASE_URL}/auth/logout`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Logout API call failed:', error);
+        // Continue with local cleanup even if API call fails
+    }
+    
     // Clear all auth data
     localStorage.removeItem('token');
     localStorage.removeItem('authToken');
@@ -130,7 +182,7 @@ function updateAuthUI() {
 
     if (user) {
         if (userGreeting) {
-            userGreeting.textContent = `Hello, ${user.fullName || user.email}`;
+            userGreeting.textContent = `Hello, ${user.fullName || user.name || user.email}`;
         }
         if (loginLink) loginLink.style.display = 'none';
         if (logoutLink) logoutLink.style.display = 'block';

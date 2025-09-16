@@ -91,14 +91,27 @@ router.post('/login', async (req, res) => {
     user.lastLogin = new Date();
     await user.save();
 
+    // Set cookie options
+    const options = {
+        expires: new Date(
+            Date.now() + (process.env.JWT_COOKIE_EXPIRE || 30) * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+    };
+
     console.log('Login successful for user:', user.email);
-    res.json({
+    res.cookie('token', token, options).json({
       success: true,
       token,
       user: {
         id: user._id,
         name: user.fullName || user.name,
-        email: user.email
+        fullName: user.fullName || user.name,
+        email: user.email,
+        phoneNumber: user.phoneNumber,
+        role: user.role
       }
     });
   } catch (err) {
@@ -137,6 +150,31 @@ router.get('/verify', async (req, res) => {
       return res.status(401).json({ message: 'Token is not valid' });
     }
     res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// @route   POST api/auth/logout
+// @desc    Logout user
+// @access  Private
+router.post('/logout', (req, res) => {
+  try {
+    // Clear the cookie
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    });
+
+    res.json({
+      success: true,
+      message: 'Logged out successfully'
+    });
+  } catch (err) {
+    console.error('Logout error:', err);
+    res.status(500).json({ 
+      success: false,
+      message: 'Server Error' 
+    });
   }
 });
 
