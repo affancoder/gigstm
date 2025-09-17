@@ -4,6 +4,86 @@
   box-sizing: border-box;
 }
 
+/* Tabs for profile steps */
+.profile-steps {
+  display: flex;
+  gap: 1rem;
+  background: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.tab-link {
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0.5rem 0.75rem;
+  font-weight: 600;
+  color: #6c757d;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+
+.tab-link.active {
+  color: #2c3e50;
+  border-color: #1e90ff;
+}
+
+.step-panel {
+  display: none;
+}
+
+.step-panel.active {
+  display: block;
+}
+
+/* Card-like grouping for sections (to mirror the screenshot) */
+.section-card {
+  background: #e9ecef;
+  border: 1px solid #dfe3e6;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Ensure spacing between section-cards inside step */
+#step2-panel .section-card + .section-card {
+  margin-top: 1rem;
+}
+
+/* Password field with visibility toggle */
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input[type="password"],
+.password-field input[type="text"] {
+  width: 100%;
+  padding-right: 44px; /* space for the eye button */
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #dee2e6;
+  border: 1px solid #cfd4d9;
+  border-radius: 6px;
+  color: #495057;
+  cursor: pointer;
+}
+
+.toggle-visibility i { font-size: 0.9rem; }
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: #f9f9f9;

@@ -20,11 +20,10 @@
             <div class="user-profile">
                 <div class="user-avatar">
                     <img id="user-photo" src="https://ui-avatars.com/api/?name=User&background=random" alt="User Avatar">
+                    </div>
                 </div>
-                <h3 class="user-name" id="user-display-name">Welcome Back!</h3>
-                <!-- <p id="user-email-display" class="user-email">user@example.com</p> -->
-                <!-- <span id="user-email" class="user-email">Loading...</span> -->
-            </div>
+
+            <!-- Removed misplaced Step 2 content (now correctly added below in main-content) -->
 
             <div class="contact-info">
                 <!-- <h3>Account Details</h3> -->
@@ -43,8 +42,18 @@
         </div>
 
         <div class="main-content">
+            <!-- Profile Steps Tabs -->
+            <div class="profile-steps" role="tablist">
+                <button type="button" class="tab-link active" data-target="#step1-panel">EDIT PROFILE STEP 1</button>
+                <button type="button" class="tab-link" data-target="#step2-panel">EDIT PROFILE STEP 2</button>
+                <button type="button" class="tab-link" data-target="#kyc-panel">KYC DETAILS</button>
+                <button type="button" class="tab-link" data-target="#password-panel">CHANGE PASSWORD</button>
+            </div>
+
             <form id="profile-form" onsubmit="handleFormSubmit(event)">
-                <div class="form-grid">
+                <!-- Step 1 Panel: existing fields -->
+                <div id="step1-panel" class="step-panel active">
+                    <div class="form-grid">
                     <!-- Name, Email, Mobile Row -->
                     <div class="form-row">
                         <div class="form-group">
@@ -592,7 +601,239 @@
                             <textarea id="about" name="about" placeholder="Type your message"></textarea>
                         </div>
                     </div>
+                </div> <!-- end .form-grid -->
+            </div> <!-- end #step1-panel -->
+
+            <!-- Step 2 Panel: new fields as per screenshot -->
+            <div id="step2-panel" class="step-panel">
+                <div class="form-grid">
+                    <!-- Experience & Type Section -->
+                    <div class="section-card">
+                        <div class="form-row double">
+                            <div class="form-group">
+                                <label for="experienceYears">Experience</label>
+                                <select id="experienceYears" name="experienceYears">
+                                    <option value="">Years</option>
+                                    <option value="0">0 years</option>
+                                    <option value="1">1 year</option>
+                                    <option value="2">2 years</option>
+                                    <option value="3">3 years</option>
+                                    <option value="4">4 years</option>
+                                    <option value="5">5 years</option>
+                                    <option value="6">6 years</option>
+                                    <option value="7">7 years</option>
+                                    <option value="8">8 years</option>
+                                    <option value="9">9 years</option>
+                                    <option value="10">10 years</option>
+                                    <option value="11">11 years</option>
+                                    <option value="12">12 years</option>
+                                    <option value="13">13 years</option>
+                                    <option value="14">14 years</option>
+                                    <option value="15">15 years</option>
+                                    <option value="16">16 years</option>
+                                    <option value="17">17 years</option>
+                                    <option value="18">18 years</option>
+                                    <option value="19">19 years</option>
+                                    <option value="20">20+ years</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="experienceMonths">&nbsp;</label>
+                                <select id="experienceMonths" name="experienceMonths">
+                                    <option value="">Months</option>
+                                    <option value="0">0 months</option>
+                                    <option value="1">1 month</option>
+                                    <option value="2">2 months</option>
+                                    <option value="3">3 months</option>
+                                    <option value="4">4 months</option>
+                                    <option value="5">5 months</option>
+                                    <option value="6">6 months</option>
+                                    <option value="7">7 months</option>
+                                    <option value="8">8 months</option>
+                                    <option value="9">9 months</option>
+                                    <option value="10">10 months</option>
+                                    <option value="11">11 months</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="employmentType">Type</label>
+                                <input type="text" id="employmentType" name="employmentType" placeholder="Enter type">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Occupation & Job Requirement -->
+                    <div class="section-card">
+                        <div class="form-row double">
+                            <div class="form-group">
+                                <label for="occupation">Occupation</label>
+                                <input type="text" id="occupation" name="occupation" placeholder="Enter occupation">
+                            </div>
+                            <div class="form-group">
+                                <label for="jobRequirement">Job Requirement</label>
+                                <input type="text" id="jobRequirement" name="jobRequirement" placeholder="Enter requirement">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Discover & Interest Type -->
+                    <div class="section-card">
+                        <div class="form-row double">
+                            <div class="form-group">
+                                <label for="heardAbout">Where did you hear about us?</label>
+                                <select id="heardAbout" name="heardAbout">
+                                    <option value="">--Select--</option>
+                                    <option value="google">Google</option>
+                                    <option value="friend">Friend/Colleague</option>
+                                    <option value="social">Social Media</option>
+                                    <option value="ads">Ads</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="interestType">Interest Type</label>
+                                <input type="text" id="interestType" name="interestType" placeholder="Enter interest">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resume/CV Upload -->
+                    <div class="section-card">
+                        <div class="form-row single">
+                            <div class="form-group">
+                                <label for="resumeStep2">Resume/CV</label>
+                                <div class="file-input">
+                                    <input type="file" id="resumeStep2" name="resumeStep2" accept=".pdf,.doc,.docx" style="display: none;">
+                                    <button type="button" class="file-btn" onclick="document.getElementById('resumeStep2').click()">Choose File</button>
+                                    <span class="file-status" id="resumeStep2-status">No file chosen</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="form-row single">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" id="submit-step2">
+                                SAVE
+                            </button>
+                        </div>
+                    </div>
                 </div>
+            </div> <!-- end #step2-panel -->
+
+            <!-- KYC DETAILS Panel -->
+            <div id="kyc-panel" class="step-panel">
+                <div class="form-grid">
+                    <!-- Bank name and Account number -->
+                    <div class="section-card">
+                        <div class="form-row double">
+                            <div class="form-group">
+                                <label for="bankName">Bank Name *</label>
+                                <input type="text" id="bankName" name="bankName" placeholder="Enter bank name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="accountNumber">Account Number *</label>
+                                <input type="text" id="accountNumber" name="accountNumber" placeholder="Enter account number" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- IFSC -->
+                    <div class="section-card">
+                        <div class="form-row single">
+                            <div class="form-group">
+                                <label for="ifscCode">IFSC Code *</label>
+                                <input type="text" id="ifscCode" name="ifscCode" placeholder="Enter ifsc code" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Aadhaar front/back uploads -->
+                    <div class="section-card">
+                        <div class="form-row double">
+                            <div class="form-group">
+                                <label for="aadhaarFront">Upload Aadhar Card Front *</label>
+                                <div class="file-input">
+                                    <input type="file" id="aadhaarFront" name="aadhaarFront" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" required>
+                                    <button type="button" class="file-btn" onclick="document.getElementById('aadhaarFront').click()">Choose File</button>
+                                    <span class="file-status" id="aadhaarFront-status">No file chosen</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="aadhaarBack">Upload Aadhar Card Back *</label>
+                                <div class="file-input">
+                                    <input type="file" id="aadhaarBack" name="aadhaarBack" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" required>
+                                    <button type="button" class="file-btn" onclick="document.getElementById('aadhaarBack').click()">Choose File</button>
+                                    <span class="file-status" id="aadhaarBack-status">No file chosen</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PAN and Passbook/Cheque uploads -->
+                    <div class="section-card">
+                        <div class="form-row double">
+                            <div class="form-group">
+                                <label for="panCardUpload">Upload Pan Card *</label>
+                                <div class="file-input">
+                                    <input type="file" id="panCardUpload" name="panCardUpload" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" required>
+                                    <button type="button" class="file-btn" onclick="document.getElementById('panCardUpload').click()">Choose File</button>
+                                    <span class="file-status" id="panCardUpload-status">No file chosen</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="passbookUpload">Upload Passbook/Cheque</label>
+                                <div class="file-input">
+                                    <input type="file" id="passbookUpload" name="passbookUpload" accept=".pdf,.jpg,.jpeg,.png" style="display:none;">
+                                    <button type="button" class="file-btn" onclick="document.getElementById('passbookUpload').click()">Choose File</button>
+                                    <span class="file-status" id="passbookUpload-status">No file chosen</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="form-row single">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" id="submit-kyc">
+                                SAVE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- end #kyc-panel -->
+
+            <!-- CHANGE PASSWORD Panel -->
+            <div id="password-panel" class="step-panel">
+                <div class="form-grid">
+                    <div class="section-card">
+                        <div class="form-row single">
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <div class="password-field">
+                                    <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password">
+                                    <button type="button" class="toggle-visibility" aria-label="Toggle visibility" data-target="#newPassword"><i class="fas fa-eye"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row single">
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <div class="password-field">
+                                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password">
+                                    <button type="button" class="toggle-visibility" aria-label="Toggle visibility" data-target="#confirmPassword"><i class="fas fa-eye"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row single">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" id="change-password-btn">CHANGE PASSWORD</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- end #password-panel -->
 
                 <!-- Auth Status and Controls -->
                 <div class="form-footer">
@@ -694,8 +935,39 @@
             }
         });
     </script>
+    <script>
+        // Toggle password visibility
+        document.addEventListener('click', function(e){
+            const btn = e.target.closest('.toggle-visibility');
+            if(!btn) return;
+            const input = document.querySelector(btn.getAttribute('data-target'));
+            if(!input) return;
+            input.type = input.type === 'password' ? 'text' : 'password';
+            const icon = btn.querySelector('i');
+            if(icon){
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            }
+        });
+    </script>
     <script src="js/authHandler.js"></script>
     <script src="js/formHandler.js"></script>
+    <script>
+        // Simple tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab-link');
+            const panels = document.querySelectorAll('.step-panel');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    panels.forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    const target = document.querySelector(tab.getAttribute('data-target'));
+                    if (target) target.classList.add('active');
+                });
+            });
+        });
+    </script>
     <script>
         // Initialize auth state when the page loads
         document.addEventListener('DOMContentLoaded', function() {
