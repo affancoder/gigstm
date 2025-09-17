@@ -8,8 +8,6 @@
     <link rel="icon" href="https://gigstm.com/images/logo/favicon.ico" type="image/x-icon">
     <title>Login - GigsTM</title>
     <link rel="stylesheet" href="userform.css">
-    <!-- MongoDB and bcrypt -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Auth Handler -->
     <script src="js/authHandler.js"></script>
     <style>
@@ -316,12 +314,12 @@
                 const result = await window.Auth.login({ email, password });
 
                 if (result.success) {
-                    showMessage('login-message', 'Login successful! Redirecting...', 'success');
+                    showMessage('login-message', result.message || 'Login successful! Redirecting...', 'success');
                     setTimeout(() => {
                         window.location.href = 'userform.html';
                     }, 1000);
                 } else {
-                    throw new Error(result.message);
+                    throw new Error(result.message || 'Login failed');
                 }
             } catch (error) {
                 showMessage('login-message', error.message, 'error');

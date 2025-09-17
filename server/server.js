@@ -83,9 +83,9 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/profile', profileRoutes);
-app.use('/api/v1/auth/admin', adminRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Admin dashboard route
 app.get('/admin/dashboard', (req, res) => {
