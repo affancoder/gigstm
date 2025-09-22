@@ -56,9 +56,9 @@ const adminRoutes = require('./routes/admin');
 const userFormRoutes = require('./routes/userform');
 const userFormsRoutes = require('./routes/userforms');
 
-app.use(adminRoutes);
-app.use(userFormRoutes);
-app.use(userFormsRoutes);
+app.use('/api', adminRoutes);
+app.use('/api', userFormRoutes);
+app.use('/api', userFormsRoutes);
 
 // Connect to MongoDB
 mongoose = require('mongoose');

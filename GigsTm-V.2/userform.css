@@ -263,12 +263,96 @@ body {
 .form-group {
   display: flex;
   flex-direction: column;
+  position: relative;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
 }
 
-.form-group label {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #2c3e50;
+/* Error States */
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+  border-color: #e74c3c !important;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e74c3c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+}
+
+/* Error Messages */
+.field-error {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
+  font-weight: 500;
+  padding-left: 0.25rem;
+}
+
+/* Success States */
+.form-group input.valid,
+.form-group select.valid,
+.form-group textarea.valid {
+  border-color: #2ecc71 !important;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%232ecc71' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 11.08V12a10 10 0 1 1-5.93-9.14'%3E%3C/path%3E%3Cpolyline points='22 4 12 14.01 9 11.01'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+}
+
+/* Animation for messages */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Message container */
+.message {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+  line-height: 1.5;
+}
+
+.message.error {
+  background-color: #fdecea;
+  color: #c62828;
+  border-left: 4px solid #e53935;
+  display: block;
+}
+
+.message.success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-left: 4px solid #43a047;
+  display: block;
+}
+
+/* Form feedback */
+.form-feedback {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  display: block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.form-feedback.error {
+  color: #e74c3c;
+  background-color: #fdecea;
+  border-left: 3px solid #e53935;
+}
+
+.form-feedback.success {
+  color: #2e7d32;
+  background-color: #e8f5e9;
+  border-left: 3px solid #43a047;
 }
 
 .form-group input,

@@ -31,6 +31,11 @@
                     <label><i class="fas fa-envelope"></i> Email Address</label>
                     <span id="user-email" class="user-email">Loading...</span>
                 </div>
+                <div class="contact-detail">
+                    <button type="button" id="edit-profile-btn" class="btn btn-secondary" style="margin-top:10px;">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                </div>
                 <!-- <div class="contact-detail">
                     <label><i class="fas fa-phone"></i> Phone Number</label>
                     <span id="user-phone">Not provided</span>
@@ -42,6 +47,9 @@
         </div>
 
         <div class="main-content">
+            <!-- Message Container -->
+            <div id="message-container" class="message-container" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; width: 90%; max-width: 600px;"></div>
+            
             <!-- Profile Steps Tabs -->
             <div class="profile-steps" role="tablist">
                 <button type="button" class="tab-link active" data-target="#step1-panel">EDIT PROFILE STEP 1</button>
@@ -826,6 +834,7 @@
                                 </div>
                             </div>
                         </div>
+                        <br/>
                         <div class="form-row single">
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary" id="change-password-btn">CHANGE PASSWORD</button>
@@ -846,12 +855,14 @@
                             </div>
                             <div id="form-message" class="message" style="display: none;"></div>
                         </div>
-                        <div id="message-container"></div>
                     </div>
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" id="logout-btn" title="Click to logout">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </button>
+                    <button type="button" id="save-draft-btn" class="btn btn-secondary">
+                        <i class="fas fa-save"></i> Save Draft
+                    </button>
                         <button type="submit" id="submit-btn" class="btn btn-primary">
                             <i class="fas fa-save"></i> Save Changes
                         </button>
@@ -902,7 +913,7 @@
             <div class="footer-section">
                 <h3>Legal</h3>
                 <ul class="footer-links">
-                    <li><a href="#">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="#">Blog</a></li>
                     <li><a href="#">Privacy Policy</a></li>
                     <li><a href="#">Terms & Conditions</a></li>
@@ -912,7 +923,7 @@
         </div>
         
         <div class="footer-bottom">
-            <p>Copyright © 2025 GigsTM.com | All Rights Reserved.</p>
+            <p>Copyright © 2025 GigsTm.com | All Rights Reserved.</p>
         </div>
     </footer>
     
