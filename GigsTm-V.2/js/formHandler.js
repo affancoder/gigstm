@@ -298,6 +298,18 @@ const validateForm = (formData) => {
     return errors;
 };
 
+// Friendly names for user-facing error summary
+const getFriendlyFieldName = (field) => ({
+    name: 'Full Name',
+    email: 'Email Address',
+    mobile: 'Mobile Number',
+    aadhaar: 'Aadhaar Number',
+    pan: 'PAN Number',
+    pincode: 'Pincode',
+    newPassword: 'New Password',
+    confirmPassword: 'Confirm Password'
+}[field] || field);
+
 const validateFileUploads = () => {
     const missing = REQUIRED_FILE_INPUTS.filter(({ id }) => {
         const fileInput = getElement(id);
@@ -363,13 +375,21 @@ const makeAuthenticatedRequest = async (url, options = {}) => {
         throw new Error('Authentication required. Please login again.');
     }
 
-    const response = await fetch(url, {
-        ...options,
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            ...options.headers
-        }
-    });
+    const finalOptions = { ...options };
+    finalOptions.headers = {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        ...(options.headers || {})
+    };
+
+    // Auto JSON encode when body is a plain object
+    const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
+    if (!isFormData && options.body && typeof options.body === 'object' && !(options.body instanceof Blob)) {
+        finalOptions.headers['Content-Type'] = finalOptions.headers['Content-Type'] || 'application/json';
+        finalOptions.body = JSON.stringify(options.body);
+    }
+
+    const response = await fetch(url, finalOptions);
 
     if (response.status === 401) {
         handleUnauthorized();
@@ -377,21 +397,21 @@ const makeAuthenticatedRequest = async (url, options = {}) => {
     }
 
     let result;
+    const contentType = response.headers.get('content-type') || '';
     try {
-        result = await response.json();
+        result = contentType.includes('application/json') ? await response.json() : await response.text();
     } catch (jsonError) {
         const text = await response.text();
         throw new Error(`Server returned ${response.status} ${response.statusText}. ${text.substring(0, 200)}`);
     }
 
     if (!response.ok) {
-        const errorMessage = formatErrorMessage(result) || 
-            (response.status === 404 ? 'API endpoint not found. Please check the server configuration.' : 
-            `Request failed with status ${response.status}`);
+        const errorMessage = typeof result === 'string' ? result : (formatErrorMessage(result) ||
+            (response.status === 404 ? 'API endpoint not found. Please check the server configuration.' : `Request failed with status ${response.status}`));
         throw new Error(errorMessage);
     }
 
-    return result;
+    return typeof result === 'string' ? { success: true, message: result } : result;
 };
 
 // Draft save/load
@@ -400,11 +420,12 @@ const saveDraft = async () => {
         const data = getAllFormData();
         const result = await makeAuthenticatedRequest(`http://localhost:3001/api/profile/draft`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: data
         });
         if (result) {
-            localStorage.setItem('userFormDraft', JSON.stringify(result.data?.data || data));
+            const draftPayload = result.data?.data || result.data || data;
+            localStorage.setItem('userFormDraft', JSON.stringify(draftPayload));
+            if (result.data?._id) localStorage.setItem('userFormDraftId', result.data._id);
             showMessage('Draft saved', MESSAGE_TYPES.SUCCESS);
         }
     } catch (error) {
@@ -421,12 +442,11 @@ const loadDraft = async () => {
             populateForm(JSON.parse(local));
         }
 
-        const result = await makeAuthenticatedRequest(`http://localhost:3001/api/profile/draft`, {
-            method: 'GET'
-        });
+        const result = await makeAuthenticatedRequest(`http://localhost:3001/api/profile/draft`, { method: 'GET' });
         if (result?.data?.data) {
             populateForm(result.data.data);
             localStorage.setItem('userFormDraft', JSON.stringify(result.data.data));
+            if (result.data?._id) localStorage.setItem('userFormDraftId', result.data._id);
         }
     } catch (error) {
         // 404 no draft is fine
@@ -468,7 +488,17 @@ const handleFormSubmit = async (e) => {
 
         if (validationErrors.length > 0) {
             validationErrors.forEach(({ field, message }) => showFieldError(field, message));
-            showMessage('Please correct the errors in the form', MESSAGE_TYPES.ERROR);
+            // Build a user-friendly missing summary (fields + files)
+            const missingFields = validationErrors.map(v => `- ${getFriendlyFieldName(v.field)}`);
+            const missingFiles = validateFileUploads().map(m => `- ${m.name}`);
+            const details = [
+                missingFields.length ? `Missing/invalid fields:\n${missingFields.join('\n')}` : '',
+                missingFiles.length ? `Required uploads:\n${missingFiles.join('\n')}` : ''
+            ].filter(Boolean).join('\n\n');
+            // Save as draft instead of failing hard
+            await saveDraft();
+            showMessage(`Some required items are missing. Your progress was saved as a draft.\n\n${details}`, MESSAGE_TYPES.INFO);
+            // Exit early
             return;
         }
 
@@ -476,9 +506,9 @@ const handleFormSubmit = async (e) => {
         const missingFiles = validateFileUploads();
         if (missingFiles.length > 0) {
             const list = missingFiles.map(m => m.name).join(', ');
-            const errorMessage = `Please upload the following required files: ${list}`;
-            showMessage(errorMessage, MESSAGE_TYPES.WARNING);
-            // Show inline errors next to each missing file status label
+            const warningMessage = `Missing uploads: ${list}. You can upload them later.`;
+            showMessage(warningMessage, MESSAGE_TYPES.WARNING);
+            // Show inline warnings but do not block save
             missingFiles.forEach(({ id, name }) => {
                 const statusElement = getElement(id + '-status');
                 if (statusElement) {
@@ -486,24 +516,18 @@ const handleFormSubmit = async (e) => {
                     if (!(exists && exists.classList && exists.classList.contains('field-error'))) {
                         const errorElement = document.createElement('div');
                         errorElement.className = 'field-error';
-                        errorElement.textContent = `${name} is required.`;
+                        errorElement.textContent = `${name} can be uploaded later.`;
                         statusElement.parentNode.insertBefore(errorElement, statusElement.nextSibling);
                     }
                 }
             });
-            const firstMissingId = missingFiles[0]?.id;
-            if (firstMissingId) {
-                getElement(firstMissingId)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                getElement(firstMissingId)?.focus();
-            }
-            return;
         }
 
         // Prepare and send data
         const formDataToSend = prepareFormDataForUpload(formData);
-        console.log('Sending form data to:', `${BASE_URL}/profile`);
+        console.log('Sending form data to:', `http://localhost:3001/api/profile`);
 
-        const result = await makeAuthenticatedRequest(`${BASE_URL}/profile`, {
+        const result = await makeAuthenticatedRequest(`http://localhost:3001/api/profile`, {
             method: 'POST',
             body: formDataToSend
         });
@@ -620,26 +644,14 @@ const loadUserProfile = async () => {
             populateForm(JSON.parse(savedFormData));
         }
 
-        // Get user email
-        const userEmail = localStorage.getItem('userEmail') || getElementValue('email');
-        if (!userEmail) {
-            console.log('No user email found, skipping server fetch');
-            return;
-        }
-
-        // Fetch from server
-        const response = await fetch(`${BASE_URL}/v1/userform/${encodeURIComponent(userEmail)}`, {
-            headers: { 'Content-Type': 'application/json' }
+        // Fetch current authenticated profile
+        const result = await makeAuthenticatedRequest(`http://localhost:3001/api/profile`, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' }
         });
-
-        if (response.ok) {
-            const result = await response.json();
-            if (result.data) {
-                populateForm(result.data);
-                localStorage.setItem('userFormData', JSON.stringify(result.data));
-            }
-        } else if (response.status !== 404) {
-            console.warn('Failed to load form data:', response.statusText);
+        if (result?.data) {
+            populateForm(result.data);
+            localStorage.setItem('userFormData', JSON.stringify(result.data));
         }
 
     } catch (error) {

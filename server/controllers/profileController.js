@@ -18,9 +18,10 @@ const uploadBufferToCloudinary = (buffer, filename) => {
 
 exports.saveProfileWithUploads = async (req, res) => {
     try {
-        // Process file uploads if any
+        // Process file uploads if any and Cloudinary configured
         const files = req.files || {};
-        if (files && Object.keys(files).length > 0) {
+        const cloudinaryConfigured = !!(process.env.CLOUDINARY_URL || (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET));
+        if (cloudinaryConfigured && files && Object.keys(files).length > 0) {
             req.body.files = req.body.files && typeof req.body.files === 'object' ? req.body.files : {};
 
             const entries = Object.entries(files);
@@ -49,7 +50,34 @@ exports.saveProfileWithUploads = async (req, res) => {
             }
         }
 
-        // Delegate to existing saveProfile logic (expects JSON fields in req.body)
+        // Map flat fields from multipart form into nested structure expected by saveProfile
+        const b = req.body || {};
+        const mapped = {
+            personalInfo: {
+                name: b.name,
+                email: b.email,
+                mobile: b.mobile,
+                jobRole: b.jobRole,
+                gender: b.gender,
+                dob: b.dob
+            },
+            documents: {
+                aadhaar: b.aadhaar,
+                pan: b.pan
+            },
+            address: {
+                street: b.address1,
+                city: b.city,
+                state: b.state,
+                country: b.country,
+                pincode: b.pincode
+            },
+            about: b.about,
+            files: b.files || {}
+        };
+
+        // Attach mapped body and delegate to existing saveProfile
+        req.body = mapped;
         return exports.saveProfile(req, res);
     } catch (error) {
         console.error('Error processing uploads:', error);
@@ -63,11 +91,11 @@ exports.saveProfile = async (req, res) => {
         const userId = req.user.id;
         const profileData = req.body;
 
-        // Validate required fields
-        if (!profileData.personalInfo || !profileData.personalInfo.name || !profileData.personalInfo.email) {
+        // Validate required fields (align with model requirements)
+        if (!profileData.personalInfo || !profileData.personalInfo.name || !profileData.personalInfo.email || !profileData.personalInfo.mobile) {
             return res.status(400).json({
                 success: false,
-                message: 'Name and email are required fields'
+                message: 'Name, email and mobile are required fields'
             });
         }
 
@@ -109,9 +137,10 @@ exports.saveProfile = async (req, res) => {
         });
     } catch (error) {
         console.error('Error saving profile:', error);
-        res.status(500).json({
+        const isValidation = error?.name === 'ValidationError' || String(error?.message || '').toLowerCase().includes('validation');
+        res.status(isValidation ? 400 : 500).json({
             success: false,
-            message: 'Error saving profile',
+            message: isValidation ? 'Validation failed. Please check required fields.' : 'Error saving profile',
             error: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }
