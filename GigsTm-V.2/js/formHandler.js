@@ -200,33 +200,36 @@ const getAllFormData = () => ({
     pan: getElementValue('pan'),
 
     // Address Information
-    country: getElementValue('country') || 'in',
-    state: getElementValue('state'),
-    city: getElementValue('city'),
-    address1: getElementValue('address1'),
-    address2: getElementValue('address2'),
-    pincode: getElementValue('pincode'),
-
-    // About
-    about: getElementValue('about'),
+    address: {
+        address1: getElementValue('address1'),
+        address2: getElementValue('address2'),
+        city: getElementValue('city'),
+        state: getElementValue('state'),
+        country: getElementValue('country') || 'in',
+        pincode: getElementValue('pincode')
+    },
 
     // Professional Information
-    experienceYears: getElementValue('experienceYears'),
-    experienceMonths: getElementValue('experienceMonths'),
+    about: getElementValue('about'),
+    experience: {
+        years: parseInt(getElementValue('experienceYears')) || 0,
+        months: parseInt(getElementValue('experienceMonths')) || 0
+    },
     employmentType: getElementValue('employmentType'),
     occupation: getElementValue('occupation'),
     jobRequirement: getElementValue('jobRequirement'),
     heardAbout: getElementValue('heardAbout'),
     interestType: getElementValue('interestType'),
 
-    // KYC Details
-    bankName: getElementValue('bankName'),
-    accountNumber: getElementValue('accountNumber'),
-    ifscCode: getElementValue('ifscCode'),
+    // Bank Details
+    bankDetails: {
+        bankName: getElementValue('bankName'),
+        accountNumber: getElementValue('accountNumber'),
+        ifscCode: getElementValue('ifscCode')
+    },
 
-    // Password
-    newPassword: getElementValue('newPassword'),
-    confirmPassword: getElementValue('confirmPassword')
+    // Draft Status
+    isDraft: true
 });
 
 // Legacy compatibility function
@@ -544,6 +547,11 @@ const handleFormSubmit = async (e) => {
             if (result.data) {
                 updateUserUI(result.data);
             }
+
+            // Redirect to dashboard/profile after brief pause, keep token intact
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 800);
         }
 
     } catch (error) {
