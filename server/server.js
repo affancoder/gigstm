@@ -1,15 +1,21 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const { createClient } = require('@supabase/supabase-js');
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 const adminRoutes = require('./routes/admin');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
 
 // Configure CORS
 const allowedOrigins = [
@@ -33,8 +39,8 @@ const corsOptions = {
     // Check if the origin is in the allowed list or is a subdomain of your Render app
     if (
       allowedOrigins.includes(origin) ||
-      origin.endsWith('.onrender.com') || // Allow all Render deployments
-      process.env.NODE_ENV === 'development' // Allow all in development
+      origin.endsWith('.onrender.com') // Allow all Render deployments
+      // process.env.NODE_ENV === 'development' // Allow all in development
     ) {
       return callback(null, true);
     }
@@ -61,24 +67,15 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
-// Apply CORS middleware
+// Apply middleware
 app.use(cors(corsOptions));
-
-// Handle preflight requests
-app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Serve static files from the GigsTm-V.2 directory
-app.use(express.static(path.join(__dirname, '../GigsTm-V.2')));
-
-// Serve static files for admin routes
-// app.use('/admin', express.static(path.join(__dirname, '../GigsTm-V.2')));
-
-// Log all requests for debugging
+// Add Supabase client to request object
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  req.supabase = supabase;
   next();
 });
 
@@ -89,7 +86,7 @@ app.use('/api/admin', adminRoutes);
 
 // Admin dashboard route
 app.get('/admin/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, '../GigsTm-V.2/admin-dashboard.html'));
+  res.sendFile(path.join(__dirname, '../GigsTm-V.2/admin-dashboard.html'));
 });
 
 // Serve index.html as the default page
@@ -115,59 +112,9 @@ app.use((req, res) => {
   });
 });
 
-// Connect to MongoDB
-const connectDB = async () => {
-  try {
-    if (!process.env.MONGODB_URI) {
-      throw new Error('MONGODB_URI is not defined in environment variables');
-    }
-    
-    console.log('🔌 Connecting to MongoDB...');
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 10000, // Increased from 5000 to 10000
-      socketTimeoutMS: 45000,
-      connectTimeoutMS: 10000, // Added explicit connection timeout
-    });
-    
-    console.log('✅ Connected to MongoDB successfully');
-    console.log(`📊 Database: ${mongoose.connection.db.databaseName}`);
-    
-    // Log database events for debugging
-    mongoose.connection.on('error', err => {
-      console.error('❌ MongoDB connection error:', err);
-    });
-    
-    mongoose.connection.on('disconnected', () => {
-      console.log('ℹ️  MongoDB disconnected');
-    });
-    
-  } catch (err) {
-    console.error('❌ Failed to connect to MongoDB:', err.message);
-    console.error('Connection string used:', process.env.MONGODB_URI ? 
-      process.env.MONGODB_URI.replace(/:[^:]*@/, ':***@') : 'Not defined');
-    process.exit(1);
-  }
-};
-
-// Connect to database before starting server is handled in startServer
-
 // Start server
-const startServer = async () => {
-  try {
-    // Wait for database connection
-    await connectDB();
-    
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`📱 Frontend available at: /`);
-      console.log(`🔐 API endpoints available at: /api/auth`);
-    });
-  } catch (err) {
-    console.error('❌ Failed to start server:', err.message);
-    process.exit(1);
-  }
-};
-
-startServer();
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📱 Frontend available at: /`);
+  console.log(`🔐 API endpoints available at: /api/auth`);
+});
