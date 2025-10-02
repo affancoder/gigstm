@@ -54,15 +54,17 @@ async function handleLogin(credentials) {
             throw new Error('No authentication token received');
         }
 
-        // Store token and user data
+        // Store token and user data (persist across form submissions)
         localStorage.setItem('token', data.token);
         localStorage.setItem('authToken', data.token);
         if (data.user) {
             localStorage.setItem('user', JSON.stringify(data.user));
+            if (data.user.email) localStorage.setItem('userEmail', data.user.email);
+            if (data.user.fullName) localStorage.setItem('userName', data.user.fullName);
         }
         
-        return { 
-            success: true, 
+        return {
+            success: true,
             data,
             message: data.message || 'Login successful',
             redirect: 'userform.html'
@@ -121,6 +123,8 @@ async function handleRegister(userData) {
         localStorage.setItem('authToken', data.token);
         if (data.user) {
             localStorage.setItem('user', JSON.stringify(data.user));
+            if (data.user.email) localStorage.setItem('userEmail', data.user.email);
+            if (data.user.fullName) localStorage.setItem('userName', data.user.fullName);
         }
         
         return { 

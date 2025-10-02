@@ -85,7 +85,52 @@
 
         <!-- Main Content -->
         <div class="ml-64 p-8 w-full">
-            <div class="flex justify-between items-center mb-6">
+            <!-- User Profile View (shown for logged-in users) -->
+            <div id="user-profile-view" class="hidden">
+                <h1 class="text-2xl font-bold mb-6">My Profile</h1>
+                <div id="userProfileContainer" class="bg-white rounded-lg shadow p-6 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <div class="text-sm text-gray-500">Full Name</div>
+                            <div id="pf_name" class="text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Email</div>
+                            <div id="pf_email" class="text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Mobile</div>
+                            <div id="pf_mobile" class="text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Job Role</div>
+                            <div id="pf_jobRole" class="text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Gender</div>
+                            <div id="pf_gender" class="text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">DOB</div>
+                            <div id="pf_dob" class="text-gray-900">-</div>
+                        </div>
+                        <div class="md:col-span-2">
+                            <div class="text-sm text-gray-500">Address</div>
+                            <div id="pf_address" class="text-gray-900">-</div>
+                        </div>
+                        <div class="md:col-span-2">
+                            <div class="text-sm text-gray-500">About</div>
+                            <div id="pf_about" class="text-gray-900">-</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <a href="userform.html" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+                            <i class="fas fa-edit mr-2"></i> Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="admin-header" class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold">User Management</h1>
                 <div class="flex items-center space-x-4">
                     <div class="relative">
@@ -100,7 +145,7 @@
             </div>
 
             <!-- Users Table -->
-            <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div id="admin-table" class="bg-white rounded-lg shadow overflow-hidden">
                 <div class="table-container">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
@@ -130,7 +175,7 @@
             </div>
 
             <!-- Pagination -->
-            <div class="mt-4 flex justify-between items-center text-sm text-gray-600">
+            <div id="admin-pagination" class="mt-4 flex justify-between items-center text-sm text-gray-600">
                 <div>
                     Showing <span id="showingFrom">0</span> to <span id="showingTo">0</span> of <span id="totalUsers">0</span> users
                 </div>
@@ -315,17 +360,77 @@
             }
         }
 
+        // Helpers
+        function formatDob(dateStr){
+            if(!dateStr) return '-';
+            const d = new Date(dateStr);
+            if(isNaN(d)) return '-';
+            return d.toLocaleDateString();
+        }
+
+        async function loadUserProfile(){
+            try{
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                if(!token) return false;
+                const res = await fetch('http://localhost:3001/api/profile', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if(!res.ok) return false;
+                const data = await res.json();
+                const p = data.data || {};
+
+                document.getElementById('pf_name').textContent = p.personalInfo?.name || '-';
+                document.getElementById('pf_email').textContent = p.personalInfo?.email || '-';
+                document.getElementById('pf_mobile').textContent = p.personalInfo?.mobile || '-';
+                document.getElementById('pf_jobRole').textContent = p.personalInfo?.jobRole || '-';
+                document.getElementById('pf_gender').textContent = p.personalInfo?.gender || '-';
+                document.getElementById('pf_dob').textContent = formatDob(p.personalInfo?.dob);
+                const addr = p.address || {};
+                const addressStr = [addr.street, addr.city, addr.state, addr.country, addr.pincode].filter(Boolean).join(', ');
+                document.getElementById('pf_address').textContent = addressStr || '-';
+                document.getElementById('pf_about').textContent = p.about || '-';
+
+                return true;
+            }catch(e){
+                console.error('Failed to load profile:', e);
+                return false;
+            }
+        }
+
         // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if user is authenticated
-            const token = localStorage.getItem('adminToken');
-            if (!token) {
-                window.location.href = 'admin-login.html';
+        document.addEventListener('DOMContentLoaded', async () => {
+            const hasAdmin = !!localStorage.getItem('adminToken');
+            const hasUser = !!(localStorage.getItem('token') || localStorage.getItem('authToken'));
+
+            if(hasAdmin){
+                // Show admin UI
+                document.getElementById('admin-header').classList.remove('hidden');
+                document.getElementById('admin-table').classList.remove('hidden');
+                document.getElementById('admin-pagination').classList.remove('hidden');
+                document.getElementById('user-profile-view').classList.add('hidden');
+                // Initial fetch
+                fetchUsers();
+            } else if(hasUser){
+                // Show user profile UI
+                document.getElementById('admin-header').classList.add('hidden');
+                document.getElementById('admin-table').classList.add('hidden');
+                document.getElementById('admin-pagination').classList.add('hidden');
+                document.getElementById('user-profile-view').classList.remove('hidden');
+                const ok = await loadUserProfile();
+                if(!ok){
+                    // If unauthorized, go to login
+                    window.location.href = 'login.html';
+                    return;
+                }
+            } else {
+                // No token at all
+                window.location.href = 'login.html';
                 return;
             }
-
-            // Initial fetch
-            fetchUsers();
 
             // Search functionality
             searchInput.addEventListener('input', filterUsers);
@@ -354,7 +459,12 @@
         document.getElementById('logout-btn').addEventListener('click', function(e) {
             e.preventDefault();
             localStorage.removeItem('adminToken');
-            window.location.href = 'admin-login.html';
+            localStorage.removeItem('token');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            window.location.href = 'index.html';
         });
 
         // Global functions for action buttons
