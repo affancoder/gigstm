@@ -1,9 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
-const usersRoute = require('./routes/users');
-const userFormRoutes = require('./routes/userform');
-const userFormsRoutes = require('./routes/userforms'); // Import the userforms routes
 
 const app = express();
 
@@ -79,51 +75,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With', 'Origin']
 }));
 
-// Routes
-app.use('/api/v1/user-forms', usersRoute);
-app.use(userFormRoutes);
-app.use(userFormsRoutes); // Mount the userforms routes
-
-// Connect to MongoDB
-mongoose
-    .connect('mongodb://localhost:27017/gigstm', {
-        serverSelectionTimeoutMS: 5000, // 5 second timeout for server selection
-        connectTimeoutMS: 10000 // 10 second timeout for initial connection
-    })
-    .then(() => {
-        console.log('MongoDB connected successfully on app.js server');
-        // Check if db property exists before trying to list collections
-        if (mongoose.connection.db) {
-            // Log available collections to help with debugging
-            mongoose.connection.db.listCollections().toArray()
-                .then(collections => {
-                    console.log('Available collections:', collections.map(c => c.name));
-                    
-                    // Check if userforms collection exists
-                    const userformsCollection = collections.find(c => c.name === 'userforms');
-                    if (!userformsCollection) {
-                        console.warn('Warning: userforms collection does not exist in the database.');
-                        console.log('Please run the seed-data.js script to populate the database with sample data.');
-                    } else {
-                        console.log('userforms collection found in the database.');
-                    }
-                })
-                .catch(err => {
-                    console.log('Error listing collections:', err);
-                });
-        } else {
-            console.warn('Warning: mongoose.connection.db is undefined. Cannot list collections.');
-        }
-    })
-    .catch((error) => {
-        console.error('MongoDB connection error in app.js:', error);
-        console.log('Please make sure MongoDB is running on your system');
-        console.log('Troubleshooting tips:');
-        console.log('1. Install MongoDB if not already installed');
-        console.log('2. Start MongoDB service');
-        console.log('3. Check if MongoDB is running on the default port (27017)');
-        console.log('4. Run the check-mongodb.js script to diagnose connection issues');
-    });
+// All API routes have been removed.
 
 // Server
 const PORT = process.env.PORT || 5000;

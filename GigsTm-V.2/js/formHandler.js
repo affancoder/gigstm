@@ -200,33 +200,36 @@ const getAllFormData = () => ({
     pan: getElementValue('pan'),
 
     // Address Information
-    country: getElementValue('country') || 'in',
-    state: getElementValue('state'),
-    city: getElementValue('city'),
-    address1: getElementValue('address1'),
-    address2: getElementValue('address2'),
-    pincode: getElementValue('pincode'),
-
-    // About
-    about: getElementValue('about'),
+    address: {
+        address1: getElementValue('address1'),
+        address2: getElementValue('address2'),
+        city: getElementValue('city'),
+        state: getElementValue('state'),
+        country: getElementValue('country') || 'in',
+        pincode: getElementValue('pincode')
+    },
 
     // Professional Information
-    experienceYears: getElementValue('experienceYears'),
-    experienceMonths: getElementValue('experienceMonths'),
+    about: getElementValue('about'),
+    experience: {
+        years: parseInt(getElementValue('experienceYears')) || 0,
+        months: parseInt(getElementValue('experienceMonths')) || 0
+    },
     employmentType: getElementValue('employmentType'),
     occupation: getElementValue('occupation'),
     jobRequirement: getElementValue('jobRequirement'),
     heardAbout: getElementValue('heardAbout'),
     interestType: getElementValue('interestType'),
 
-    // KYC Details
-    bankName: getElementValue('bankName'),
-    accountNumber: getElementValue('accountNumber'),
-    ifscCode: getElementValue('ifscCode'),
+    // Bank Details
+    bankDetails: {
+        bankName: getElementValue('bankName'),
+        accountNumber: getElementValue('accountNumber'),
+        ifscCode: getElementValue('ifscCode')
+    },
 
-    // Password
-    newPassword: getElementValue('newPassword'),
-    confirmPassword: getElementValue('confirmPassword')
+    // Draft Status
+    isDraft: true
 });
 
 // Legacy compatibility function
@@ -370,180 +373,87 @@ const handleUnauthorized = () => {
 };
 
 const makeAuthenticatedRequest = async (url, options = {}) => {
-    const token = getAuthToken();
-    if (!token) {
-        throw new Error('Authentication required. Please login again.');
-    }
-
     const finalOptions = { ...options };
+    finalOptions.credentials = 'include'; // Important for sending cookies
+
+    // Do not set Authorization header, the browser will handle the cookie
     finalOptions.headers = {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
         ...(options.headers || {})
     };
 
-    // Auto JSON encode when body is a plain object
+    // If body is a plain object, stringify it, unless it's FormData
     const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
-    if (!isFormData && options.body && typeof options.body === 'object' && !(options.body instanceof Blob)) {
-        finalOptions.headers['Content-Type'] = finalOptions.headers['Content-Type'] || 'application/json';
+    if (!isFormData && options.body && typeof options.body === 'object') {
+        finalOptions.headers['Content-Type'] = 'application/json';
         finalOptions.body = JSON.stringify(options.body);
     }
 
     const response = await fetch(url, finalOptions);
 
     if (response.status === 401) {
-        handleUnauthorized();
-        return null;
+        showMessage('Your session has expired. Redirecting to login...', MESSAGE_TYPES.ERROR);
+        setTimeout(() => {
+            window.location.href = 'login.html?sessionExpired=true';
+        }, 2000);
+        throw new Error('Unauthorized');
     }
 
-    let result;
-    const contentType = response.headers.get('content-type') || '';
-    try {
-        result = contentType.includes('application/json') ? await response.json() : await response.text();
-    } catch (jsonError) {
-        const text = await response.text();
-        throw new Error(`Server returned ${response.status} ${response.statusText}. ${text.substring(0, 200)}`);
-    }
+    const result = await response.json();
 
     if (!response.ok) {
-        const errorMessage = typeof result === 'string' ? result : (formatErrorMessage(result) ||
-            (response.status === 404 ? 'API endpoint not found. Please check the server configuration.' : `Request failed with status ${response.status}`));
+        const errorMessage = result.error || result.message || 'An API error occurred.';
         throw new Error(errorMessage);
     }
 
-    return typeof result === 'string' ? { success: true, message: result } : result;
-};
-
-// Draft save/load
-const saveDraft = async () => {
-    try {
-        const data = getAllFormData();
-        const result = await makeAuthenticatedRequest(`http://localhost:3001/api/profile/draft`, {
-            method: 'POST',
-            body: data
-        });
-        if (result) {
-            const draftPayload = result.data?.data || result.data || data;
-            localStorage.setItem('userFormDraft', JSON.stringify(draftPayload));
-            if (result.data?._id) localStorage.setItem('userFormDraftId', result.data._id);
-            showMessage('Draft saved', MESSAGE_TYPES.SUCCESS);
-        }
-    } catch (error) {
-        console.error('Draft save failed:', error);
-        showMessage(error.message || 'Failed to save draft', MESSAGE_TYPES.ERROR);
-    }
-};
-
-const loadDraft = async () => {
-    try {
-        // Local first
-        const local = localStorage.getItem('userFormDraft');
-        if (local) {
-            populateForm(JSON.parse(local));
-        }
-
-        const result = await makeAuthenticatedRequest(`http://localhost:3001/api/profile/draft`, { method: 'GET' });
-        if (result?.data?.data) {
-            populateForm(result.data.data);
-            localStorage.setItem('userFormDraft', JSON.stringify(result.data.data));
-            if (result.data?._id) localStorage.setItem('userFormDraftId', result.data._id);
-        }
-    } catch (error) {
-        // 404 no draft is fine
-        console.log('No remote draft or failed to load draft:', error?.message || error);
-    }
+    return result;
 };
 
 // Form Submission
 const handleFormSubmit = async (e) => {
     e.preventDefault();
-
     const submitBtn = getElement('submit-btn');
     const originalBtnText = submitBtn?.innerHTML;
 
     try {
-        // Update UI state
         if (submitBtn) {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
         }
 
-        // Clear previous errors
-        clearAllFieldErrors();
-        // Also clear inline file errors
-        (() => {
-            FILE_INPUT_IDS.forEach(inputId => {
-                const statusElement = getElement(inputId + '-status');
-                if (!statusElement) return;
-                const next = statusElement.nextElementSibling;
-                if (next && next.classList && next.classList.contains('field-error')) {
-                    next.remove();
-                }
-            });
-        })();
+        const profileImageInput = getElement('profile-image');
+        const file = profileImageInput?.files?.[0];
 
-        // Get and validate form data
-        const formData = getAllFormData();
-        const validationErrors = validateForm(formData);
-
-        if (validationErrors.length > 0) {
-            validationErrors.forEach(({ field, message }) => showFieldError(field, message));
-            // Build a user-friendly missing summary (fields + files)
-            const missingFields = validationErrors.map(v => `- ${getFriendlyFieldName(v.field)}`);
-            const missingFiles = validateFileUploads().map(m => `- ${m.name}`);
-            const details = [
-                missingFields.length ? `Missing/invalid fields:\n${missingFields.join('\n')}` : '',
-                missingFiles.length ? `Required uploads:\n${missingFiles.join('\n')}` : ''
-            ].filter(Boolean).join('\n\n');
-            // Save as draft instead of failing hard
-            await saveDraft();
-            showMessage(`Some required items are missing. Your progress was saved as a draft.\n\n${details}`, MESSAGE_TYPES.INFO);
-            // Exit early
+        if (!file) {
+            showMessage('Please select a profile image to upload.', MESSAGE_TYPES.WARNING);
+            // In a real scenario, you would proceed to save other form data here.
             return;
         }
 
-        // Check required file uploads
-        const missingFiles = validateFileUploads();
-        if (missingFiles.length > 0) {
-            const list = missingFiles.map(m => m.name).join(', ');
-            const warningMessage = `Missing uploads: ${list}. You can upload them later.`;
-            showMessage(warningMessage, MESSAGE_TYPES.WARNING);
-            // Show inline warnings but do not block save
-            missingFiles.forEach(({ id, name }) => {
-                const statusElement = getElement(id + '-status');
-                if (statusElement) {
-                    const exists = statusElement.nextElementSibling;
-                    if (!(exists && exists.classList && exists.classList.contains('field-error'))) {
-                        const errorElement = document.createElement('div');
-                        errorElement.className = 'field-error';
-                        errorElement.textContent = `${name} can be uploaded later.`;
-                        statusElement.parentNode.insertBefore(errorElement, statusElement.nextSibling);
-                    }
-                }
-            });
-        }
+        // Prepare and send file data
+        const formData = new FormData();
+        formData.append('file', file);
 
-        // Prepare and send data
-        const formDataToSend = prepareFormDataForUpload(formData);
-        console.log('Sending form data to:', `http://localhost:3001/api/profile`);
+        console.log('Uploading profile image...');
 
-        const result = await makeAuthenticatedRequest(`http://localhost:3001/api/profile`, {
+        const result = await makeAuthenticatedRequest(`/api/storage/upload`, {
             method: 'POST',
-            body: formDataToSend
+            body: formData
         });
 
-        if (result) {
-            showMessage('Profile updated successfully!', MESSAGE_TYPES.SUCCESS);
-            localStorage.setItem('userFormData', JSON.stringify(result.data || {}));
-
-            // Clear password fields
-            setElementValue('newPassword', '');
-            setElementValue('confirmPassword', '');
-
-            // Update UI
-            if (result.data) {
-                updateUserUI(result.data);
+        if (result && result.url) {
+            showMessage('Profile image updated successfully!', MESSAGE_TYPES.SUCCESS);
+            
+            // Update the profile image on the page
+            const userPhoto = getElement('user-photo');
+            if (userPhoto) {
+                userPhoto.src = result.url;
             }
+            
+            // Here you would typically save the result.url to the user's profile
+            // along with the other form data.
+            console.log('New image URL:', result.url);
+        } else {
+            throw new Error('File upload succeeded but no URL was returned.');
         }
 
     } catch (error) {
@@ -769,8 +679,8 @@ const initializeApp = async () => {
         setupEventHandlers();
         setupFileInputs();
         // Load draft first (prefill), then fallback to profile if needed
-        await loadDraft();
-        await loadUserProfile();
+        // await loadDraft();
+        // await loadUserProfile();
     } catch (error) {
         console.error('Initialization error:', error);
         showMessage('Failed to initialize the application. Please refresh the page.', MESSAGE_TYPES.ERROR);

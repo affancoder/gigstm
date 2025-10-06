@@ -979,39 +979,7 @@
             });
         });
     </script>
-    <script>
-        // Initialize auth state when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            const user = getCurrentUser();
-            
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            // Update user info in the UI
-            const userPhoto = document.getElementById('user-photo');
-            const userName = document.getElementById('logged-in-name');
-            const userEmail = document.getElementById('logged-in-email');
-            const userDisplayName = document.getElementById('user-display-name');
-            const userEmailDisplay = document.getElementById('user-email');
-            
-            if (userPhoto) userPhoto.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || 'User')}&background=random`;
-            if (userName) userName.textContent = user.fullName || 'User';
-            if (userEmail) userEmail.textContent = user.email || 'user@example.com';
-            if (userDisplayName) userDisplayName.textContent = user.fullName || 'Welcome Back!';
-            if (userEmailDisplay) userEmailDisplay.textContent = user.email || 'user@example.com';
-            
-            // Set up logout button
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    handleLogout();
-                });
-            }
-        });
-    </script>
+
 </body>
 
 </html>
