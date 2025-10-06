@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="https://gigstm.com/images/logo/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="https://gigstm.com/images/logo/favicon.ico" type="image/x-icon" />
+    <title>User Dashboard - GigsTM</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #4f46e5;
+        }
+
+        body {
+            background-color: #f9fafb;
+        }
+
+        .sidebar {
+            width: 250px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+        }
+
+        /* Table styles */
+        .table-container {
+            max-height: 70vh;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        .table-container thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #f9fafb;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-container th, .table-container td {
+            white-space: nowrap;
+            padding: 0.75rem 1rem;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .sidebar,
+            .main-content {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .table-container {
+                max-height: 60vh;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans">
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-white shadow-md fixed h-full">
+            <div class="p-4 border-b">
+                <img src="./GigsTm_files/lgo_project1.png" alt="GigsTM" class="h-10" />
+            </div>
+            <nav class="mt-4">
+                <a href="#" class="flex items-center px-4 py-3 text-gray-700 bg-blue-50 border-r-4 border-blue-500">
+                    <i class="fas fa-users w-6"></i>
+                    <span class="ml-3">All Users</span>
+                </a>
+                <a href="userform.html" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50">
+                    <i class="fas fa-user-plus w-6"></i>
+                    <span class="ml-3">Add New User</span>
+                </a>
+                <a href="#" id="logout-btn" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50 mt-auto">
+                    <i class="fas fa-sign-out-alt w-6"></i>
+                    <span class="ml-3">Logout</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="ml-64 p-8 w-full">
+            <!-- User Profile View (shown for logged-in users) -->
+            <div id="user-profile-view" class="hidden">
+                <h1 class="text-2xl font-bold mb-6">My Profile</h1>
+                <div id="userProfileContainer" class="bg-white rounded-lg shadow p-6 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <div class="text-sm text-gray-500">Full Name</div>
+                            <div id="pf_name" class="text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Email</div>
+                            <div id="pf_email" class="text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Mobile</div>
+                            <div id="pf_mobile" class="text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Job Role</div>
+                            <div id="pf_jobRole" class="text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Gender</div>
+                            <div id="pf_gender" class="text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">DOB</div>
+                            <div id="pf_dob" class="text-gray-900">-</div>
+                        </div>
+                        <div class="md:col-span-2">
+                            <div class="text-sm text-gray-500">Address</div>
+                            <div id="pf_address" class="text-gray-900">-</div>
+                        </div>
+                        <div class="md:col-span-2">
+                            <div class="text-sm text-gray-500">About</div>
+                            <div id="pf_about" class="text-gray-900">-</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <a href="userform.html" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+                            <i class="fas fa-edit mr-2"></i> Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="admin-header" class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold">User Management</h1>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Search users..." 
+                               class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                    <button id="refreshBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+                        <i class="fas fa-sync-alt mr-2"></i> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div id="admin-table" class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="table-container">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skills</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Experience</th>
+<<<<<<< HEAD
+=======
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+>>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200">
+                            <tr id="loadingRow">
+                                <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
+                                    <i class="fas fa-spinner fa-spin mr-2"></i> Loading user data...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div id="admin-pagination" class="mt-4 flex justify-between items-center text-sm text-gray-600">
+                <div>
+                    Showing <span id="showingFrom">0</span> to <span id="showingTo">0</span> of <span id="totalUsers">0</span> users
+                </div>
+                <div class="flex space-x-2">
+                    <button id="prevPage" class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button id="nextPage" class="px-3 py-1 bg-gray-200 rounded disabled:opacity-50" disabled>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let users = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let filteredUsers = [];
+
+        // DOM Elements
+        const usersTableBody = document.getElementById('usersTableBody');
+        const loadingRow = document.getElementById('loadingRow');
+        const searchInput = document.getElementById('searchInput');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const showingFromSpan = document.getElementById('showingFrom');
+        const showingToSpan = document.getElementById('showingTo');
+        const totalUsersSpan = document.getElementById('totalUsers');
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Format skills
+        function formatSkills(skills) {
+            if (!skills) return 'N/A';
+            if (Array.isArray(skills)) return skills.join(', ');
+            return skills;
+        }
+
+        // Render users table
+        function renderUsers() {
+            if (users.length === 0) {
+                usersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">
+                            No users found
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedUsers = filteredUsers.slice(start, end);
+
+            usersTableBody.innerHTML = paginatedUsers.map(user => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ${user.name || 'N/A'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${user.email || 'N/A'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${user.phone || 'N/A'}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">
+                        ${formatSkills(user.skills)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${user.experience || 'N/A'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+<<<<<<< HEAD
+=======
+                        ${user.location || 'N/A'}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+>>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
+                        ${formatDate(user.createdAt)}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button onclick="viewUser('${user._id}')" class="text-blue-600 hover:text-blue-900 mr-3">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button onclick="editUser('${user._id}')" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deleteUser('${user._id}')" class="text-red-600 hover:text-red-900">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Update pagination info
+            updatePagination();
+        }
+
+        // Update pagination controls
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+            const start = filteredUsers.length ? (currentPage - 1) * itemsPerPage + 1 : 0;
+            const end = Math.min(currentPage * itemsPerPage, filteredUsers.length);
+
+            showingFromSpan.textContent = start;
+            showingToSpan.textContent = end;
+            totalUsersSpan.textContent = filteredUsers.length;
+
+            prevPageBtn.disabled = currentPage <= 1;
+            nextPageBtn.disabled = currentPage >= totalPages;
+        }
+
+        // Filter users based on search input
+        function filterUsers() {
+            const searchTerm = searchInput.value.toLowerCase();
+            filteredUsers = users.filter(user => 
+                (user.name && user.name.toLowerCase().includes(searchTerm)) ||
+                (user.email && user.email.toLowerCase().includes(searchTerm)) ||
+                (user.phone && user.phone.includes(searchTerm)) ||
+<<<<<<< HEAD
+=======
+                (user.location && user.location.toLowerCase().includes(searchTerm)) ||
+>>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
+                (user.skills && 
+                    (Array.isArray(user.skills) 
+                        ? user.skills.some(skill => skill.toLowerCase().includes(searchTerm))
+                        : user.skills.toLowerCase().includes(searchTerm)
+                    )
+                )
+            );
+            currentPage = 1; // Reset to first page when filtering
+            renderUsers();
+        }
+
+        // Fetch users from API
+        async function fetchUsers() {
+            try {
+                loadingRow.style.display = '';
+                
+<<<<<<< HEAD
+                const response = await fetch('http://localhost:3001/api/admin/users', {
+=======
+                const response = await fetch('http://localhost:3001/api/v1/userforms', {
+>>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch users');
+                }
+
+                const data = await response.json();
+                users = Array.isArray(data) ? data : (data.data || []);
+<<<<<<< HEAD
+=======
+                console.log('Fetched userform data:', users);
+>>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
+                filterUsers();
+                loadingRow.style.display = 'none';
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                usersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 text-center text-sm text-red-500">
+                            Error loading users. Please try again later.
+                        </td>
+                    </tr>`;
+                loadingRow.style.display = 'none';
+            }
+        }
+
+        // Helpers
+        function formatDob(dateStr){
+            if(!dateStr) return '-';
+            const d = new Date(dateStr);
+            if(isNaN(d)) return '-';
+            return d.toLocaleDateString();
+        }
+
+        async function loadUserProfile(){
+            try{
+                const token = localStorage.getItem('token') || localStorage.getItem('authToken');
+                if(!token) return false;
+                const res = await fetch('http://localhost:3001/api/profile', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if(!res.ok) return false;
+                const data = await res.json();
+                const p = data.data || {};
+
+                document.getElementById('pf_name').textContent = p.personalInfo?.name || '-';
+                document.getElementById('pf_email').textContent = p.personalInfo?.email || '-';
+                document.getElementById('pf_mobile').textContent = p.personalInfo?.mobile || '-';
+                document.getElementById('pf_jobRole').textContent = p.personalInfo?.jobRole || '-';
+                document.getElementById('pf_gender').textContent = p.personalInfo?.gender || '-';
+                document.getElementById('pf_dob').textContent = formatDob(p.personalInfo?.dob);
+                const addr = p.address || {};
+                const addressStr = [addr.street, addr.city, addr.state, addr.country, addr.pincode].filter(Boolean).join(', ');
+                document.getElementById('pf_address').textContent = addressStr || '-';
+                document.getElementById('pf_about').textContent = p.about || '-';
+
+                return true;
+            }catch(e){
+                console.error('Failed to load profile:', e);
+                return false;
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', async () => {
+            const hasAdmin = !!localStorage.getItem('adminToken');
+            const hasUser = !!(localStorage.getItem('token') || localStorage.getItem('authToken'));
+
+            if(hasAdmin){
+                // Show admin UI
+                document.getElementById('admin-header').classList.remove('hidden');
+                document.getElementById('admin-table').classList.remove('hidden');
+                document.getElementById('admin-pagination').classList.remove('hidden');
+                document.getElementById('user-profile-view').classList.add('hidden');
+                // Initial fetch
+                fetchUsers();
+            } else if(hasUser){
+                // Show user profile UI
+                document.getElementById('admin-header').classList.add('hidden');
+                document.getElementById('admin-table').classList.add('hidden');
+                document.getElementById('admin-pagination').classList.add('hidden');
+                document.getElementById('user-profile-view').classList.remove('hidden');
+                const ok = await loadUserProfile();
+                if(!ok){
+                    // If unauthorized, go to login
+                    window.location.href = 'login.html';
+                    return;
+                }
+            } else {
+                // No token at all
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Search functionality
+            searchInput.addEventListener('input', filterUsers);
+
+            // Refresh button
+            refreshBtn.addEventListener('click', fetchUsers);
+
+            // Pagination
+            prevPageBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderUsers();
+                }
+            });
+
+            nextPageBtn.addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderUsers();
+                }
+            });
+        });
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('token');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            window.location.href = 'index.html';
+        });
+
+        // Global functions for action buttons
+        function viewUser(userId) {
+            // Implement view functionality
+            console.log('View user:', userId);
+            // window.location.href = `view-user.html?id=${userId}`;
+        }
+
+        function editUser(userId) {
+            // Implement edit functionality
+            console.log('Edit user:', userId);
+            // window.location.href = `userform.html?edit=${userId}`;
+        }
+
+        async function deleteUser(userId) {
+            if (!confirm('Are you sure you want to delete this user?')) return;
+            
+            try {
+<<<<<<< HEAD
+                const response = await fetch(`http://localhost:3001/api/admin/users/${userId}`, {
+=======
+                const response = await fetch(`http://localhost:3001/api/v1/userforms/${userId}`, {
+>>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+
+                if (response.ok) {
+                    // Remove the user from the local array and re-render
+                    users = users.filter(user => user._id !== userId);
+                    filterUsers();
+                } else {
+                    throw new Error('Failed to delete user');
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                alert('Failed to delete user. Please try again.');
+            }
+        }
+    </script>
+</body>
+
+</html>

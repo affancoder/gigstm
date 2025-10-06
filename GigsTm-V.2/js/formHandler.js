@@ -448,12 +448,20 @@ const handleFormSubmit = async (e) => {
             if (userPhoto) {
                 userPhoto.src = result.url;
             }
+<<<<<<< HEAD
             
             // Here you would typically save the result.url to the user's profile
             // along with the other form data.
             console.log('New image URL:', result.url);
         } else {
             throw new Error('File upload succeeded but no URL was returned.');
+=======
+
+            // Redirect to dashboard/profile after brief pause, keep token intact
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 800);
+>>>>>>> 6a403c59a0b1da471dea4f9bf5762332ab4a4feb
         }
 
     } catch (error) {
