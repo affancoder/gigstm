@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-document.addEventListener('DOMContentLoaded', async () => {
-    const protectedPages = ['userform.html', 'dashboard.html'];
-=======
 // API base URL
 const API_BASE_URL = '/api';
 // expose for inline scripts that may check window.API_BASE_URL
@@ -203,10 +199,8 @@ function updateAuthUI() {
 }
 
 // Initialize auth state when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    // Check if we're on a protected page
-    const protectedPages = ['userform.html'];
->>>>>>> 6a403c59a0b1da471dea4f9bf5762332ab4a4feb
+document.addEventListener('DOMContentLoaded', async () => {
+    const protectedPages = ['userform.html', 'dashboard.html'];
     const currentPage = window.location.pathname.split('/').pop();
 
     if (protectedPages.includes(currentPage)) {

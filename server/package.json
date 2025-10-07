@@ -10,15 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
-    "@supabase/supabase-js": "^2.58.0",
-=======
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/auth-helpers-react": "^0.5.0",
     "@supabase/supabase-js": "^2.58.0",
     "@types/node": "^24.6.1",
     "@types/react": "^19.1.17",
->>>>>>> 6a403c59a0b1da471dea4f9bf5762332ab4a4feb
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",

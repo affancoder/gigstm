@@ -3,12 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-<<<<<<< HEAD
 
 // Import routes
-=======
-const { createClient } = require('@supabase/supabase-js');
->>>>>>> 6a403c59a0b1da471dea4f9bf5762332ab4a4feb
 const authRoutes = require('./routes/auth');
 const storageRoutes = require('./routes/storage');
 
@@ -16,9 +12,10 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Initialize Supabase client
+const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 // Configure CORS
@@ -37,9 +34,6 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function (origin, callback) {
-<<<<<<< HEAD
-    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.onrender.com') || process.env.NODE_ENV === 'development') {
-=======
     // Allow requests with no origin (like mobile apps, curl, postman)
     if (!origin) return callback(null, true);
     
@@ -49,7 +43,6 @@ const corsOptions = {
       origin.endsWith('.onrender.com') // Allow all Render deployments
       // process.env.NODE_ENV === 'development' // Allow all in development
     ) {
->>>>>>> 6a403c59a0b1da471dea4f9bf5762332ab4a4feb
       return callback(null, true);
     }
     return callback(new Error(`Not allowed by CORS: ${origin}`));
@@ -57,21 +50,13 @@ const corsOptions = {
   credentials: true,
 };
 
-<<<<<<< HEAD
 // Middleware
-=======
-// Apply middleware
->>>>>>> 6a403c59a0b1da471dea4f9bf5762332ab4a4feb
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-<<<<<<< HEAD
-// Log all requests for debugging
-=======
 // Add Supabase client to request object
->>>>>>> 6a403c59a0b1da471dea4f9bf5762332ab4a4feb
 app.use((req, res, next) => {
   req.supabase = supabase;
   next();
@@ -81,15 +66,13 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/storage', storageRoutes);
 
-<<<<<<< HEAD
 // Serve static files from the GigsTm-V.2 directory
 app.use(express.static(path.join(__dirname, '../GigsTm-V.2')));
-=======
+
 // Admin dashboard route
 app.get('/admin/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, '../GigsTm-V.2/admin-dashboard.html'));
 });
->>>>>>> 6a403c59a0b1da471dea4f9bf5762332ab4a4feb
 
 // Serve index.html as the default page for any route not handled by the API or static files
 app.get('*', (req, res) => {
@@ -105,11 +88,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-<<<<<<< HEAD
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-=======
 // Handle 404
 app.use((req, res) => {
   res.status(404).json({ 
@@ -123,5 +101,4 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📱 Frontend available at: /`);
   console.log(`🔐 API endpoints available at: /api/auth`);
->>>>>>> 6a403c59a0b1da471dea4f9bf5762332ab4a4feb
 });

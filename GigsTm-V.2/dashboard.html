@@ -155,10 +155,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Skills</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Experience</th>
-<<<<<<< HEAD
-=======
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
->>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
@@ -257,12 +254,9 @@
                         ${user.experience || 'N/A'}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-<<<<<<< HEAD
-=======
                         ${user.location || 'N/A'}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
->>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
                         ${formatDate(user.createdAt)}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -304,10 +298,7 @@
                 (user.name && user.name.toLowerCase().includes(searchTerm)) ||
                 (user.email && user.email.toLowerCase().includes(searchTerm)) ||
                 (user.phone && user.phone.includes(searchTerm)) ||
-<<<<<<< HEAD
-=======
                 (user.location && user.location.toLowerCase().includes(searchTerm)) ||
->>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
                 (user.skills && 
                     (Array.isArray(user.skills) 
                         ? user.skills.some(skill => skill.toLowerCase().includes(searchTerm))
@@ -324,11 +315,7 @@
             try {
                 loadingRow.style.display = '';
                 
-<<<<<<< HEAD
-                const response = await fetch('http://localhost:3001/api/admin/users', {
-=======
                 const response = await fetch('http://localhost:3001/api/v1/userforms', {
->>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -342,10 +329,7 @@
 
                 const data = await response.json();
                 users = Array.isArray(data) ? data : (data.data || []);
-<<<<<<< HEAD
-=======
                 console.log('Fetched userform data:', users);
->>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
                 filterUsers();
                 loadingRow.style.display = 'none';
             } catch (error) {
@@ -417,7 +401,7 @@
             } else if(hasUser){
                 // Show user profile UI
                 document.getElementById('admin-header').classList.add('hidden');
-                document.getElementById('admin-table').classList.add('hidden');
+                document.getElementById('admin-.table').classList.add('hidden');
                 document.getElementById('admin-pagination').classList.add('hidden');
                 document.getElementById('user-profile-view').classList.remove('hidden');
                 const ok = await loadUserProfile();
@@ -484,11 +468,7 @@
             if (!confirm('Are you sure you want to delete this user?')) return;
             
             try {
-<<<<<<< HEAD
-                const response = await fetch(`http://localhost:3001/api/admin/users/${userId}`, {
-=======
                 const response = await fetch(`http://localhost:3001/api/v1/userforms/${userId}`, {
->>>>>>> 2d43225b91f202ca0ee6116beff623b5cb6ad4bc
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
