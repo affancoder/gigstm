@@ -55,10 +55,12 @@ app.use(express.json());
 const adminRoutes = require('./routes/admin');
 const userFormRoutes = require('./routes/userform');
 const userFormsRoutes = require('./routes/userforms');
+const profileRoutes = require('./routes/profile');
 
 app.use('/api', adminRoutes);
 app.use('/api', userFormRoutes);
 app.use('/api', userFormsRoutes);
+app.use('/api/profile', profileRoutes);
 
 // Connect to MongoDB
 mongoose = require('mongoose');

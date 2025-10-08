@@ -82,7 +82,7 @@
                     <div class="form-row single">
                         <div class="form-group">
                             <label for="job-role">Job Role</label>
-                            <input type="text" id="job-role" name="jobRole" placeholder="Enter job role">
+                            <input type="text" id="job-role" name="jobRole" placeholder="Enter job role" required>
                         </div>
                     </div>
 
@@ -90,7 +90,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="gender">Gender</label>
-                            <select id="gender" name="gender">
+                            <select id="gender" name="gender" required>
                                 <option value="">-- Select Gender --</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
@@ -99,12 +99,12 @@
                         </div>
                         <div class="form-group">
                             <label for="dob">Your DOB</label>
-                            <input type="date" id="dob" name="dob" class="date-input">
+                            <input type="date" id="dob" name="dob" class="date-input" required>
                         </div>
                         <div class="form-group">
                             <label for="profile-image">Profile Image</label>
                             <div class="file-input">
-                                <input type="file" id="profile-image" name="profile-image" accept="image/*" style="display: none;">
+                                <input type="file" id="profile-image" name="profile-image" accept="image/*" style="display: none;" required>
                                 <button type="button" class="file-btn" onclick="document.getElementById('profile-image').click()">
                                     <i class="fas fa-upload"></i> Choose File
                                 </button>
@@ -117,11 +117,11 @@
                     <div class="form-row double">
                         <div class="form-group">
                             <label for="aadhaar">Enter Aadhaar Card No.</label>
-                            <input type="text" id="aadhaar" name="aadhaar" placeholder="Enter aadhaar card no." maxlength="12">
+                            <input type="text" id="aadhaar" name="aadhaar" placeholder="Enter aadhaar card no." maxlength="12" required>
                         </div>
                         <div class="form-group">
                             <label for="pan">Enter Pan Card No.</label>
-                            <input type="text" id="pan" name="pan" placeholder="Enter pan card no." maxlength="10">
+                            <input type="text" id="pan" name="pan" placeholder="Enter pan card no." maxlength="10" required>
                         </div>
                     </div>
 
@@ -130,7 +130,7 @@
                         <div class="form-group">
                             <label for="aadhaar-upload">Upload Aadhaar Card</label>
                             <div class="file-input">
-                                <input type="file" id="aadhaar-file" name="aadhaar-file" accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                                <input type="file" id="aadhaar-file" name="aadhaar-file" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" required>
                                 <button type="button" class="file-btn" onclick="document.getElementById('aadhaar-file').click()">Choose File</button>
                                 <span class="file-status" id="aadhaar-status">No file chosen</span>
                             </div>
@@ -138,7 +138,7 @@
                         <div class="form-group">
                             <label for="pan-upload">Upload Pan Card</label>
                             <div class="file-input">
-                                <input type="file" id="pan-file" name="pan-file" accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                                <input type="file" id="pan-file" name="pan-file" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" required>
                                 <button type="button" class="file-btn" onclick="document.getElementById('pan-file').click()">Choose File</button>
                                 <span class="file-status" id="pan-status">No file chosen</span>
                             </div>
@@ -149,7 +149,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="country">Country</label>
-                            <select id="country" name="country">
+                            <select id="country" name="country" required>
                                 <option value="">-- Select Country --</option>
                                 <option value="af">Afghanistan</option>
                                 <option value="al">Albania</option>
@@ -404,7 +404,7 @@
                         </div>
                         <div class="form-group">
                             <label for="state">State</label>
-                            <select id="state" name="state">
+                            <select id="state" name="state" required>
                                 <option value="">-- Select State --</option>
                                 <option value="andhra_pradesh">Andhra Pradesh</option>
                                 <option value="arunachal_pradesh">Arunachal Pradesh</option>
@@ -446,7 +446,7 @@
                         </div>
                         <div class="form-group">
                             <label for="city">City</label>
-                            <select id="city" name="city">
+                            <select id="city" name="city" required>
                                 <option value="">-- Select City --</option>
                                 <!-- Metropolitan Cities -->
                                 <option value="mumbai">Mumbai, Maharashtra</option>
@@ -574,11 +574,11 @@
                     <div class="form-row double">
                         <div class="form-group">
                             <label for="address1">Address Line 1</label>
-                            <input type="text" id="address1" name="address1" placeholder="Address line 1">
+                            <input type="text" id="address1" name="address1" placeholder="Address line 1" required>
                         </div>
                         <div class="form-group">
                             <label for="address2">Address Line 2</label>
-                            <input type="text" id="address2" name="address2" placeholder="Address line 2">
+                            <input type="text" id="address2" name="address2" placeholder="Address line 2" required>
                         </div>
                     </div>
 
@@ -586,7 +586,7 @@
                     <div class="form-row single">
                         <div class="form-group">
                             <label for="pincode">Pincode</label>
-                            <input type="text" id="pincode" name="pincode" placeholder="Pincode" style="max-width: 300px;" maxlength="6">
+                            <input type="text" id="pincode" name="pincode" placeholder="Pincode" style="max-width: 300px;" maxlength="6" required>
                         </div>
                     </div>
 
@@ -595,7 +595,7 @@
                         <div class="form-group">
                             <label for="resume">Resume</label>
                             <div class="file-input">
-                                <input type="file" id="resume-file" name="resume-file" accept=".pdf,.doc,.docx" style="display: none;">
+                                <input type="file" id="resume-file" name="resume-file" accept=".pdf,.doc,.docx" style="display: none;" required>
                                 <button type="button" class="file-btn" onclick="document.getElementById('resume-file').click()">Choose File</button>
                                 <span class="file-status" id="resume-status">No file chosen</span>
                             </div>
@@ -606,7 +606,7 @@
                     <div class="form-row single">
                         <div class="form-group">
                             <label for="about">About</label>
-                            <textarea id="about" name="about" placeholder="Type your message"></textarea>
+                            <textarea id="about" name="about" placeholder="Type your message" required></textarea>
                         </div>
                     </div>
                 </div> <!-- end .form-grid -->

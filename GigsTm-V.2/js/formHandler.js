@@ -1,7 +1,7 @@
 // API configuration
 const ORIGIN = window.location.origin;
 const API_PORT = '3001';
-const BASE_URL = window.API_BASE_URL || `${ORIGIN.split(':').slice(0, 2).join(':')}:${API_PORT}/api`;
+const BASE_URL = window.API_BASE_URL || `${window.location.protocol}//${window.location.hostname}:${API_PORT}/api`;
 
 // Constants
 const VALIDATION_PATTERNS = {
@@ -38,10 +38,15 @@ const FILE_INPUT_IDS = [
 ];
 
 const FILE_INPUT_MAPPING = {
-    'profile-image': 'profileImage',
-    'aadhaar-file': 'aadhaarFile',
-    'pan-file': 'panFile',
-    'resume-file': 'resume'
+    'profile-image': { fieldName: 'profileImage', bucket: 'profile_images' },
+    'aadhaar-file': { fieldName: 'aadhaarFile', bucket: 'aadhaar_documents' },
+    'pan-file': { fieldName: 'panFile', bucket: 'pan_documents' },
+    'resume-file': { fieldName: 'resume', bucket: 'resumes' },
+    'resumeStep2': { fieldName: 'resumeStep2', bucket: 'resumes' },
+    'aadhaarFront': { fieldName: 'aadhaarFront', bucket: 'aadhaar_documents' },
+    'aadhaarBack': { fieldName: 'aadhaarBack', bucket: 'aadhaar_documents' },
+    'panCardUpload': { fieldName: 'panCardUpload', bucket: 'pan_documents' },
+    'passbookUpload': { fieldName: 'passbookUpload', bucket: 'bank_documents' }
 };
 
 // Utility Functions
@@ -115,8 +120,7 @@ const clearAllFieldErrors = () => {
 // Message Display
 const showMessage = (message, type = MESSAGE_TYPES.ERROR, containerId = 'message-container') => {
     try {
-        const messageText = typeof message === 'string' ? message :
-                           (message?.message || 'An unknown error occurred');
+        const messageText = (message && typeof message === 'object' && message.message) ? message.message : (typeof message === 'string' ? message : 'An unknown error occurred');
 
         console.log(`[${type.toUpperCase()}]`, message);
 
@@ -376,6 +380,9 @@ const makeAuthenticatedRequest = async (url, options = {}) => {
     const finalOptions = { ...options };
     finalOptions.credentials = 'include'; // Important for sending cookies
 
+    // Prepend BASE_URL if the URL is relative
+    const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url}`;
+
     // Do not set Authorization header, the browser will handle the cookie
     finalOptions.headers = {
         ...(options.headers || {})
@@ -388,7 +395,7 @@ const makeAuthenticatedRequest = async (url, options = {}) => {
         finalOptions.body = JSON.stringify(options.body);
     }
 
-    const response = await fetch(url, finalOptions);
+    const response = await fetch(fullUrl, finalOptions);
 
     if (response.status === 401) {
         showMessage('Your session has expired. Redirecting to login...', MESSAGE_TYPES.ERROR);
@@ -420,36 +427,54 @@ const handleFormSubmit = async (e) => {
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
         }
 
-        const profileImageInput = getElement('profile-image');
-        const file = profileImageInput?.files?.[0];
+        const formData = getAllFormData();
+        const uploadedFileUrls = {};
+        const uploadPromises = [];
 
-        if (!file) {
-            showMessage('Please select a profile image to upload.', MESSAGE_TYPES.WARNING);
-            // In a real scenario, you would proceed to save other form data here.
-            return;
+        for (const inputId of FILE_INPUT_IDS) {
+            const fileInput = getElement(inputId);
+            const file = fileInput?.files?.[0];
+            const mapping = FILE_INPUT_MAPPING[inputId];
+
+            if (file && mapping) {
+                const fileFormData = new FormData();
+                fileFormData.append('file', file);
+                fileFormData.append('bucketName', mapping.bucket);
+
+                console.log(`Uploading ${mapping.fieldName} to ${mapping.bucket} bucket...`);
+
+                uploadPromises.push(
+                    makeAuthenticatedRequest(`/api/storage/upload?bucketName=${mapping.bucket}`, {
+                        method: 'POST',
+                        body: fileFormData
+                    }).then(result => {
+                        if (result && result.url) {
+                            uploadedFileUrls[mapping.fieldName] = result.url;
+                            showMessage(`${mapping.fieldName} uploaded successfully!`, MESSAGE_TYPES.SUCCESS);
+                        } else {
+                            throw new Error(`Failed to upload ${mapping.fieldName}`);
+                        }
+                    })
+                );
+            }
         }
 
-        // Prepare and send file data
-        const formData = new FormData();
-        formData.append('file', file);
+        await Promise.all(uploadPromises);
 
-        console.log('Uploading profile image...');
+        // Merge uploaded file URLs into the main formData
+        Object.assign(formData, uploadedFileUrls);
 
-        const result = await makeAuthenticatedRequest(`/api/storage/upload`, {
+        console.log('All files uploaded. Submitting form data to database...');
+
+        // Send all form data (including file URLs) to a new API endpoint for database storage
+        const dbSaveResult = await makeAuthenticatedRequest(`/api/profile`, {
             method: 'POST',
             body: formData
         });
 
-        if (result && result.url) {
-            showMessage('Profile image updated successfully!', MESSAGE_TYPES.SUCCESS);
-            
-            // Update the profile image on the page
-            const userPhoto = getElement('user-photo');
-            if (userPhoto) {
-                userPhoto.src = result.url;
-            }
-
-            // Redirect to dashboard/profile after brief pause, keep token intact
+        if (dbSaveResult) {
+            showMessage('Profile updated successfully!', MESSAGE_TYPES.SUCCESS);
+            // Optionally update UI or redirect
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
             }, 800);
@@ -670,6 +695,15 @@ const setupEventHandlers = () => {
             showMessage('Loaded latest draft for editing', MESSAGE_TYPES.INFO);
         });
     }
+};
+
+// Draft Management (Placeholder functions)
+const saveDraft = () => {
+    console.log('Save Draft functionality not yet implemented.');
+};
+
+const loadDraft = async () => {
+    console.log('Load Draft functionality not yet implemented.');
 };
 
 // Initialization
