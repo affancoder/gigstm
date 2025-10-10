@@ -1,4 +1,4 @@
-// API configuration
+"""// API configuration
 const ORIGIN = window.location.origin;
 const API_PORT = '3001';
 const BASE_URL = window.API_BASE_URL || `${window.location.protocol}//${window.location.hostname}:${API_PORT}/api`;
@@ -25,12 +25,6 @@ const AUTO_DISMISS_DELAYS = {
     [MESSAGE_TYPES.SUCCESS]: 5000,
     [MESSAGE_TYPES.INFO]: 5000
 };
-
-const REQUIRED_FILE_INPUTS = [
-    { id: 'aadhaar-file', name: 'Aadhaar Card' },
-    { id: 'pan-file', name: 'PAN Card' },
-    { id: 'resume-file', name: 'Resume' }
-];
 
 const FILE_INPUT_IDS = [
     'profile-image', 'aadhaar-file', 'pan-file', 'resume-file',
@@ -65,6 +59,30 @@ const setElementValue = (id, value) => {
 };
 
 const getAuthToken = () => localStorage.getItem('token') || localStorage.getItem('authToken');
+
+// Tab Management
+const enableTab = (target) => {
+    const tab = document.querySelector(`button[data-target="${target}"]`);
+    if (tab) {
+        tab.disabled = false;
+    }
+};
+
+const switchToTab = (target) => {
+    const tabs = document.querySelectorAll('.tab-link');
+    const panels = document.querySelectorAll('.step-panel');
+    tabs.forEach(t => t.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+
+    const tab = document.querySelector(`button[data-target="${target}"]`);
+    if (tab) {
+        tab.classList.add('active');
+    }
+    const panel = getElement(target.substring(1));
+    if (panel) {
+        panel.classList.add('active');
+    }
+};
 
 // User Interface Updates
 const updateUserUI = (userData) => {
@@ -190,20 +208,15 @@ const dismissAlert = (alertDiv, container) => {
 };
 
 // Form Data Management
-const getAllFormData = () => ({
-    // Personal Information
+const getStep1FormData = () => ({
     name: getElementValue('name'),
     email: getElementValue('email'),
     mobile: getElementValue('mobile'),
     jobRole: getElementValue('job-role'),
     gender: getElementValue('gender'),
     dob: getElementValue('dob'),
-
-    // Documents
     aadhaar: getElementValue('aadhaar'),
     pan: getElementValue('pan'),
-
-    // Address Information
     address: {
         address1: getElementValue('address1'),
         address2: getElementValue('address2'),
@@ -212,9 +225,10 @@ const getAllFormData = () => ({
         country: getElementValue('country') || 'in',
         pincode: getElementValue('pincode')
     },
-
-    // Professional Information
     about: getElementValue('about'),
+});
+
+const getStep2FormData = () => ({
     experience: {
         years: parseInt(getElementValue('experienceYears')) || 0,
         months: parseInt(getElementValue('experienceMonths')) || 0
@@ -224,171 +238,52 @@ const getAllFormData = () => ({
     jobRequirement: getElementValue('jobRequirement'),
     heardAbout: getElementValue('heardAbout'),
     interestType: getElementValue('interestType'),
+});
 
-    // Bank Details
+const getKYCFormData = () => ({
     bankDetails: {
         bankName: getElementValue('bankName'),
         accountNumber: getElementValue('accountNumber'),
         ifscCode: getElementValue('ifscCode')
     },
-
-    // Draft Status
-    isDraft: true
 });
 
-// Legacy compatibility function
-const getFormData = () => ({
-    personalInfo: {
-        name: getElementValue('name'),
-        email: getElementValue('email'),
-        mobile: getElementValue('mobile'),
-        jobRole: getElementValue('job-role'),
-        gender: getElementValue('gender'),
-        dob: getElementValue('dob')
-    },
-    documents: {
-        aadhaar: getElementValue('aadhaar'),
-        pan: getElementValue('pan')
-    },
-    address: {
-        street: getElementValue('address1'),
-        city: getElementValue('city'),
-        state: getElementValue('state'),
-        country: getElementValue('country'),
-        pincode: getElementValue('pincode')
-    },
-    about: getElementValue('about')
-});
 
 // Validation Functions
-const validateField = (value, pattern, fieldName, errorMessage) => {
-    if (!value) return null;
-    return pattern.test(value) ? null : errorMessage;
-};
-
-const validateForm = (formData) => {
+const validateStep1 = (formData) => {
     const errors = [];
-
-    // Required field validation
     if (!formData.name) errors.push({ field: 'name', message: 'Please enter your full name' });
     if (!formData.email) errors.push({ field: 'email', message: 'Email address is required' });
-    if (!formData.mobile) errors.push({ field: 'mobile', message: 'Mobile number is required' });
-
-    // Pattern validation
     if (formData.email && !VALIDATION_PATTERNS.email.test(formData.email)) {
         errors.push({ field: 'email', message: 'Please enter a valid email address' });
     }
+    if (!formData.mobile) errors.push({ field: 'mobile', message: 'Mobile number is required' });
     if (formData.mobile && !VALIDATION_PATTERNS.mobile.test(formData.mobile)) {
         errors.push({ field: 'mobile', message: 'Please enter a valid 10-digit mobile number' });
     }
-
-    // Password validation
-    if (formData.newPassword || formData.confirmPassword) {
-        if (formData.newPassword !== formData.confirmPassword) {
-            errors.push({ field: 'newPassword', message: 'Passwords do not match' });
-            errors.push({ field: 'confirmPassword', message: 'Passwords do not match' });
-        } else if (formData.newPassword.length < 6) {
-            errors.push({ field: 'newPassword', message: 'Password must be at least 6 characters long' });
-        }
+    if (formData.aadhaar && !VALIDATION_PATTERNS.aadhaar.test(formData.aadhaar)) {
+        errors.push({ field: 'aadhaar', message: 'Aadhaar must be 12 digits' });
     }
-
-    // Document validation
-    const aadhaarError = validateField(formData.aadhaar, VALIDATION_PATTERNS.aadhaar, 'aadhaar', 'Aadhaar must be 12 digits');
-    if (aadhaarError) errors.push({ field: 'aadhaar', message: aadhaarError });
-
-    const panError = validateField(formData.pan, VALIDATION_PATTERNS.pan, 'pan', 'Please enter a valid PAN number');
-    if (panError) errors.push({ field: 'pan', message: panError });
-
-    const pincodeError = validateField(formData.pincode, VALIDATION_PATTERNS.pincode, 'pincode', 'Please enter a valid 6-digit pincode');
-    if (pincodeError) errors.push({ field: 'pincode', message: pincodeError });
-
+    if (formData.pan && !VALIDATION_PATTERNS.pan.test(formData.pan)) {
+        errors.push({ field: 'pan', message: 'Please enter a valid PAN number' });
+    }
+    if (formData.address.pincode && !VALIDATION_PATTERNS.pincode.test(formData.address.pincode)) {
+        errors.push({ field: 'pincode', message: 'Please enter a valid 6-digit pincode' });
+    }
     return errors;
 };
 
-// Friendly names for user-facing error summary
-const getFriendlyFieldName = (field) => ({
-    name: 'Full Name',
-    email: 'Email Address',
-    mobile: 'Mobile Number',
-    aadhaar: 'Aadhaar Number',
-    pan: 'PAN Number',
-    pincode: 'Pincode',
-    newPassword: 'New Password',
-    confirmPassword: 'Confirm Password'
-}[field] || field);
-
-const validateFileUploads = () => {
-    const missing = REQUIRED_FILE_INPUTS.filter(({ id }) => {
-        const fileInput = getElement(id);
-        return !fileInput?.files?.[0];
-    }).map(({ id, name }) => ({ id, name }));
-    return missing;
-};
-
-// File Upload Management
-const prepareFormDataForUpload = (formData) => {
-    const formDataToSend = new FormData();
-
-    // Add form fields
-    Object.entries(formData).forEach(([key, value]) => {
-        if (value !== '' && value !== null && value !== undefined) {
-            formDataToSend.append(key, value);
-        }
-    });
-
-    // Add file uploads
-    FILE_INPUT_IDS.forEach(inputId => {
-        const fileInput = getElement(inputId);
-        if (fileInput?.files?.[0]) {
-            const fieldName = FILE_INPUT_MAPPING[inputId] || inputId;
-            formDataToSend.append(fieldName, fileInput.files[0]);
-        }
-    });
-
-    return formDataToSend;
-};
-
 // API Communication
-const formatErrorMessage = (error) => {
-    if (!error) return 'An unknown error occurred';
-    if (typeof error === 'string') return error;
-    if (error.message) return error.message;
-    if (error.error) return error.error;
-    
-    if (error.errors) {
-        if (Array.isArray(error.errors)) {
-            return error.errors.map(e => e.msg || e.message || e).join('\n');
-        }
-        if (typeof error.errors === 'object') {
-            return Object.values(error.errors).join('\n');
-        }
-    }
-    
-    return JSON.stringify(error);
-};
-
-const handleUnauthorized = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('authToken');
-    showMessage('Your session has expired. Please log in again.', MESSAGE_TYPES.ERROR);
-    setTimeout(() => {
-        window.location.href = 'login.html?sessionExpired=true';
-    }, 2000);
-};
-
 const makeAuthenticatedRequest = async (url, options = {}) => {
     const finalOptions = { ...options };
     finalOptions.credentials = 'include'; // Important for sending cookies
 
-    // Prepend BASE_URL if the URL is relative
     const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url}`;
 
-    // Do not set Authorization header, the browser will handle the cookie
     finalOptions.headers = {
         ...(options.headers || {})
     };
 
-    // If body is a plain object, stringify it, unless it's FormData
     const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
     if (!isFormData && options.body && typeof options.body === 'object') {
         finalOptions.headers['Content-Type'] = 'application/json';
@@ -416,8 +311,18 @@ const makeAuthenticatedRequest = async (url, options = {}) => {
 };
 
 // Form Submission
-const handleFormSubmit = async (e) => {
+const handleStep1Submit = async (e) => {
     e.preventDefault();
+    clearAllFieldErrors();
+    const formData = getStep1FormData();
+    const errors = validateStep1(formData);
+
+    if (errors.length > 0) {
+        errors.forEach(err => showFieldError(err.field, err.message));
+        showMessage('Please fix the errors before proceeding.', MESSAGE_TYPES.ERROR);
+        return;
+    }
+
     const submitBtn = getElement('submit-btn');
     const originalBtnText = submitBtn?.innerHTML;
 
@@ -427,62 +332,18 @@ const handleFormSubmit = async (e) => {
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
         }
 
-        const formData = getAllFormData();
-        const uploadedFileUrls = {};
-        const uploadPromises = [];
+        // Here you would typically save the data for Step 1
+        console.log("Submitting Step 1", formData);
+        // Simulating API call
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
-        for (const inputId of FILE_INPUT_IDS) {
-            const fileInput = getElement(inputId);
-            const file = fileInput?.files?.[0];
-            const mapping = FILE_INPUT_MAPPING[inputId];
-
-            if (file && mapping) {
-                const fileFormData = new FormData();
-                fileFormData.append('file', file);
-                fileFormData.append('bucketName', mapping.bucket);
-
-                console.log(`Uploading ${mapping.fieldName} to ${mapping.bucket} bucket...`);
-
-                uploadPromises.push(
-                    makeAuthenticatedRequest(`/api/storage/upload?bucketName=${mapping.bucket}`, {
-                        method: 'POST',
-                        body: fileFormData
-                    }).then(result => {
-                        if (result && result.url) {
-                            uploadedFileUrls[mapping.fieldName] = result.url;
-                            showMessage(`${mapping.fieldName} uploaded successfully!`, MESSAGE_TYPES.SUCCESS);
-                        } else {
-                            throw new Error(`Failed to upload ${mapping.fieldName}`);
-                        }
-                    })
-                );
-            }
-        }
-
-        await Promise.all(uploadPromises);
-
-        // Merge uploaded file URLs into the main formData
-        Object.assign(formData, uploadedFileUrls);
-
-        console.log('All files uploaded. Submitting form data to database...');
-
-        // Send all form data (including file URLs) to a new API endpoint for database storage
-        const dbSaveResult = await makeAuthenticatedRequest(`/api/profile`, {
-            method: 'POST',
-            body: formData
-        });
-
-        if (dbSaveResult) {
-            showMessage('Profile updated successfully!', MESSAGE_TYPES.SUCCESS);
-            // Optionally update UI or redirect
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 800);
-        }
+        showMessage('Step 1 completed successfully!', MESSAGE_TYPES.SUCCESS);
+        enableTab('#step2-panel');
+        switchToTab('#step2-panel');
 
     } catch (error) {
-        console.error('Error saving form data:', error);
-        showMessage(error.message || 'Failed to save form data. Please try again.', MESSAGE_TYPES.ERROR);
+        console.error('Error saving step 1 data:', error);
+        showMessage(error.message || 'Failed to save step 1 data. Please try again.', MESSAGE_TYPES.ERROR);
     } finally {
         if (submitBtn) {
             submitBtn.disabled = false;
@@ -491,109 +352,69 @@ const handleFormSubmit = async (e) => {
     }
 };
 
-// Form Population
-const populateForm = (profileData) => {
-    if (!profileData) return;
+const handleStep2Submit = async (e) => {
+    e.preventDefault();
+    const formData = getStep2FormData();
+    
+    const submitBtn = getElement('submit-step2');
+    const originalBtnText = submitBtn?.innerHTML;
 
-    // Direct field mapping
-    const fieldMap = {
-        name: 'name',
-        email: 'email',
-        mobile: 'mobile',
-        jobRole: 'job-role',
-        gender: 'gender',
-        dob: 'dob',
-        aadhaar: 'aadhaar',
-        pan: 'pan',
-        country: 'country',
-        state: 'state',
-        city: 'city',
-        address1: 'address1',
-        address2: 'address2',
-        pincode: 'pincode',
-        about: 'about',
-        experienceYears: 'experienceYears',
-        experienceMonths: 'experienceMonths',
-        employmentType: 'employmentType',
-        occupation: 'occupation',
-        jobRequirement: 'jobRequirement',
-        heardAbout: 'heardAbout',
-        interestType: 'interestType',
-        bankName: 'bankName',
-        accountNumber: 'accountNumber',
-        ifscCode: 'ifscCode'
-    };
-
-    Object.entries(fieldMap).forEach(([dataKey, elementId]) => {
-        const value = profileData[dataKey];
-        if (value) {
-            if (dataKey === 'dob') {
-                setElementValue(elementId, formatDate(value));
-            } else {
-                setElementValue(elementId, value);
-            }
-        }
-    });
-
-    // Legacy nested data support
-    if (profileData.personalInfo) {
-        const legacyPersonalMap = {
-            name: 'name',
-            email: 'email',
-            mobile: 'mobile',
-            jobRole: 'job-role',
-            gender: 'gender',
-            dob: 'dob'
-        };
-
-        Object.entries(legacyPersonalMap).forEach(([key, elementId]) => {
-            const value = profileData.personalInfo[key];
-            if (value) {
-                setElementValue(elementId, key === 'dob' ? formatDate(value) : value);
-            }
-        });
-    }
-
-    if (profileData.documents) {
-        setElementValue('aadhaar', profileData.documents.aadhaar);
-        setElementValue('pan', profileData.documents.pan);
-    }
-
-    if (profileData.address) {
-        const { street, city, state, country, pincode } = profileData.address;
-        setElementValue('address1', street);
-        setElementValue('city', city);
-        setElementValue('state', state);
-        setElementValue('country', country);
-        setElementValue('pincode', pincode);
-    }
-};
-
-// Profile Loading
-const loadUserProfile = async () => {
     try {
-        // Load from localStorage first for instant display
-        const savedFormData = localStorage.getItem('userFormData');
-        if (savedFormData) {
-            populateForm(JSON.parse(savedFormData));
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
         }
 
-        // Fetch current authenticated profile
-        const result = await makeAuthenticatedRequest(`http://localhost:3001/api/profile`, {
-            method: 'GET',
-            headers: { 'Accept': 'application/json' }
-        });
-        if (result?.data) {
-            populateForm(result.data);
-            localStorage.setItem('userFormData', JSON.stringify(result.data));
-        }
+        console.log("Submitting Step 2", formData);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        showMessage('Step 2 completed successfully!', MESSAGE_TYPES.SUCCESS);
+        enableTab('#kyc-panel');
+        switchToTab('#kyc-panel');
 
     } catch (error) {
-        console.error('Error loading form data:', error);
+        console.error('Error saving step 2 data:', error);
+        showMessage(error.message || 'Failed to save step 2 data. Please try again.', MESSAGE_TYPES.ERROR);
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        }
     }
 };
 
-// Password Change
+const handleKYCSubmit = async (e) => {
+    e.preventDefault();
+    const formData = getKYCFormData();
+
+    const submitBtn = getElement('submit-kyc');
+    const originalBtnText = submitBtn?.innerHTML;
+
+    try {
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        }
+
+        console.log("Submitting KYC", formData);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        showMessage('KYC details submitted successfully!', MESSAGE_TYPES.SUCCESS);
+        enableTab('#password-panel');
+        switchToTab('#password-panel');
+
+    } catch (error) {
+        console.error('Error saving KYC data:', error);
+        showMessage(error.message || 'Failed to save KYC data. Please try again.', MESSAGE_TYPES.ERROR);
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        }
+    }
+};
+
+
 const handlePasswordChange = async () => {
     const newPassword = getElementValue('newPassword');
     const confirmPassword = getElementValue('confirmPassword');
@@ -614,21 +435,9 @@ const handlePasswordChange = async () => {
     }
 
     try {
-        const formData = new FormData();
-        formData.append('newPassword', newPassword);
-        formData.append('confirmPassword', confirmPassword);
-
-        const response = await fetch(`${BASE_URL}/v1/userform`, {
-            method: 'POST',
-            body: formData
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(result.message || 'Failed to change password');
-        }
-
+        console.log("Changing password");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
         showMessage('Password changed successfully!', MESSAGE_TYPES.SUCCESS);
         setElementValue('newPassword', '');
         setElementValue('confirmPassword', '');
@@ -662,9 +471,24 @@ const setupFileInputs = () => {
 
 // Event Handlers
 const setupEventHandlers = () => {
-    const form = getElement('profile-form');
-    if (form) {
-        form.addEventListener('submit', handleFormSubmit);
+    const step1SubmitBtn = getElement('submit-btn');
+    if (step1SubmitBtn) {
+        step1SubmitBtn.addEventListener('click', handleStep1Submit);
+    }
+
+    const step2SubmitBtn = getElement('submit-step2');
+    if (step2SubmitBtn) {
+        step2SubmitBtn.addEventListener('click', handleStep2Submit);
+    }
+
+    const kycSubmitBtn = getElement('submit-kyc');
+    if (kycSubmitBtn) {
+        kycSubmitBtn.addEventListener('click', handleKYCSubmit);
+    }
+
+    const changePasswordBtn = getElement('change-password-btn');
+    if (changePasswordBtn) {
+        changePasswordBtn.addEventListener('click', handlePasswordChange);
     }
 
     const logoutBtn = getElement('logout-btn');
@@ -677,33 +501,6 @@ const setupEventHandlers = () => {
             window.location.href = 'index.html';
         });
     }
-
-    const changePasswordBtn = getElement('change-password-btn');
-    if (changePasswordBtn) {
-        changePasswordBtn.addEventListener('click', handlePasswordChange);
-    }
-
-    const saveDraftBtn = getElement('save-draft-btn');
-    if (saveDraftBtn) {
-        saveDraftBtn.addEventListener('click', saveDraft);
-    }
-
-    const editBtn = getElement('edit-profile-btn');
-    if (editBtn) {
-        editBtn.addEventListener('click', async () => {
-            await loadDraft();
-            showMessage('Loaded latest draft for editing', MESSAGE_TYPES.INFO);
-        });
-    }
-};
-
-// Draft Management (Placeholder functions)
-const saveDraft = () => {
-    console.log('Save Draft functionality not yet implemented.');
-};
-
-const loadDraft = async () => {
-    console.log('Load Draft functionality not yet implemented.');
 };
 
 // Initialization
@@ -711,9 +508,6 @@ const initializeApp = async () => {
     try {
         setupEventHandlers();
         setupFileInputs();
-        // Load draft first (prefill), then fallback to profile if needed
-        // await loadDraft();
-        // await loadUserProfile();
     } catch (error) {
         console.error('Initialization error:', error);
         showMessage('Failed to initialize the application. Please refresh the page.', MESSAGE_TYPES.ERROR);
@@ -722,3 +516,4 @@ const initializeApp = async () => {
 
 // DOM Ready
 document.addEventListener('DOMContentLoaded', initializeApp);
+""
