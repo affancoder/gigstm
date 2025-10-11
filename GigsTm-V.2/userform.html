@@ -31,6 +31,10 @@
                     <label><i class="fas fa-envelope"></i> Email Address</label>
                     <span id="user-email" class="user-email">Loading...</span>
                 </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5a181e2f1734884b6a6f543437620627546f0d5f
                 <!-- <div class="contact-detail">
                     <label><i class="fas fa-phone"></i> Phone Number</label>
                     <span id="user-phone">Not provided</span>
@@ -48,12 +52,12 @@
             <!-- Profile Steps Tabs -->
             <div class="profile-steps" role="tablist">
                 <button type="button" class="tab-link active" data-target="#step1-panel">EDIT PROFILE STEP 1</button>
-                <button type="button" class="tab-link" data-target="#step2-panel">EDIT PROFILE STEP 2</button>
-                <button type="button" class="tab-link" data-target="#kyc-panel">KYC DETAILS</button>
-                <button type="button" class="tab-link" data-target="#password-panel">CHANGE PASSWORD</button>
+                <button type="button" class="tab-link" data-target="#step2-panel" disabled>EDIT PROFILE STEP 2</button>
+                <button type="button" class="tab-link" data-target="#kyc-panel" disabled>KYC DETAILS</button>
+                <button type="button" class="tab-link" data-target="#password-panel" disabled>CHANGE PASSWORD</button>
             </div>
 
-            <form id="profile-form" onsubmit="handleFormSubmit(event)">
+            <form id="profile-form">
                 <!-- Step 1 Panel: existing fields -->
                 <div id="step1-panel" class="step-panel active">
                     <div class="form-grid">
@@ -855,6 +859,10 @@
                         <button type="button" class="btn btn-secondary" id="logout-btn" title="Click to logout">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </button>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5a181e2f1734884b6a6f543437620627546f0d5f
                         <button type="submit" id="submit-btn" class="btn btn-primary">
                             <i class="fas fa-save"></i> Save Changes
                         </button>
@@ -954,6 +962,7 @@
         });
     </script>
     <script src="js/authHandler.js"></script>
+<<<<<<< HEAD
     <script>
         // Simple tab switching
         document.addEventListener('DOMContentLoaded', function() {
@@ -966,11 +975,29 @@
                     tab.classList.add('active');
                     const target = document.querySelector(tab.getAttribute('data-target'));
                     if (target) target.classList.add('active');
+=======
+    <script src="js/formHandler.js"></script>
+            <script>
+            // Simple tab switching
+            document.addEventListener('DOMContentLoaded', function() {
+                const tabs = document.querySelectorAll('.tab-link');
+                const panels = document.querySelectorAll('.step-panel');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        if (tab.disabled) {
+                            alert("Please complete the previous steps first.");
+                            return;
+                        }
+                        tabs.forEach(t => t.classList.remove('active'));
+                        panels.forEach(p => p.classList.remove('active'));
+                        tab.classList.add('active');
+                        const target = document.querySelector(tab.getAttribute('data-target'));
+                        if (target) target.classList.add('active');
+                    });
+>>>>>>> 5a181e2f1734884b6a6f543437620627546f0d5f
                 });
             });
-        });
-    </script>
-
+        </script>
 </body>
 
 </html>
