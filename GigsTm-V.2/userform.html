@@ -26,18 +26,10 @@
             <!-- Removed misplaced Step 2 content (now correctly added below in main-content) -->
 
             <div class="contact-info">
-                <!-- <h3>Account Details</h3> -->
                 <div class="contact-detail">
                     <label><i class="fas fa-envelope"></i> Email Address</label>
                     <span id="user-email" class="user-email">Loading...</span>
                 </div>
-                <!-- <div class="contact-detail">
-                    <label><i class="fas fa-phone"></i> Phone Number</label>
-                    <span id="user-phone">Not provided</span>
-                </div> -->
-                <!-- <div class="contact-detail" id="dashui">
-                <a href="dashboard.html">Dashboard</a>
-                </div> -->
             </div>
         </div>
 
@@ -48,12 +40,12 @@
             <!-- Profile Steps Tabs -->
             <div class="profile-steps" role="tablist">
                 <button type="button" class="tab-link active" data-target="#step1-panel">EDIT PROFILE STEP 1</button>
-                <button type="button" class="tab-link" data-target="#step2-panel">EDIT PROFILE STEP 2</button>
-                <button type="button" class="tab-link" data-target="#kyc-panel">KYC DETAILS</button>
-                <button type="button" class="tab-link" data-target="#password-panel">CHANGE PASSWORD</button>
+                <button type="button" class="tab-link" data-target="#step2-panel" disabled>EDIT PROFILE STEP 2</button>
+                <button type="button" class="tab-link" data-target="#kyc-panel" disabled>KYC DETAILS</button>
+                <button type="button" class="tab-link" data-target="#password-panel" disabled>CHANGE PASSWORD</button>
             </div>
 
-            <form id="profile-form" onsubmit="handleFormSubmit(event)">
+            <form id="profile-form">
                 <!-- Step 1 Panel: existing fields -->
                 <div id="step1-panel" class="step-panel active">
                     <div class="form-grid">
@@ -944,23 +936,26 @@
     </script>
     <script src="js/authHandler.js"></script>
     <script src="js/formHandler.js"></script>
-    <script>
-        // Simple tab switching
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.tab-link');
-            const panels = document.querySelectorAll('.step-panel');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    panels.forEach(p => p.classList.remove('active'));
-                    tab.classList.add('active');
-                    const target = document.querySelector(tab.getAttribute('data-target'));
-                    if (target) target.classList.add('active');
+            <script>
+            // Simple tab switching
+            document.addEventListener('DOMContentLoaded', function() {
+                const tabs = document.querySelectorAll('.tab-link');
+                const panels = document.querySelectorAll('.step-panel');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        if (tab.disabled) {
+                            alert("Please complete the previous steps first.");
+                            return;
+                        }
+                        tabs.forEach(t => t.classList.remove('active'));
+                        panels.forEach(p => p.classList.remove('active'));
+                        tab.classList.add('active');
+                        const target = document.querySelector(tab.getAttribute('data-target'));
+                        if (target) target.classList.add('active');
+                    });
                 });
             });
-        });
-    </script>
-
+        </script>
 </body>
 
 </html>
