@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/user');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { createSendToken } = require('../utils/jwtUtils');
