@@ -1,0 +1,85 @@
+const User = require('../models/User');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
+const { createSendToken } = require('../utils/jwtUtils');
+
+// Signup a new user
+exports.signup = catchAsync(async (req, res, next) => {
+  const { name, email, password, passwordConfirm } = req.body;
+
+  // 1) Check if user exists
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return next(new AppError('Email already in use', 400));
+  }
+
+  // 2) Create new user
+  const newUser = await User.create({
+    name,
+    email,
+    password,
+    passwordConfirm
+  });
+
+  // 3) Remove password from output
+  newUser.password = undefined;
+
+  // 4) Generate token and send response
+  createSendToken(newUser, 201, res);
+});
+
+// Login user
+exports.login = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  // 1) Check if email and password exist
+  if (!email || !password) {
+    return next(new AppError('Please provide email and password!', 400));
+  }
+
+  // 2) Check if user exists && password is correct
+  const user = await User.findOne({ email }).select('+password');
+  
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(new AppError('Incorrect email or password', 401));
+  }
+
+  // 3) If everything ok, send token to client
+  createSendToken(user, 200, res);
+});
+
+// Check if user is logged in
+exports.isLoggedIn = (req, res, next) => {
+  if (req.session && req.session.user) {
+    return res.status(200).json({
+      status: 'success',
+      isLoggedIn: true,
+      user: req.session.user
+    });
+  }
+  return res.status(200).json({
+    status: 'success',
+    isLoggedIn: false
+  });
+};
+
+// Logout user
+exports.logout = (req, res) => {
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Logout failed'
+        });
+      }
+      res.clearCookie('connect.sid');
+      res.status(200).json({
+        status: 'success',
+        message: 'Logged out successfully!'
+      });
+    });
+  } else {
+    res.end();
+  }
+};
