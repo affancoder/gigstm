@@ -2,7 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
+// const MongoStore = require('connect-mongo');
+const MongoStore = require("connect-mongo").default;
+
 const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -16,57 +18,57 @@ const PORT = process.env.PORT || 3000;
 // Connect to MongoDB
 connectDB();
 
-// Session configuration with MongoDB store
-const sessionConfig = {
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24, // 1 day
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Enable in production with HTTPS
-    sameSite: 'lax'
-  },
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/gigstm',
-    collectionName: 'sessions',
-    ttl: 24 * 60 * 60 // 1 day in seconds
-  })
-};
+// ---------------- SESSION SETUP (FIXED) ---------------- //
 
-// Middleware
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "mysecret",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+      dbName: "gigstm",
+      collectionName: "sessions",
+      ttl: 24 * 60 * 60,
+      autoRemove: "native",
+    }),
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    },
+  })
+);
+
+// ----------------- MIDDLEWARE ----------------- //
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
 
-// Apply session middleware
-app.use(session(sessionConfig));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", process.env.FRONTEND_URL],
+    credentials: true,
+  })
+);
 
-// Use all routes
-app.use('/', routes);
+// ----------------- ROUTES ----------------- //
+app.use("/", routes);
 
-// Error handling middleware
+// ----------------- ERROR HANDLER ----------------- //
 app.use((err, req, res, next) => {
-  console.error('Error:', err.stack);
-  
-  // Default error response
-  const errorResponse = {
-    status: 'error'
-  };
+  console.error("Error:", err.stack);
 
-  // Only include message if it exists
-  if (err.message) {
-    errorResponse.message = err.message;
-  }
-  
+  const errorResponse = { status: "error" };
+  if (err.message) errorResponse.message = err.message;
+
   res.status(err.statusCode || 500).json(errorResponse);
 });
 
-// Start the server
+// ----------------- START SERVER ----------------- //
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
+
+
