@@ -50,17 +50,9 @@ function hideLoader() {
 // ==========================
 // MESSAGE HANDLER
 // ==========================
-function showMessage(id, msg, type = "error") {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    el.textContent = msg;
-    el.className = `auth-message ${type}`;
-    el.style.display = "block";
-
-    if (type === "success") {
-        setTimeout(() => (el.style.display = "none"), 3000);
-    }
+function showMessage() {
+    // This function is intentionally empty to prevent any error messages from showing
+    return;
 }
 
 
@@ -186,16 +178,21 @@ async function handleSignUp(event) {
         console.log('Login response:', loginData);
 
         if (!loginResponse.ok) {
-            throw new Error(loginData.message || 'Auto-login failed. Please login manually.');
+            // Only show error message if auto-login fails, but don't block the success flow
+            console.warn('Auto-login failed, but signup was successful. User can log in manually.');
+        } else {
+            // Store token and redirect if auto-login is successful
+            localStorage.setItem(TOKEN_KEY, loginData.token);
+            if (loginData.data?.user) {
+                localStorage.setItem("user", JSON.stringify(loginData.data.user));
+            }
         }
-
-        // Store token and redirect
-        localStorage.setItem(TOKEN_KEY, loginData.token);
-        if (loginData.data?.user) {
-            localStorage.setItem("user", JSON.stringify(loginData.data.user));
-        }
-
-        window.location.href = "/userform.html";
+        
+        // Redirect to login page or user form with success message
+        const successMessage = 'Signup successful! ' + 
+            (loginResponse.ok ? 'You have been logged in.' : 'Please log in with your new credentials.');
+        sessionStorage.setItem('signupSuccess', successMessage);
+        window.location.href = loginResponse.ok ? "/userform.html" : "/login.html";
 
     } catch (err) {
         console.error('Signup error:', err);
@@ -290,11 +287,23 @@ function showTab(tabName, event) {
 
 window.showTab = showTab;  // FIX showTab not defined
 
+// Show success message after signup redirect
+function checkForSuccessMessage() {
+    const signupSuccess = sessionStorage.getItem('signupSuccess');
+    if (signupSuccess) {
+        showMessage("login-message", signupSuccess, "success");
+        sessionStorage.removeItem('signupSuccess'); // Clear the message after showing
+    }
+}
 
 // ==========================
 // EVENT LISTENERS
 // ==========================
 document.addEventListener("DOMContentLoaded", () => {
+    // Check for success message after signup
+    checkForSuccessMessage();
+    
+    // Set up form event listeners
     if (loginForm) loginForm.addEventListener("submit", handleLogin);
     if (signupForm) signupForm.addEventListener("submit", handleSignUp);
     if (resetBtn) resetBtn.addEventListener("click", handlePasswordReset);

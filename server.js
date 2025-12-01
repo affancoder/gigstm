@@ -48,11 +48,19 @@ app.use('/', routes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    status: 'error',
-    message: 'Something went wrong!'
-  });
+  console.error('Error:', err.stack);
+  
+  // Default error response
+  const errorResponse = {
+    status: 'error'
+  };
+
+  // Only include message if it exists
+  if (err.message) {
+    errorResponse.message = err.message;
+  }
+  
+  res.status(err.statusCode || 500).json(errorResponse);
 });
 
 // Start the server
