@@ -21,6 +21,33 @@ const signupConfirmPassword = document.getElementById("signup-confirm-password")
 
 
 // ==========================
+// LOADER HANDLER
+// ==========================
+function showLoader(message = 'Please wait...') {
+    const loader = document.getElementById('loader');
+    const loaderText = loader.querySelector('.loader-text');
+    if (loader && loaderText) {
+        loaderText.textContent = message;
+        loader.style.display = 'flex';
+        // Add form-hidden class to all forms
+        document.querySelectorAll('.auth-form').forEach(form => {
+            form.classList.add('form-hidden');
+        });
+    }
+}
+
+function hideLoader() {
+    const loader = document.getElementById('loader');
+    if (loader) {
+        loader.style.display = 'none';
+        // Remove form-hidden class from all forms
+        document.querySelectorAll('.auth-form').forEach(form => {
+            form.classList.remove('form-hidden');
+        });
+    }
+}
+
+// ==========================
 // MESSAGE HANDLER
 // ==========================
 function showMessage(id, msg, type = "error") {
@@ -42,8 +69,15 @@ function showMessage(id, msg, type = "error") {
 // ==========================
 async function handleLogin(event) {
     event.preventDefault();
-
+    
+    const loginBtn = document.getElementById('login-btn');
+    const originalBtnText = loginBtn.innerHTML;
+    
     try {
+        // Show loader and disable button
+        showLoader('Signing in...');
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
         const res = await fetch(`${API_URL}/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -64,6 +98,13 @@ async function handleLogin(event) {
 
     } catch (err) {
         showMessage("login-message", err.message);
+    } finally {
+        // Always hide loader and reset button state
+        hideLoader();
+        if (loginBtn) {
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = originalBtnText;
+        }
     }
 }
 
@@ -100,7 +141,8 @@ async function handleSignUp(event) {
         const signupBtn = document.getElementById('signup-btn');
         const originalBtnText = signupBtn.innerHTML;
         signupBtn.disabled = true;
-        signupBtn.innerHTML = 'Creating Account...';
+        signupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+        showLoader('Creating your account...');
 
         // Make signup request
         const signupResponse = await fetch(`${API_URL}/auth/signup`, {
@@ -159,7 +201,8 @@ async function handleSignUp(event) {
         console.error('Signup error:', err);
         showMessage("signup-message", err.message || 'An error occurred during signup. Please try again.');
         
-        // Reset button state
+        // Reset button state and hide loader
+        hideLoader();
         const signupBtn = document.getElementById('signup-btn');
         if (signupBtn) {
             signupBtn.disabled = false;
@@ -168,6 +211,59 @@ async function handleSignUp(event) {
     }
 }
 
+// ==========================
+// PASSWORD RESET
+// ==========================
+async function handlePasswordReset() {
+    const email = document.getElementById('reset-email').value.trim();
+    const resetMessage = document.getElementById('reset-message');
+    const resetBtn = document.getElementById('reset-password-btn');
+    const originalBtnText = resetBtn.innerHTML;
+    
+    if (!email) {
+        resetMessage.textContent = 'Please enter your email address';
+        resetMessage.className = 'auth-message error';
+        return;
+    }
+    
+    try {
+        // Show loading state
+        resetBtn.disabled = true;
+        resetBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        showLoader('Sending reset link...');
+
+        const response = await fetch(`${API_URL}/auth/reset-password`, {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+        console.log('Password reset response:', data);
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to send reset link. Please try again.');
+        }
+
+        resetMessage.textContent = 'Reset link sent successfully!';
+        resetMessage.className = 'auth-message success';
+
+    } catch (error) {
+        console.error('Password reset error:', error);
+        resetMessage.textContent = error.message || 'Failed to send reset link. Please try again.';
+        resetMessage.className = 'auth-message error';
+    } finally {
+        // Reset button state and hide loader
+        hideLoader();
+        if (resetBtn) {
+            resetBtn.disabled = false;
+            resetBtn.innerHTML = originalBtnText;
+        }
+    }
+}
 
 // ==========================
 // LOGOUT
@@ -201,92 +297,11 @@ window.showTab = showTab;  // FIX showTab not defined
 document.addEventListener("DOMContentLoaded", () => {
     if (loginForm) loginForm.addEventListener("submit", handleLogin);
     if (signupForm) signupForm.addEventListener("submit", handleSignUp);
+    if (resetBtn) resetBtn.addEventListener("click", handlePasswordReset);
 
     const logoutBtn = document.getElementById("logout-btn") || document.getElementById("logout-button");
     if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
 });
-
-// --------------------------
-
-// // API base URL
-// const API_URL = 'http://localhost:3000/api';
-
-// // Store JWT token in localStorage
-// const TOKEN_KEY = 'jwt_token';
-
-// // DOM Elements
-// const loginForm = document.getElementById('login-form');
-// const signupForm = document.getElementById('signup-form');
-// const loginEmail = document.getElementById('login-email');
-// const loginPassword = document.getElementById('login-password');
-// const signupName = document.getElementById('signup-name');
-// const signupEmail = document.getElementById('signup-email');
-// const signupPassword = document.getElementById('signup-password');
-// const signupConfirmPassword = document.getElementById('signup-confirm-password');
-
-// // Show message function
-// function showMessage(elementId, message, type = 'error') {
-//   const messageElement = document.getElementById(elementId);
-//   messageElement.textContent = message;
-//   messageElement.className = `auth-message ${type}`;
-//   messageElement.style.display = 'block';
-  
-//   // Auto-hide success messages after 3 seconds
-//   if (type === 'success') {
-//     setTimeout(() => {
-//       messageElement.style.display = 'none';
-//     }, 3000);
-//   }
-// }
-
-// // Handle login form submission
-// async function handleLogin(event) {
-//   event.preventDefault();
-  
-//   try {
-//     const response = await fetch(`${API_URL}/auth/login`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         email: loginEmail.value,
-//         password: loginPassword.value
-//       })
-//     });
-
-//     const data = await response.json();
-
-//     if (!response.ok) {
-//       throw new Error(data.message || 'Login failed');
-//     }
-
-//     // Store the token and user data in localStorage
-//     if (data.token) {
-//       localStorage.setItem(TOKEN_KEY, data.token);
-//       if (data.data && data.data.user) {
-//         localStorage.setItem('user', JSON.stringify(data.data.user));
-//       }
-//       // Redirect to user form page
-//       window.location.href = '/userform.html';
-//     }
-    
-//   } catch (error) {
-//     showMessage('login-message', error.message || 'Login failed. Please try again.');
-//   }
-// }
-
-// // Handle signup form submission
-// async function handleSignUp() {
-//   // Get form elements directly by their IDs
-//   const email = document.getElementById('signup-email')?.value;
-//   const name = document.getElementById('signup-name')?.value;
-//   const password = document.getElementById('signup-password')?.value;
-//   const confirmPassword = document.getElementById('confirm-password')?.value;
-//   const signupBtn = document.getElementById('signup-btn');
-//   const messageElement = document.getElementById('signup-message');
-
-//   // Basic validation
 //   if (!email || !name || !password || !confirmPassword) {
 //     showMessage('signup-message', 'Please fill in all fields');
 //     return false;

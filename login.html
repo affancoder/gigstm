@@ -5,12 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - GigsTm</title>
     <link rel="stylesheet" href="login-themed.css" />
+    <link rel="icon" href="https://gigstm.com/images/logo/favicon.ico" type="image/x-icon">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <style>
+      /* Loader Styles */
+      .loader-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      
+      .loader {
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #026bae;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 15px;
+      }
+      
+      .loader-text {
+        color: #026bae;
+        font-weight: 500;
+        margin-top: 10px;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .form-hidden {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+    </style>
   </head>
   <body>
+    <!-- Loader Overlay -->
+    <div id="loader" class="loader-container">
+      <div class="loader"></div>
+      <div class="loader-text">Please wait...</div>
+    </div>
+    
     <div class="site-wrapper">
       <header class="site-header">
         <div class="brand-logo">
@@ -62,7 +111,7 @@
                 required
               />
             </div>
-            <button type="submit" id="login-btn">
+            <button type="submit" id="login-btn" class="auth-button">
               Login
             </button>
             <p style="text-align: center; margin-top: 1rem">
@@ -154,6 +203,7 @@
                     border-radius: 4px;
                     cursor: pointer;
                   "
+                  id="reset-password-btn"
                 >
                   Send Reset Link
                 </button>
@@ -199,9 +249,7 @@
                 required
               />
             </div>
-            <button type="submit" id="signup-btn" class="btn-primary">
-              Create Account
-            </button>
+            <button type="submit" id="signup-btn" class="auth-button">Create Account</button>
             <p style="text-align: center; margin-top: 1rem; color: #6b6e6f; font-size: 0.9rem;">
               Already have an account? 
               <a href="#" onclick="showTab('login', event); return false;" style="color: #026bae; text-decoration: none; font-weight: 500;">
