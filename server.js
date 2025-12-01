@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -15,20 +16,22 @@ const PORT = process.env.PORT || 3000;
 // Connect to MongoDB
 connectDB();
 
-// Session configuration with in-memory store (temporary)
+// Session configuration with MongoDB store
 const sessionConfig = {
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24, // 1 day
-    httpOnly: true
-  }
-  // Uncomment this for production with MongoDB
-  // store: MongoStore.create({
-  //   mongoUrl: process.env.MONGODB_URI,
-  //   collectionName: 'sessions'
-  // })
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // Enable in production with HTTPS
+    sameSite: 'lax'
+  },
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/gigstm',
+    collectionName: 'sessions',
+    ttl: 24 * 60 * 60 // 1 day in seconds
+  })
 };
 
 // Middleware
