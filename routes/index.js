@@ -1,10 +1,12 @@
 const express = require('express');
 const path = require('path');
 const authRoutes = require('./authRoutes');
+const userRoutes = require('./userRoutes');
 
 const router = express.Router();
 
 // API Routes
+router.use('/api/user', userRoutes);
 router.use('/api/auth', authRoutes);
 
 // API Test Route

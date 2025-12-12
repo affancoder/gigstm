@@ -437,7 +437,6 @@ main {
     font-size: 0.9rem;
     transition: color 0.3s ease;
     display: inline-block;
-    margin-top: 0.5rem;
 }
 
 #forgot-password-link:hover {
