@@ -249,4 +249,78 @@ document.addEventListener("DOMContentLoaded", function () {
         : "No file chosen";
     });
   });
+
+
+  // ------------------------------
+  // Change Password Button Handler
+  // ------------------------------
+  const toggleButtons = document.querySelectorAll(".toggle-visibility");
+  toggleButtons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const targetInput = document.querySelector(btn.dataset.target);
+      if (targetInput.type === "password") {
+        targetInput.type = "text";
+        btn.querySelector("i").classList.remove("fa-eye");
+        btn.querySelector("i").classList.add("fa-eye-slash");
+      } else {
+        targetInput.type = "password";
+        btn.querySelector("i").classList.remove("fa-eye-slash");
+        btn.querySelector("i").classList.add("fa-eye");
+      }
+    });
+  });
+
+  // ===== Handle Change Password Form Submission =====
+  const submitBtn = document.getElementById("change-password-btn");
+
+  submitBtn.addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    // Get form values
+    const newPassword = document.getElementById("newPassword").value.trim();
+    const confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+    // Basic validation
+    if (!newPassword || !confirmPassword) {
+      alert("Please fill in both password fields.");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    // Get JWT Token
+    const token = localStorage.getItem("jwt_token");
+    if (!token) {
+      alert("Authentication token missing. Please login.");
+      return;
+    }
+
+
+    try {
+      const response = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({newPassword,confirmPassword}),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("Password changed successfully!");
+        console.log(result);
+        window.location.href = "/login.html"; // redirect after success
+      } else {
+        alert("Error: " + (result.message || "Something went wrong"));
+        console.error(result);
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+      alert("An error occurred while changing password.");
+    }
+  });
 });

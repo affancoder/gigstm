@@ -331,7 +331,4 @@ exports.kyc = catchAsync(async (req, res, next) => {
 });
 
 
-// Change Password
-exports.changePassword = catchAsync(async (req, res, next) => {
-	res.status(200).json({ message: "Password changed successfully!" });
-});
+

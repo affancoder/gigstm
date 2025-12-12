@@ -29,11 +29,11 @@ app.use(
       mongoUrl: process.env.MONGODB_URI,
       dbName: "gigstm",
       collectionName: "sessions",
-      ttl: 24 * 60 * 60,
+      ttl: 7 * 24 * 60 * 60,
       autoRemove: "native",
     }),
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",

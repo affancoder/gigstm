@@ -13,12 +13,15 @@ exports.signup = catchAsync(async (req, res, next) => {
     return next(new AppError('Email already in use', 400));
   }
 
+   if (password !== passwordConfirm) {
+    return next(new AppError('Passwords do not match', 400));
+  }
+
   // 2) Create new user
   const newUser = await User.create({
     name,
     email,
-    password,
-    passwordConfirm
+    password
   });
 
   // 3) Remove password from output
@@ -83,3 +86,38 @@ exports.logout = (req, res) => {
     res.end();
   }
 };
+
+
+// Change user password
+exports.changePassword = catchAsync(async (req, res, next) => {
+  const userId = req.user.id; // Assuming user is authenticated and req.user is set
+  console.log("req : ", req.body)
+  const { newPassword, confirmPassword } = req.body;
+
+  // 1) Validate input
+  if (!newPassword || !confirmPassword) {
+    return next(new AppError('Please provide both new password and confirmation', 400));
+  }
+
+  if (newPassword !== confirmPassword) {
+    return next(new AppError('Passwords do not match', 400));
+  }
+
+  // 2) Fetch user from DB
+  const user = await User.findById(userId).select('+password');
+
+  if (!user) {
+    return next(new AppError('User not found', 404));
+  }
+
+  // 3) Update password
+  user.password = newPassword; // assume User model hashes password in pre-save hook
+  await user.save();
+
+  // 4) Optionally, invalidate old JWTs (e.g., by changing passwordChangedAt)
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Password changed successfully',
+  });
+});

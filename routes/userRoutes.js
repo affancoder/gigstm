@@ -39,7 +39,4 @@ router.post(
 	]),
 	userController.kyc
 );
-
-router.post("/changePassword", userController.changePassword);
-
 module.exports = router;
