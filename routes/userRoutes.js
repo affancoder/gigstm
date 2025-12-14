@@ -3,7 +3,7 @@ const userController = require("../controllers/userController");
 
 const router = express.Router();
 const upload = require("../utils/multerCloudinary");
-const { protect } = require("../middleware/authMiddleware");
+const { protect, restrictTo } = require("../middleware/authMiddleware");
 
 // Auth Routes
 router.post(
@@ -39,4 +39,6 @@ router.post(
 	]),
 	userController.kyc
 );
+router.get("/admin/users", protect, restrictTo("admin"), userController.getCombinedUsers);
+router.get("/me/combined", protect, userController.getMyCombined);
 module.exports = router;

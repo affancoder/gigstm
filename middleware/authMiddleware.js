@@ -30,3 +30,19 @@ module.exports.protect = async function (req, res, next) {
 		return next(new AppError("Invalid or expired token!", 401));
 	}
 };
+
+module.exports.restrictTo = function (...roles) {
+	return (req, res, next) => {
+		const adminEmails = (process.env.ADMIN_EMAILS || "")
+			.split(",")
+			.map((e) => e.trim().toLowerCase())
+			.filter(Boolean);
+		const isAdminEmail =
+			req.user?.email && adminEmails.includes(req.user.email.toLowerCase());
+		const hasRole = roles.includes(req.user?.role);
+		if (!(hasRole || isAdminEmail)) {
+			return next(new AppError("Forbidden", 403));
+		}
+		next();
+	};
+};
