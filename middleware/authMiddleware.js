@@ -2,47 +2,64 @@ const User = require("../models/user");
 const AppError = require("../utils/appError");
 const { verifyToken } = require("../utils/jwtUtils");
 
-module.exports.protect = async function (req, res, next) {
-	try {
-		let token;
+// module.exports.protect = async function (req, res, next) {
+// 	try {
+// 		let token;
 
-		if (
-			req.headers.authorization &&
-			req.headers.authorization.startsWith("Bearer")
-		) {
-			token = req.headers.authorization.split(" ")[1];
-		}
-		if (!token) {
-			return next(new AppError("You are not logged in!", 401));
-		}
+// 		if (
+// 			req.headers.authorization &&
+// 			req.headers.authorization.startsWith("Bearer")
+// 		) {
+// 			token = req.headers.authorization.split(" ")[1];
+// 		}
+// 		if (!token) {
+// 			return next(new AppError("You are not logged in!", 401));
+// 		}
 
-		const decoded = verifyToken(token);
+// 		const decoded = verifyToken(token);
 
-		const currentUser = await User.findById(decoded.id);
-		if (!currentUser) {
-			return next(new AppError("User no longer exists!", 401));
-		}
+// 		const currentUser = await User.findById(decoded.id);
+// 		if (!currentUser) {
+// 			return next(new AppError("User no longer exists!", 401));
+// 		}
 
-		req.user = currentUser;
+// 		req.user = currentUser;
 
-		next();
-	} catch (err) {
-		return next(new AppError("Invalid or expired token!", 401));
-	}
+// 		next();
+// 	} catch (err) {
+// 		return next(new AppError("Invalid or expired token!", 401));
+// 	}
+// };
+
+exports.protect = async (req, res, next) => {
+  let token = req.cookies?.jwt;
+
+  if (!token) {
+    return next(new AppError("You are not logged in!", 401));
+  }
+
+  const decoded = verifyToken(token);
+
+  const user = await User.findById(decoded.id);
+  if (!user) {
+    return next(new AppError("User no longer exists", 401));
+  }
+
+  req.user = user;
+  next();
 };
 
-module.exports.restrictTo = function (...roles) {
-	return (req, res, next) => {
-		const adminEmails = (process.env.ADMIN_EMAILS || "")
-			.split(",")
-			.map((e) => e.trim().toLowerCase())
-			.filter(Boolean);
-		const isAdminEmail =
-			req.user?.email && adminEmails.includes(req.user.email.toLowerCase());
-		const hasRole = roles.includes(req.user?.role);
-		if (!(hasRole || isAdminEmail)) {
-			return next(new AppError("Forbidden", 403));
-		}
-		next();
-	};
+module.exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return next(new AppError("Unauthorized", 401));
+    }
+
+    if (!roles.includes(req.user.role)) {
+      return next(new AppError("Forbidden", 403));
+    }
+
+    next();
+  };
 };
+

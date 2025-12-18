@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0028)https://gigstm.com/find-work -->
-<html lang="en" webcrx="" data-qb-installed="true">
+<!-- saved from url=(0034)https://gigstm.com/gigs-categories -->
+<html lang="en" data-qb-installed="true">
 <style class="adjust-screen-brightness" media="screen">
-  html::before {
+  html::before,
+  :not(:root):fullscreen::before {
     content: " ";
     z-index: 2147483647;
     pointer-events: none;
@@ -13,78 +14,3210 @@
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.19999999999999996);
   }
+
+  :not(:root):fullscreen::backdrop {
+    display: none;
+  }
 </style>
 
 <head>
-
-
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <style>
+    body {
+      transition: opacity ease-in 0.2s;
+    }
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="keywords" content="">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <meta name="csrf-token" content="ZXt9ZW5uy1uuSD6X2d74XVMWxSPgGhar16hRXbO8">
-  <link rel="shortcut icon" href="https://gigstm.com/images/logo/favicon.ico" type="image/x-icon">
-  <link rel="icon" href="https://gigstm.com/images/logo/favicon.ico" type="image/x-icon">
-  <title>GigsTm</title>
-  <!-- External Styles -->
-  <link rel="stylesheet" href="./styles.css">
+    body[unresolved] {
+      opacity: 0;
+      display: block;
+      overflow: hidden;
+      position: relative;
+    }
+  </style>
+
+
+
+
+
+
+
+
+
+
+  <!-- Livewire Styles -->
+  <style>
+    [wire\:loading][wire\:loading],
+    [wire\:loading\.delay][wire\:loading\.delay],
+    [wire\:loading\.inline-block][wire\:loading\.inline-block],
+    [wire\:loading\.inline][wire\:loading\.inline],
+    [wire\:loading\.block][wire\:loading\.block],
+    [wire\:loading\.flex][wire\:loading\.flex],
+    [wire\:loading\.table][wire\:loading\.table],
+    [wire\:loading\.grid][wire\:loading\.grid],
+    [wire\:loading\.inline-flex][wire\:loading\.inline-flex] {
+      display: none;
+    }
+
+    [wire\:loading\.delay\.none][wire\:loading\.delay\.none],
+    [wire\:loading\.delay\.shortest][wire\:loading\.delay\.shortest],
+    [wire\:loading\.delay\.shorter][wire\:loading\.delay\.shorter],
+    [wire\:loading\.delay\.short][wire\:loading\.delay\.short],
+    [wire\:loading\.delay\.default][wire\:loading\.delay\.default],
+    [wire\:loading\.delay\.long][wire\:loading\.delay\.long],
+    [wire\:loading\.delay\.longer][wire\:loading\.delay\.longer],
+    [wire\:loading\.delay\.longest][wire\:loading\.delay\.longest] {
+      display: none;
+    }
+
+    [wire\:offline][wire\:offline] {
+      display: none;
+    }
+
+    [wire\:dirty]:not(textarea):not(input):not(select) {
+      display: none;
+    }
+
+    :root {
+      --livewire-progress-bar-color: #2299dd;
+    }
+
+    [x-cloak] {
+      display: none !important;
+    }
+  </style>
   <!-- Bootstrap , fonts & icons  -->
-  <link rel="stylesheet" href="./GigsTm_files/bootstrap.css">
-  <link rel="stylesheet" href="./GigsTm_files/style.css">
-  <link rel="stylesheet" href="./GigsTm_files/typo.css">
+  <link rel="stylesheet" href="/gigs-categories_files/bootstrap.css">
+  <link rel="stylesheet" href="/gigs-categories_files/style.css">
+  <link rel="stylesheet" href="/gigs-categories_files/typo.css">
+  <link rel="stylesheet" href="/gigs-categories_files/all.css">
+  <!-- Plugin'stylesheets  -->
+  <link rel="stylesheet" href="/gigs-categories_files/aos.min.css">
+  <link rel="stylesheet" href="/gigs-categories_files/jquery.fancybox.min.css">
+
+  <link rel="stylesheet" href="/gigs-categories_files/slick.min.css">
+  <link rel="stylesheet" href="/gigs-categories_files/jquery-ui.css">
+  <link rel="stylesheet" href="/gigs-categories_files/sweetalert2.min.css">
+
   <!-- Font Awesome Icons (CDN) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Plugin'stylesheets  -->
-  <link rel="stylesheet" href="./GigsTm_files/aos.min.css">
-  <link rel="stylesheet" href="./GigsTm_files/jquery.fancybox.min.css">
 
-  <link rel="stylesheet" href="./GigsTm_files/slick.min.css">
-  <link rel="stylesheet" href="./GigsTm_files/jquery-ui.css">
-  <link rel="stylesheet" href="./GigsTm_files/sweetalert2.min.css">
   <!-- Vendor stylesheets  -->
-  <link rel="stylesheet" href="./GigsTm_files/main.css">
-  <link rel="stylesheet" href="./GigsTm_files/custom.css">
-  <link rel="stylesheet" href="./GigsTm_files/find-worker.css">
+  <link rel="stylesheet" href="/gigs-categories_files/main.css">
+  <link rel="stylesheet" href="/gigs-categories_files/custom.css">
+  <link rel="stylesheet" href="/gigs-categories_files/font-awesome.min.css">
+  <link rel="stylesheet" href="/gigs-categories_files/find-worker.css">
   <link type="text/css" rel="stylesheet" id="dark-mode-custom-link">
   <link type="text/css" rel="stylesheet" id="dark-mode-general-link">
   <style lang="en" type="text/css" id="dark-mode-custom-style"></style>
   <style lang="en" type="text/css" id="dark-mode-native-style"></style>
   <style lang="en" type="text/css" id="dark-mode-native-sheet"></style>
+  <style>
+    /* Make clicks pass-through */
 
+    #nprogress {
+      pointer-events: none;
+    }
+
+    #nprogress .bar {
+      background: var(--livewire-progress-bar-color, #29d);
+
+      position: fixed;
+      z-index: 1031;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 2px;
+    }
+
+    /* Fancy blur effect */
+    #nprogress .peg {
+      display: block;
+      position: absolute;
+      right: 0px;
+      width: 100px;
+      height: 100%;
+      box-shadow: 0 0 10px var(--livewire-progress-bar-color, #29d), 0 0 5px var(--livewire-progress-bar-color, #29d);
+      opacity: 1.0;
+
+      -webkit-transform: rotate(3deg) translate(0px, -4px);
+      -ms-transform: rotate(3deg) translate(0px, -4px);
+      transform: rotate(3deg) translate(0px, -4px);
+    }
+
+    /* Remove these to get rid of the spinner */
+    #nprogress .spinner {
+      display: block;
+      position: fixed;
+      z-index: 1031;
+      top: 15px;
+      right: 15px;
+    }
+
+    #nprogress .spinner-icon {
+      width: 18px;
+      height: 18px;
+      box-sizing: border-box;
+
+      border: solid 2px transparent;
+      border-top-color: var(--livewire-progress-bar-color, #29d);
+      border-left-color: var(--livewire-progress-bar-color, #29d);
+      border-radius: 50%;
+
+      -webkit-animation: nprogress-spinner 400ms linear infinite;
+      animation: nprogress-spinner 400ms linear infinite;
+    }
+
+    .nprogress-custom-parent {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .nprogress-custom-parent #nprogress .spinner,
+    .nprogress-custom-parent #nprogress .bar {
+      position: absolute;
+    }
+
+    @-webkit-keyframes nprogress-spinner {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes nprogress-spinner {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+  <style>
+    :root {
+      --swal2-container-padding: 0.625em;
+      --swal2-backdrop: rgba(0, 0, 0, 0.4);
+      --swal2-width: 32em;
+      --swal2-padding: 0 0 1.25em;
+      --swal2-border: none;
+      --swal2-border-radius: 0.3125rem;
+      --swal2-background: white;
+      --swal2-color: #545454;
+      --swal2-footer-border-color: #eee;
+      --swal2-input-background: transparent;
+      --swal2-validation-message-background: #f0f0f0;
+      --swal2-validation-message-color: #666
+    }
+
+    [data-swal2-theme=dark] {
+      --swal2-dark-theme-black: #19191a;
+      --swal2-dark-theme-white: #e1e1e1;
+      --swal2-background: var(--swal2-dark-theme-black);
+      --swal2-color: var(--swal2-dark-theme-white);
+      --swal2-footer-border-color: #555;
+      --swal2-input-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);
+      --swal2-validation-message-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);
+      --swal2-validation-message-color: var(--swal2-dark-theme-white)
+    }
+
+    @media(prefers-color-scheme: dark) {
+      [data-swal2-theme=auto] {
+        --swal2-dark-theme-black: #19191a;
+        --swal2-dark-theme-white: #e1e1e1;
+        --swal2-background: var(--swal2-dark-theme-black);
+        --swal2-color: var(--swal2-dark-theme-white);
+        --swal2-footer-border-color: #555;
+        --swal2-input-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);
+        --swal2-validation-message-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);
+        --swal2-validation-message-color: var(--swal2-dark-theme-white)
+      }
+    }
+
+    body.swal2-shown:not(.swal2-no-backdrop, .swal2-toast-shown) {
+      overflow: hidden
+    }
+
+    body.swal2-height-auto {
+      height: auto !important
+    }
+
+    body.swal2-no-backdrop .swal2-container {
+      background-color: rgba(0, 0, 0, 0) !important;
+      pointer-events: none
+    }
+
+    body.swal2-no-backdrop .swal2-container .swal2-popup {
+      pointer-events: all
+    }
+
+    body.swal2-no-backdrop .swal2-container .swal2-modal {
+      box-shadow: 0 0 10px var(--swal2-backdrop)
+    }
+
+    body.swal2-toast-shown .swal2-container {
+      box-sizing: border-box;
+      width: 360px;
+      max-width: 100%;
+      background-color: rgba(0, 0, 0, 0);
+      pointer-events: none
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-top {
+      inset: 0 auto auto 50%;
+      transform: translateX(-50%)
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-top-end,
+    body.swal2-toast-shown .swal2-container.swal2-top-right {
+      inset: 0 0 auto auto
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-top-start,
+    body.swal2-toast-shown .swal2-container.swal2-top-left {
+      inset: 0 auto auto 0
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-center-start,
+    body.swal2-toast-shown .swal2-container.swal2-center-left {
+      inset: 50% auto auto 0;
+      transform: translateY(-50%)
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-center {
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%)
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-center-end,
+    body.swal2-toast-shown .swal2-container.swal2-center-right {
+      inset: 50% 0 auto auto;
+      transform: translateY(-50%)
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-bottom-start,
+    body.swal2-toast-shown .swal2-container.swal2-bottom-left {
+      inset: auto auto 0 0
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-bottom {
+      inset: auto auto 0 50%;
+      transform: translateX(-50%)
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-bottom-end,
+    body.swal2-toast-shown .swal2-container.swal2-bottom-right {
+      inset: auto 0 0 auto
+    }
+
+    @media print {
+      body.swal2-shown:not(.swal2-no-backdrop, .swal2-toast-shown) {
+        overflow-y: scroll !important
+      }
+
+      body.swal2-shown:not(.swal2-no-backdrop, .swal2-toast-shown)>[aria-hidden=true] {
+        display: none
+      }
+
+      body.swal2-shown:not(.swal2-no-backdrop, .swal2-toast-shown) .swal2-container {
+        position: static !important
+      }
+    }
+
+    div:where(.swal2-container) {
+      display: grid;
+      position: fixed;
+      z-index: 1060;
+      inset: 0;
+      box-sizing: border-box;
+      grid-template-areas: "top-start     top            top-end" "center-start  center         center-end" "bottom-start  bottom-center  bottom-end";
+      grid-template-rows: minmax(min-content, auto) minmax(min-content, auto) minmax(min-content, auto);
+      height: 100%;
+      padding: var(--swal2-container-padding);
+      overflow-x: hidden;
+      transition: background-color .1s;
+      -webkit-overflow-scrolling: touch
+    }
+
+    div:where(.swal2-container).swal2-backdrop-show,
+    div:where(.swal2-container).swal2-noanimation {
+      background: var(--swal2-backdrop)
+    }
+
+    div:where(.swal2-container).swal2-backdrop-hide {
+      background: rgba(0, 0, 0, 0) !important
+    }
+
+    div:where(.swal2-container).swal2-top-start,
+    div:where(.swal2-container).swal2-center-start,
+    div:where(.swal2-container).swal2-bottom-start {
+      grid-template-columns: minmax(0, 1fr) auto auto
+    }
+
+    div:where(.swal2-container).swal2-top,
+    div:where(.swal2-container).swal2-center,
+    div:where(.swal2-container).swal2-bottom {
+      grid-template-columns: auto minmax(0, 1fr) auto
+    }
+
+    div:where(.swal2-container).swal2-top-end,
+    div:where(.swal2-container).swal2-center-end,
+    div:where(.swal2-container).swal2-bottom-end {
+      grid-template-columns: auto auto minmax(0, 1fr)
+    }
+
+    div:where(.swal2-container).swal2-top-start>.swal2-popup {
+      align-self: start
+    }
+
+    div:where(.swal2-container).swal2-top>.swal2-popup {
+      grid-column: 2;
+      place-self: start center
+    }
+
+    div:where(.swal2-container).swal2-top-end>.swal2-popup,
+    div:where(.swal2-container).swal2-top-right>.swal2-popup {
+      grid-column: 3;
+      place-self: start end
+    }
+
+    div:where(.swal2-container).swal2-center-start>.swal2-popup,
+    div:where(.swal2-container).swal2-center-left>.swal2-popup {
+      grid-row: 2;
+      align-self: center
+    }
+
+    div:where(.swal2-container).swal2-center>.swal2-popup {
+      grid-column: 2;
+      grid-row: 2;
+      place-self: center center
+    }
+
+    div:where(.swal2-container).swal2-center-end>.swal2-popup,
+    div:where(.swal2-container).swal2-center-right>.swal2-popup {
+      grid-column: 3;
+      grid-row: 2;
+      place-self: center end
+    }
+
+    div:where(.swal2-container).swal2-bottom-start>.swal2-popup,
+    div:where(.swal2-container).swal2-bottom-left>.swal2-popup {
+      grid-column: 1;
+      grid-row: 3;
+      align-self: end
+    }
+
+    div:where(.swal2-container).swal2-bottom>.swal2-popup {
+      grid-column: 2;
+      grid-row: 3;
+      place-self: end center
+    }
+
+    div:where(.swal2-container).swal2-bottom-end>.swal2-popup,
+    div:where(.swal2-container).swal2-bottom-right>.swal2-popup {
+      grid-column: 3;
+      grid-row: 3;
+      place-self: end end
+    }
+
+    div:where(.swal2-container).swal2-grow-row>.swal2-popup,
+    div:where(.swal2-container).swal2-grow-fullscreen>.swal2-popup {
+      grid-column: 1/4;
+      width: 100%
+    }
+
+    div:where(.swal2-container).swal2-grow-column>.swal2-popup,
+    div:where(.swal2-container).swal2-grow-fullscreen>.swal2-popup {
+      grid-row: 1/4;
+      align-self: stretch
+    }
+
+    div:where(.swal2-container).swal2-no-transition {
+      transition: none !important
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup) {
+      display: none;
+      position: relative;
+      box-sizing: border-box;
+      grid-template-columns: minmax(0, 100%);
+      width: var(--swal2-width);
+      max-width: 100%;
+      padding: var(--swal2-padding);
+      border: var(--swal2-border);
+      border-radius: var(--swal2-border-radius);
+      background: var(--swal2-background);
+      color: var(--swal2-color);
+      font-family: inherit;
+      font-size: 1rem
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup):focus {
+      outline: none
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup).swal2-loading {
+      overflow-y: hidden
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup).swal2-draggable {
+      cursor: grab
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup).swal2-draggable div:where(.swal2-icon) {
+      cursor: grab
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup).swal2-dragging {
+      cursor: grabbing
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup).swal2-dragging div:where(.swal2-icon) {
+      cursor: grabbing
+    }
+
+    div:where(.swal2-container) h2:where(.swal2-title) {
+      position: relative;
+      max-width: 100%;
+      margin: 0;
+      padding: .8em 1em 0;
+      color: inherit;
+      font-size: 1.875em;
+      font-weight: 600;
+      text-align: center;
+      text-transform: none;
+      word-wrap: break-word;
+      cursor: initial
+    }
+
+    div:where(.swal2-container) div:where(.swal2-actions) {
+      display: flex;
+      z-index: 1;
+      box-sizing: border-box;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      margin: 1.25em auto 0;
+      padding: 0
+    }
+
+    div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled[disabled] {
+      opacity: .4
+    }
+
+    div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled:hover {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1))
+    }
+
+    div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled:active {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))
+    }
+
+    div:where(.swal2-container) div:where(.swal2-loader) {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 2.2em;
+      height: 2.2em;
+      margin: 0 1.875em;
+      animation: swal2-rotate-loading 1.5s linear 0s infinite normal;
+      border-width: .25em;
+      border-style: solid;
+      border-radius: 100%;
+      border-color: #2778c4 rgba(0, 0, 0, 0) #2778c4 rgba(0, 0, 0, 0)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled) {
+      margin: .3125em;
+      padding: .625em 1.1em;
+      transition: box-shadow .1s;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0);
+      font-weight: 500
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):not([disabled]) {
+      cursor: pointer
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
+      border: 0;
+      border-radius: .25em;
+      background: initial;
+      background-color: #7066e0;
+      color: #fff;
+      font-size: 1em
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm):focus-visible {
+      box-shadow: 0 0 0 3px rgba(112, 102, 224, .5)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny) {
+      border: 0;
+      border-radius: .25em;
+      background: initial;
+      background-color: #dc3741;
+      color: #fff;
+      font-size: 1em
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny):focus-visible {
+      box-shadow: 0 0 0 3px rgba(220, 55, 65, .5)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel) {
+      border: 0;
+      border-radius: .25em;
+      background: initial;
+      background-color: #6e7881;
+      color: #fff;
+      font-size: 1em
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel):focus-visible {
+      box-shadow: 0 0 0 3px rgba(110, 120, 129, .5)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled).swal2-default-outline:focus-visible {
+      box-shadow: 0 0 0 3px rgba(100, 150, 200, .5)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):focus-visible {
+      outline: none
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled)::-moz-focus-inner {
+      border: 0
+    }
+
+    div:where(.swal2-container) div:where(.swal2-footer) {
+      margin: 1em 0 0;
+      padding: 1em 1em 0;
+      border-top: 1px solid var(--swal2-footer-border-color);
+      color: inherit;
+      font-size: 1em;
+      text-align: center;
+      cursor: initial
+    }
+
+    div:where(.swal2-container) .swal2-timer-progress-bar-container {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      grid-column: auto !important;
+      overflow: hidden;
+      border-bottom-right-radius: var(--swal2-border-radius);
+      border-bottom-left-radius: var(--swal2-border-radius)
+    }
+
+    div:where(.swal2-container) div:where(.swal2-timer-progress-bar) {
+      width: 100%;
+      height: .25em;
+      background: rgba(0, 0, 0, .2)
+    }
+
+    div:where(.swal2-container) img:where(.swal2-image) {
+      max-width: 100%;
+      margin: 2em auto 1em;
+      cursor: initial
+    }
+
+    div:where(.swal2-container) button:where(.swal2-close) {
+      z-index: 2;
+      align-items: center;
+      justify-content: center;
+      width: 1.2em;
+      height: 1.2em;
+      margin-top: 0;
+      margin-right: 0;
+      margin-bottom: -1.2em;
+      padding: 0;
+      overflow: hidden;
+      transition: color .1s, box-shadow .1s;
+      border: none;
+      border-radius: var(--swal2-border-radius);
+      background: rgba(0, 0, 0, 0);
+      color: #ccc;
+      font-family: monospace;
+      font-size: 2.5em;
+      cursor: pointer;
+      justify-self: end
+    }
+
+    div:where(.swal2-container) button:where(.swal2-close):hover {
+      transform: none;
+      background: rgba(0, 0, 0, 0);
+      color: #f27474
+    }
+
+    div:where(.swal2-container) button:where(.swal2-close):focus-visible {
+      outline: none;
+      box-shadow: inset 0 0 0 3px rgba(100, 150, 200, .5)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-close)::-moz-focus-inner {
+      border: 0
+    }
+
+    div:where(.swal2-container) div:where(.swal2-html-container) {
+      z-index: 1;
+      justify-content: center;
+      margin: 0;
+      padding: 1em 1.6em .3em;
+      overflow: auto;
+      color: inherit;
+      font-size: 1.125em;
+      font-weight: normal;
+      line-height: normal;
+      text-align: center;
+      word-wrap: break-word;
+      word-break: break-word;
+      cursor: initial
+    }
+
+    div:where(.swal2-container) input:where(.swal2-input),
+    div:where(.swal2-container) input:where(.swal2-file),
+    div:where(.swal2-container) textarea:where(.swal2-textarea),
+    div:where(.swal2-container) select:where(.swal2-select),
+    div:where(.swal2-container) div:where(.swal2-radio),
+    div:where(.swal2-container) label:where(.swal2-checkbox) {
+      margin: 1em 2em 3px
+    }
+
+    div:where(.swal2-container) input:where(.swal2-input),
+    div:where(.swal2-container) input:where(.swal2-file),
+    div:where(.swal2-container) textarea:where(.swal2-textarea) {
+      box-sizing: border-box;
+      width: auto;
+      transition: border-color .1s, box-shadow .1s;
+      border: 1px solid #d9d9d9;
+      border-radius: .1875em;
+      background: var(--swal2-input-background);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .06), 0 0 0 3px rgba(0, 0, 0, 0);
+      color: inherit;
+      font-size: 1.125em
+    }
+
+    div:where(.swal2-container) input:where(.swal2-input).swal2-inputerror,
+    div:where(.swal2-container) input:where(.swal2-file).swal2-inputerror,
+    div:where(.swal2-container) textarea:where(.swal2-textarea).swal2-inputerror {
+      border-color: #f27474 !important;
+      box-shadow: 0 0 2px #f27474 !important
+    }
+
+    div:where(.swal2-container) input:where(.swal2-input):focus,
+    div:where(.swal2-container) input:where(.swal2-file):focus,
+    div:where(.swal2-container) textarea:where(.swal2-textarea):focus {
+      border: 1px solid #b4dbed;
+      outline: none;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .06), 0 0 0 3px rgba(100, 150, 200, .5)
+    }
+
+    div:where(.swal2-container) input:where(.swal2-input)::placeholder,
+    div:where(.swal2-container) input:where(.swal2-file)::placeholder,
+    div:where(.swal2-container) textarea:where(.swal2-textarea)::placeholder {
+      color: #ccc
+    }
+
+    div:where(.swal2-container) .swal2-range {
+      margin: 1em 2em 3px;
+      background: var(--swal2-background)
+    }
+
+    div:where(.swal2-container) .swal2-range input {
+      width: 80%
+    }
+
+    div:where(.swal2-container) .swal2-range output {
+      width: 20%;
+      color: inherit;
+      font-weight: 600;
+      text-align: center
+    }
+
+    div:where(.swal2-container) .swal2-range input,
+    div:where(.swal2-container) .swal2-range output {
+      height: 2.625em;
+      padding: 0;
+      font-size: 1.125em;
+      line-height: 2.625em
+    }
+
+    div:where(.swal2-container) .swal2-input {
+      height: 2.625em;
+      padding: 0 .75em
+    }
+
+    div:where(.swal2-container) .swal2-file {
+      width: 75%;
+      margin-right: auto;
+      margin-left: auto;
+      background: var(--swal2-input-background);
+      font-size: 1.125em
+    }
+
+    div:where(.swal2-container) .swal2-textarea {
+      height: 6.75em;
+      padding: .75em
+    }
+
+    div:where(.swal2-container) .swal2-select {
+      min-width: 50%;
+      max-width: 100%;
+      padding: .375em .625em;
+      background: var(--swal2-input-background);
+      color: inherit;
+      font-size: 1.125em
+    }
+
+    div:where(.swal2-container) .swal2-radio,
+    div:where(.swal2-container) .swal2-checkbox {
+      align-items: center;
+      justify-content: center;
+      background: var(--swal2-background);
+      color: inherit
+    }
+
+    div:where(.swal2-container) .swal2-radio label,
+    div:where(.swal2-container) .swal2-checkbox label {
+      margin: 0 .6em;
+      font-size: 1.125em
+    }
+
+    div:where(.swal2-container) .swal2-radio input,
+    div:where(.swal2-container) .swal2-checkbox input {
+      flex-shrink: 0;
+      margin: 0 .4em
+    }
+
+    div:where(.swal2-container) label:where(.swal2-input-label) {
+      display: flex;
+      justify-content: center;
+      margin: 1em auto 0
+    }
+
+    div:where(.swal2-container) div:where(.swal2-validation-message) {
+      align-items: center;
+      justify-content: center;
+      margin: 1em 0 0;
+      padding: .625em;
+      overflow: hidden;
+      background: var(--swal2-validation-message-background);
+      color: var(--swal2-validation-message-color);
+      font-size: 1em;
+      font-weight: 300
+    }
+
+    div:where(.swal2-container) div:where(.swal2-validation-message)::before {
+      content: "!";
+      display: inline-block;
+      width: 1.5em;
+      min-width: 1.5em;
+      height: 1.5em;
+      margin: 0 .625em;
+      border-radius: 50%;
+      background-color: #f27474;
+      color: #fff;
+      font-weight: 600;
+      line-height: 1.5em;
+      text-align: center
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps {
+      flex-wrap: wrap;
+      align-items: center;
+      max-width: 100%;
+      margin: 1.25em auto;
+      padding: 0;
+      background: rgba(0, 0, 0, 0);
+      font-weight: 600
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps li {
+      display: inline-block;
+      position: relative
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step {
+      z-index: 20;
+      flex-shrink: 0;
+      width: 2em;
+      height: 2em;
+      border-radius: 2em;
+      background: #2778c4;
+      color: #fff;
+      line-height: 2em;
+      text-align: center
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step {
+      background: #2778c4
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step {
+      background: #add8e6;
+      color: #fff
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step-line {
+      background: #add8e6
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step-line {
+      z-index: 10;
+      flex-shrink: 0;
+      width: 2.5em;
+      height: .4em;
+      margin: 0 -1px;
+      background: #2778c4
+    }
+
+    div:where(.swal2-icon) {
+      position: relative;
+      box-sizing: content-box;
+      justify-content: center;
+      width: 5em;
+      height: 5em;
+      margin: 2.5em auto .6em;
+      border: .25em solid rgba(0, 0, 0, 0);
+      border-radius: 50%;
+      border-color: #000;
+      font-family: inherit;
+      line-height: 5em;
+      cursor: default;
+      user-select: none
+    }
+
+    div:where(.swal2-icon) .swal2-icon-content {
+      display: flex;
+      align-items: center;
+      font-size: 3.75em
+    }
+
+    div:where(.swal2-icon).swal2-error {
+      border-color: #f27474;
+      color: #f27474
+    }
+
+    div:where(.swal2-icon).swal2-error .swal2-x-mark {
+      position: relative;
+      flex-grow: 1
+    }
+
+    div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line] {
+      display: block;
+      position: absolute;
+      top: 2.3125em;
+      width: 2.9375em;
+      height: .3125em;
+      border-radius: .125em;
+      background-color: #f27474
+    }
+
+    div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line][class$=left] {
+      left: 1.0625em;
+      transform: rotate(45deg)
+    }
+
+    div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line][class$=right] {
+      right: 1em;
+      transform: rotate(-45deg)
+    }
+
+    div:where(.swal2-icon).swal2-error.swal2-icon-show {
+      animation: swal2-animate-error-icon .5s
+    }
+
+    div:where(.swal2-icon).swal2-error.swal2-icon-show .swal2-x-mark {
+      animation: swal2-animate-error-x-mark .5s
+    }
+
+    div:where(.swal2-icon).swal2-warning {
+      border-color: #f8bb86;
+      color: #f8bb86
+    }
+
+    div:where(.swal2-icon).swal2-warning.swal2-icon-show {
+      animation: swal2-animate-error-icon .5s
+    }
+
+    div:where(.swal2-icon).swal2-warning.swal2-icon-show .swal2-icon-content {
+      animation: swal2-animate-i-mark .5s
+    }
+
+    div:where(.swal2-icon).swal2-info {
+      border-color: #3fc3ee;
+      color: #3fc3ee
+    }
+
+    div:where(.swal2-icon).swal2-info.swal2-icon-show {
+      animation: swal2-animate-error-icon .5s
+    }
+
+    div:where(.swal2-icon).swal2-info.swal2-icon-show .swal2-icon-content {
+      animation: swal2-animate-i-mark .8s
+    }
+
+    div:where(.swal2-icon).swal2-question {
+      border-color: #87adbd;
+      color: #87adbd
+    }
+
+    div:where(.swal2-icon).swal2-question.swal2-icon-show {
+      animation: swal2-animate-error-icon .5s
+    }
+
+    div:where(.swal2-icon).swal2-question.swal2-icon-show .swal2-icon-content {
+      animation: swal2-animate-question-mark .8s
+    }
+
+    div:where(.swal2-icon).swal2-success {
+      border-color: #a5dc86;
+      color: #a5dc86
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line] {
+      position: absolute;
+      width: 3.75em;
+      height: 7.5em;
+      border-radius: 50%
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line][class$=left] {
+      top: -0.4375em;
+      left: -2.0635em;
+      transform: rotate(-45deg);
+      transform-origin: 3.75em 3.75em;
+      border-radius: 7.5em 0 0 7.5em
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line][class$=right] {
+      top: -0.6875em;
+      left: 1.875em;
+      transform: rotate(-45deg);
+      transform-origin: 0 3.75em;
+      border-radius: 0 7.5em 7.5em 0
+    }
+
+    div:where(.swal2-icon).swal2-success .swal2-success-ring {
+      position: absolute;
+      z-index: 2;
+      top: -0.25em;
+      left: -0.25em;
+      box-sizing: content-box;
+      width: 100%;
+      height: 100%;
+      border: .25em solid rgba(165, 220, 134, .3);
+      border-radius: 50%
+    }
+
+    div:where(.swal2-icon).swal2-success .swal2-success-fix {
+      position: absolute;
+      z-index: 1;
+      top: .5em;
+      left: 1.625em;
+      width: .4375em;
+      height: 5.625em;
+      transform: rotate(-45deg)
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-line] {
+      display: block;
+      position: absolute;
+      z-index: 2;
+      height: .3125em;
+      border-radius: .125em;
+      background-color: #a5dc86
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=tip] {
+      top: 2.875em;
+      left: .8125em;
+      width: 1.5625em;
+      transform: rotate(45deg)
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=long] {
+      top: 2.375em;
+      right: .5em;
+      width: 2.9375em;
+      transform: rotate(-45deg)
+    }
+
+    div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-tip {
+      animation: swal2-animate-success-line-tip .75s
+    }
+
+    div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-long {
+      animation: swal2-animate-success-line-long .75s
+    }
+
+    div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-circular-line-right {
+      animation: swal2-rotate-success-circular-line 4.25s ease-in
+    }
+
+    [class^=swal2] {
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+    }
+
+    .swal2-show {
+      animation: swal2-show .3s
+    }
+
+    .swal2-hide {
+      animation: swal2-hide .15s forwards
+    }
+
+    .swal2-noanimation {
+      transition: none
+    }
+
+    .swal2-scrollbar-measure {
+      position: absolute;
+      top: -9999px;
+      width: 50px;
+      height: 50px;
+      overflow: scroll
+    }
+
+    .swal2-rtl .swal2-close {
+      margin-right: initial;
+      margin-left: 0
+    }
+
+    .swal2-rtl .swal2-timer-progress-bar {
+      right: 0;
+      left: auto
+    }
+
+    .swal2-toast {
+      box-sizing: border-box;
+      grid-column: 1/4 !important;
+      grid-row: 1/4 !important;
+      grid-template-columns: min-content auto min-content;
+      padding: 1em;
+      overflow-y: hidden;
+      background: #fff;
+      box-shadow: 0 0 1px rgba(0, 0, 0, .075), 0 1px 2px rgba(0, 0, 0, .075), 1px 2px 4px rgba(0, 0, 0, .075), 1px 3px 8px rgba(0, 0, 0, .075), 2px 4px 16px rgba(0, 0, 0, .075);
+      pointer-events: all
+    }
+
+    .swal2-toast>* {
+      grid-column: 2
+    }
+
+    .swal2-toast h2:where(.swal2-title) {
+      margin: .5em 1em;
+      padding: 0;
+      font-size: 1em;
+      text-align: initial
+    }
+
+    .swal2-toast .swal2-loading {
+      justify-content: center
+    }
+
+    .swal2-toast input:where(.swal2-input) {
+      height: 2em;
+      margin: .5em;
+      font-size: 1em
+    }
+
+    .swal2-toast .swal2-validation-message {
+      font-size: 1em
+    }
+
+    .swal2-toast div:where(.swal2-footer) {
+      margin: .5em 0 0;
+      padding: .5em 0 0;
+      font-size: .8em
+    }
+
+    .swal2-toast button:where(.swal2-close) {
+      grid-column: 3/3;
+      grid-row: 1/99;
+      align-self: center;
+      width: .8em;
+      height: .8em;
+      margin: 0;
+      font-size: 2em
+    }
+
+    .swal2-toast div:where(.swal2-html-container) {
+      margin: .5em 1em;
+      padding: 0;
+      overflow: initial;
+      font-size: 1em;
+      text-align: initial
+    }
+
+    .swal2-toast div:where(.swal2-html-container):empty {
+      padding: 0
+    }
+
+    .swal2-toast .swal2-loader {
+      grid-column: 1;
+      grid-row: 1/99;
+      align-self: center;
+      width: 2em;
+      height: 2em;
+      margin: .25em
+    }
+
+    .swal2-toast .swal2-icon {
+      grid-column: 1;
+      grid-row: 1/99;
+      align-self: center;
+      width: 2em;
+      min-width: 2em;
+      height: 2em;
+      margin: 0 .5em 0 0
+    }
+
+    .swal2-toast .swal2-icon .swal2-icon-content {
+      display: flex;
+      align-items: center;
+      font-size: 1.8em;
+      font-weight: bold
+    }
+
+    .swal2-toast .swal2-icon.swal2-success .swal2-success-ring {
+      width: 2em;
+      height: 2em
+    }
+
+    .swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line] {
+      top: .875em;
+      width: 1.375em
+    }
+
+    .swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left] {
+      left: .3125em
+    }
+
+    .swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right] {
+      right: .3125em
+    }
+
+    .swal2-toast div:where(.swal2-actions) {
+      justify-content: flex-start;
+      height: auto;
+      margin: 0;
+      margin-top: .5em;
+      padding: 0 .5em
+    }
+
+    .swal2-toast button:where(.swal2-styled) {
+      margin: .25em .5em;
+      padding: .4em .6em;
+      font-size: 1em
+    }
+
+    .swal2-toast .swal2-success {
+      border-color: #a5dc86
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-circular-line] {
+      position: absolute;
+      width: 1.6em;
+      height: 3em;
+      border-radius: 50%
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=left] {
+      top: -0.8em;
+      left: -0.5em;
+      transform: rotate(-45deg);
+      transform-origin: 2em 2em;
+      border-radius: 4em 0 0 4em
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=right] {
+      top: -0.25em;
+      left: .9375em;
+      transform-origin: 0 1.5em;
+      border-radius: 0 4em 4em 0
+    }
+
+    .swal2-toast .swal2-success .swal2-success-ring {
+      width: 2em;
+      height: 2em
+    }
+
+    .swal2-toast .swal2-success .swal2-success-fix {
+      top: 0;
+      left: .4375em;
+      width: .4375em;
+      height: 2.6875em
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-line] {
+      height: .3125em
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-line][class$=tip] {
+      top: 1.125em;
+      left: .1875em;
+      width: .75em
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-line][class$=long] {
+      top: .9375em;
+      right: .1875em;
+      width: 1.375em
+    }
+
+    .swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip {
+      animation: swal2-toast-animate-success-line-tip .75s
+    }
+
+    .swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long {
+      animation: swal2-toast-animate-success-line-long .75s
+    }
+
+    .swal2-toast.swal2-show {
+      animation: swal2-toast-show .5s
+    }
+
+    .swal2-toast.swal2-hide {
+      animation: swal2-toast-hide .1s forwards
+    }
+
+    @keyframes swal2-show {
+      0% {
+        transform: scale(0.7)
+      }
+
+      45% {
+        transform: scale(1.05)
+      }
+
+      80% {
+        transform: scale(0.95)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    @keyframes swal2-hide {
+      0% {
+        transform: scale(1);
+        opacity: 1
+      }
+
+      100% {
+        transform: scale(0.5);
+        opacity: 0
+      }
+    }
+
+    @keyframes swal2-animate-success-line-tip {
+      0% {
+        top: 1.1875em;
+        left: .0625em;
+        width: 0
+      }
+
+      54% {
+        top: 1.0625em;
+        left: .125em;
+        width: 0
+      }
+
+      70% {
+        top: 2.1875em;
+        left: -0.375em;
+        width: 3.125em
+      }
+
+      84% {
+        top: 3em;
+        left: 1.3125em;
+        width: 1.0625em
+      }
+
+      100% {
+        top: 2.8125em;
+        left: .8125em;
+        width: 1.5625em
+      }
+    }
+
+    @keyframes swal2-animate-success-line-long {
+      0% {
+        top: 3.375em;
+        right: 2.875em;
+        width: 0
+      }
+
+      65% {
+        top: 3.375em;
+        right: 2.875em;
+        width: 0
+      }
+
+      84% {
+        top: 2.1875em;
+        right: 0;
+        width: 3.4375em
+      }
+
+      100% {
+        top: 2.375em;
+        right: .5em;
+        width: 2.9375em
+      }
+    }
+
+    @keyframes swal2-rotate-success-circular-line {
+      0% {
+        transform: rotate(-45deg)
+      }
+
+      5% {
+        transform: rotate(-45deg)
+      }
+
+      12% {
+        transform: rotate(-405deg)
+      }
+
+      100% {
+        transform: rotate(-405deg)
+      }
+    }
+
+    @keyframes swal2-animate-error-x-mark {
+      0% {
+        margin-top: 1.625em;
+        transform: scale(0.4);
+        opacity: 0
+      }
+
+      50% {
+        margin-top: 1.625em;
+        transform: scale(0.4);
+        opacity: 0
+      }
+
+      80% {
+        margin-top: -0.375em;
+        transform: scale(1.15)
+      }
+
+      100% {
+        margin-top: 0;
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    @keyframes swal2-animate-error-icon {
+      0% {
+        transform: rotateX(100deg);
+        opacity: 0
+      }
+
+      100% {
+        transform: rotateX(0deg);
+        opacity: 1
+      }
+    }
+
+    @keyframes swal2-rotate-loading {
+      0% {
+        transform: rotate(0deg)
+      }
+
+      100% {
+        transform: rotate(360deg)
+      }
+    }
+
+    @keyframes swal2-animate-question-mark {
+      0% {
+        transform: rotateY(-360deg)
+      }
+
+      100% {
+        transform: rotateY(0)
+      }
+    }
+
+    @keyframes swal2-animate-i-mark {
+      0% {
+        transform: rotateZ(45deg);
+        opacity: 0
+      }
+
+      25% {
+        transform: rotateZ(-25deg);
+        opacity: .4
+      }
+
+      50% {
+        transform: rotateZ(15deg);
+        opacity: .8
+      }
+
+      75% {
+        transform: rotateZ(-5deg);
+        opacity: 1
+      }
+
+      100% {
+        transform: rotateX(0);
+        opacity: 1
+      }
+    }
+
+    @keyframes swal2-toast-show {
+      0% {
+        transform: translateY(-0.625em) rotateZ(2deg)
+      }
+
+      33% {
+        transform: translateY(0) rotateZ(-2deg)
+      }
+
+      66% {
+        transform: translateY(0.3125em) rotateZ(2deg)
+      }
+
+      100% {
+        transform: translateY(0) rotateZ(0deg)
+      }
+    }
+
+    @keyframes swal2-toast-hide {
+      100% {
+        transform: rotateZ(1deg);
+        opacity: 0
+      }
+    }
+
+    @keyframes swal2-toast-animate-success-line-tip {
+      0% {
+        top: .5625em;
+        left: .0625em;
+        width: 0
+      }
+
+      54% {
+        top: .125em;
+        left: .125em;
+        width: 0
+      }
+
+      70% {
+        top: .625em;
+        left: -0.25em;
+        width: 1.625em
+      }
+
+      84% {
+        top: 1.0625em;
+        left: .75em;
+        width: .5em
+      }
+
+      100% {
+        top: 1.125em;
+        left: .1875em;
+        width: .75em
+      }
+    }
+
+    @keyframes swal2-toast-animate-success-line-long {
+      0% {
+        top: 1.625em;
+        right: 1.375em;
+        width: 0
+      }
+
+      65% {
+        top: 1.25em;
+        right: .9375em;
+        width: 0
+      }
+
+      84% {
+        top: .9375em;
+        right: 0;
+        width: 1.125em
+      }
+
+      100% {
+        top: .9375em;
+        right: .1875em;
+        width: 1.375em
+      }
+    }
+  </style>
+  <style type="text/css">
+    .lf-progress {
+      -webkit-appearance: none;
+      -moz-apperance: none;
+      width: 100%;
+      /* margin: 0 10px; */
+      height: 4px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .lf-progress:focus {
+      outline: none;
+      border: none;
+    }
+
+    .lf-progress::-moz-range-track {
+      cursor: pointer;
+      background: none;
+      border: none;
+      outline: none;
+    }
+
+    .lf-progress::-webkit-slider-thumb {
+      -webkit-appearance: none !important;
+      height: 13px;
+      width: 13px;
+      border: 0;
+      border-radius: 50%;
+      background: #0fccce;
+      cursor: pointer;
+    }
+
+    .lf-progress::-moz-range-thumb {
+      -moz-appearance: none !important;
+      height: 13px;
+      width: 13px;
+      border: 0;
+      border-radius: 50%;
+      background: #0fccce;
+      cursor: pointer;
+    }
+
+    .lf-progress::-ms-track {
+      width: 100%;
+      height: 3px;
+      cursor: pointer;
+      background: transparent;
+      border-color: transparent;
+      color: transparent;
+    }
+
+    .lf-progress::-ms-fill-lower {
+      background: #ccc;
+      border-radius: 3px;
+    }
+
+    .lf-progress::-ms-fill-upper {
+      background: #ccc;
+      border-radius: 3px;
+    }
+
+    .lf-progress::-ms-thumb {
+      border: 0;
+      height: 15px;
+      width: 15px;
+      border-radius: 50%;
+      background: #0fccce;
+      cursor: pointer;
+    }
+
+    .lf-progress:focus::-ms-fill-lower {
+      background: #ccc;
+    }
+
+    .lf-progress:focus::-ms-fill-upper {
+      background: #ccc;
+    }
+
+    .lf-player-container :focus {
+      outline: 0;
+    }
+
+    .lf-popover {
+      position: relative;
+    }
+
+    .lf-popover-content {
+      display: inline-block;
+      position: absolute;
+      opacity: 1;
+      visibility: visible;
+      transform: translate(0, -10px);
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+      transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+    }
+
+    .lf-popover-content.hidden {
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(0, 0px);
+    }
+
+    .lf-player-btn-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .lf-player-btn {
+      cursor: pointer;
+      fill: #999;
+      width: 14px;
+    }
+
+    .lf-player-btn.active {
+      fill: #555;
+    }
+
+    .lf-popover {
+      position: relative;
+    }
+
+    .lf-popover-content {
+      display: inline-block;
+      position: absolute;
+      background-color: #ffffff;
+      opacity: 1;
+
+      transform: translate(0, -10px);
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+      transition: all 0.3s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+      padding: 10px;
+    }
+
+    .lf-popover-content.hidden {
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(0, 0px);
+    }
+
+    .lf-arrow {
+      position: absolute;
+      z-index: -1;
+      content: '';
+      bottom: -9px;
+      border-style: solid;
+      border-width: 10px 10px 0px 10px;
+    }
+
+    .lf-left-align,
+    .lf-left-align .lfarrow {
+      left: 0;
+      right: unset;
+    }
+
+    .lf-right-align,
+    .lf-right-align .lf-arrow {
+      right: 0;
+      left: unset;
+    }
+
+    .lf-text-input {
+      border: 1px #ccc solid;
+      border-radius: 5px;
+      padding: 3px;
+      width: 60px;
+      margin: 0;
+    }
+
+    .lf-color-picker {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      height: 90px;
+    }
+
+    .lf-color-selectors {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .lf-color-component {
+      display: flex;
+      flex-direction: row;
+      font-size: 12px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lf-color-component strong {
+      width: 40px;
+    }
+
+    .lf-color-component input[type='range'] {
+      margin: 0 0 0 10px;
+    }
+
+    .lf-color-component input[type='number'] {
+      width: 50px;
+      margin: 0 0 0 10px;
+    }
+
+    .lf-color-preview {
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 5px;
+    }
+
+    .lf-preview {
+      height: 60px;
+      width: 60px;
+    }
+
+    .lf-popover-snapshot {
+      width: 150px;
+    }
+
+    .lf-popover-snapshot h5 {
+      margin: 5px 0 10px 0;
+      font-size: 0.75rem;
+    }
+
+    .lf-popover-snapshot a {
+      display: block;
+      text-decoration: none;
+    }
+
+    .lf-popover-snapshot a:before {
+      content: '⥼';
+      margin-right: 5px;
+    }
+
+    .lf-popover-snapshot .lf-note {
+      display: block;
+      margin-top: 10px;
+      color: #999;
+    }
+
+    .lf-player-controls>div {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+
+    .lf-player-controls>div:first-child {
+      margin-left: 0px;
+    }
+
+    .lf-player-controls>div:last-child {
+      margin-right: 0px;
+    }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="csrf-token" content="7Ha9MilcwGr4crujLofyuhlOrJOdywH7TGzYL3vP">
+  <link rel="shortcut icon" href="https://gigstm.com/images/logo/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="https://gigstm.com/images/logo/favicon.ico" type="image/x-icon">
+  <title>GigsTm</title>
+  <style>
+    :root {
+      --swal2-container-padding: 0.625em;
+      --swal2-backdrop: rgba(0, 0, 0, 0.4);
+      --swal2-width: 32em;
+      --swal2-padding: 0 0 1.25em;
+      --swal2-border: none;
+      --swal2-border-radius: 0.3125rem;
+      --swal2-background: white;
+      --swal2-color: #545454;
+      --swal2-footer-border-color: #eee;
+      --swal2-input-background: transparent;
+      --swal2-validation-message-background: #f0f0f0;
+      --swal2-validation-message-color: #666
+    }
+
+    [data-swal2-theme=dark] {
+      --swal2-dark-theme-black: #19191a;
+      --swal2-dark-theme-white: #e1e1e1;
+      --swal2-background: var(--swal2-dark-theme-black);
+      --swal2-color: var(--swal2-dark-theme-white);
+      --swal2-footer-border-color: #555;
+      --swal2-input-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);
+      --swal2-validation-message-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);
+      --swal2-validation-message-color: var(--swal2-dark-theme-white)
+    }
+
+    @media(prefers-color-scheme: dark) {
+      [data-swal2-theme=auto] {
+        --swal2-dark-theme-black: #19191a;
+        --swal2-dark-theme-white: #e1e1e1;
+        --swal2-background: var(--swal2-dark-theme-black);
+        --swal2-color: var(--swal2-dark-theme-white);
+        --swal2-footer-border-color: #555;
+        --swal2-input-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);
+        --swal2-validation-message-background: color-mix(in srgb, var(--swal2-dark-theme-black), var(--swal2-dark-theme-white) 10%);
+        --swal2-validation-message-color: var(--swal2-dark-theme-white)
+      }
+    }
+
+    body.swal2-shown:not(.swal2-no-backdrop, .swal2-toast-shown) {
+      overflow: hidden
+    }
+
+    body.swal2-height-auto {
+      height: auto !important
+    }
+
+    body.swal2-no-backdrop .swal2-container {
+      background-color: rgba(0, 0, 0, 0) !important;
+      pointer-events: none
+    }
+
+    body.swal2-no-backdrop .swal2-container .swal2-popup {
+      pointer-events: all
+    }
+
+    body.swal2-no-backdrop .swal2-container .swal2-modal {
+      box-shadow: 0 0 10px var(--swal2-backdrop)
+    }
+
+    body.swal2-toast-shown .swal2-container {
+      box-sizing: border-box;
+      width: 360px;
+      max-width: 100%;
+      background-color: rgba(0, 0, 0, 0);
+      pointer-events: none
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-top {
+      inset: 0 auto auto 50%;
+      transform: translateX(-50%)
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-top-end,
+    body.swal2-toast-shown .swal2-container.swal2-top-right {
+      inset: 0 0 auto auto
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-top-start,
+    body.swal2-toast-shown .swal2-container.swal2-top-left {
+      inset: 0 auto auto 0
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-center-start,
+    body.swal2-toast-shown .swal2-container.swal2-center-left {
+      inset: 50% auto auto 0;
+      transform: translateY(-50%)
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-center {
+      inset: 50% auto auto 50%;
+      transform: translate(-50%, -50%)
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-center-end,
+    body.swal2-toast-shown .swal2-container.swal2-center-right {
+      inset: 50% 0 auto auto;
+      transform: translateY(-50%)
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-bottom-start,
+    body.swal2-toast-shown .swal2-container.swal2-bottom-left {
+      inset: auto auto 0 0
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-bottom {
+      inset: auto auto 0 50%;
+      transform: translateX(-50%)
+    }
+
+    body.swal2-toast-shown .swal2-container.swal2-bottom-end,
+    body.swal2-toast-shown .swal2-container.swal2-bottom-right {
+      inset: auto 0 0 auto
+    }
+
+    @media print {
+      body.swal2-shown:not(.swal2-no-backdrop, .swal2-toast-shown) {
+        overflow-y: scroll !important
+      }
+
+      body.swal2-shown:not(.swal2-no-backdrop, .swal2-toast-shown)>[aria-hidden=true] {
+        display: none
+      }
+
+      body.swal2-shown:not(.swal2-no-backdrop, .swal2-toast-shown) .swal2-container {
+        position: static !important
+      }
+    }
+
+    div:where(.swal2-container) {
+      display: grid;
+      position: fixed;
+      z-index: 1060;
+      inset: 0;
+      box-sizing: border-box;
+      grid-template-areas: "top-start     top            top-end" "center-start  center         center-end" "bottom-start  bottom-center  bottom-end";
+      grid-template-rows: minmax(min-content, auto) minmax(min-content, auto) minmax(min-content, auto);
+      height: 100%;
+      padding: var(--swal2-container-padding);
+      overflow-x: hidden;
+      transition: background-color .1s;
+      -webkit-overflow-scrolling: touch
+    }
+
+    div:where(.swal2-container).swal2-backdrop-show,
+    div:where(.swal2-container).swal2-noanimation {
+      background: var(--swal2-backdrop)
+    }
+
+    div:where(.swal2-container).swal2-backdrop-hide {
+      background: rgba(0, 0, 0, 0) !important
+    }
+
+    div:where(.swal2-container).swal2-top-start,
+    div:where(.swal2-container).swal2-center-start,
+    div:where(.swal2-container).swal2-bottom-start {
+      grid-template-columns: minmax(0, 1fr) auto auto
+    }
+
+    div:where(.swal2-container).swal2-top,
+    div:where(.swal2-container).swal2-center,
+    div:where(.swal2-container).swal2-bottom {
+      grid-template-columns: auto minmax(0, 1fr) auto
+    }
+
+    div:where(.swal2-container).swal2-top-end,
+    div:where(.swal2-container).swal2-center-end,
+    div:where(.swal2-container).swal2-bottom-end {
+      grid-template-columns: auto auto minmax(0, 1fr)
+    }
+
+    div:where(.swal2-container).swal2-top-start>.swal2-popup {
+      align-self: start
+    }
+
+    div:where(.swal2-container).swal2-top>.swal2-popup {
+      grid-column: 2;
+      place-self: start center
+    }
+
+    div:where(.swal2-container).swal2-top-end>.swal2-popup,
+    div:where(.swal2-container).swal2-top-right>.swal2-popup {
+      grid-column: 3;
+      place-self: start end
+    }
+
+    div:where(.swal2-container).swal2-center-start>.swal2-popup,
+    div:where(.swal2-container).swal2-center-left>.swal2-popup {
+      grid-row: 2;
+      align-self: center
+    }
+
+    div:where(.swal2-container).swal2-center>.swal2-popup {
+      grid-column: 2;
+      grid-row: 2;
+      place-self: center center
+    }
+
+    div:where(.swal2-container).swal2-center-end>.swal2-popup,
+    div:where(.swal2-container).swal2-center-right>.swal2-popup {
+      grid-column: 3;
+      grid-row: 2;
+      place-self: center end
+    }
+
+    div:where(.swal2-container).swal2-bottom-start>.swal2-popup,
+    div:where(.swal2-container).swal2-bottom-left>.swal2-popup {
+      grid-column: 1;
+      grid-row: 3;
+      align-self: end
+    }
+
+    div:where(.swal2-container).swal2-bottom>.swal2-popup {
+      grid-column: 2;
+      grid-row: 3;
+      place-self: end center
+    }
+
+    div:where(.swal2-container).swal2-bottom-end>.swal2-popup,
+    div:where(.swal2-container).swal2-bottom-right>.swal2-popup {
+      grid-column: 3;
+      grid-row: 3;
+      place-self: end end
+    }
+
+    div:where(.swal2-container).swal2-grow-row>.swal2-popup,
+    div:where(.swal2-container).swal2-grow-fullscreen>.swal2-popup {
+      grid-column: 1/4;
+      width: 100%
+    }
+
+    div:where(.swal2-container).swal2-grow-column>.swal2-popup,
+    div:where(.swal2-container).swal2-grow-fullscreen>.swal2-popup {
+      grid-row: 1/4;
+      align-self: stretch
+    }
+
+    div:where(.swal2-container).swal2-no-transition {
+      transition: none !important
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup) {
+      display: none;
+      position: relative;
+      box-sizing: border-box;
+      grid-template-columns: minmax(0, 100%);
+      width: var(--swal2-width);
+      max-width: 100%;
+      padding: var(--swal2-padding);
+      border: var(--swal2-border);
+      border-radius: var(--swal2-border-radius);
+      background: var(--swal2-background);
+      color: var(--swal2-color);
+      font-family: inherit;
+      font-size: 1rem
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup):focus {
+      outline: none
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup).swal2-loading {
+      overflow-y: hidden
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup).swal2-draggable {
+      cursor: grab
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup).swal2-draggable div:where(.swal2-icon) {
+      cursor: grab
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup).swal2-dragging {
+      cursor: grabbing
+    }
+
+    div:where(.swal2-container) div:where(.swal2-popup).swal2-dragging div:where(.swal2-icon) {
+      cursor: grabbing
+    }
+
+    div:where(.swal2-container) h2:where(.swal2-title) {
+      position: relative;
+      max-width: 100%;
+      margin: 0;
+      padding: .8em 1em 0;
+      color: inherit;
+      font-size: 1.875em;
+      font-weight: 600;
+      text-align: center;
+      text-transform: none;
+      word-wrap: break-word;
+      cursor: initial
+    }
+
+    div:where(.swal2-container) div:where(.swal2-actions) {
+      display: flex;
+      z-index: 1;
+      box-sizing: border-box;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      margin: 1.25em auto 0;
+      padding: 0
+    }
+
+    div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled[disabled] {
+      opacity: .4
+    }
+
+    div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled:hover {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1))
+    }
+
+    div:where(.swal2-container) div:where(.swal2-actions):not(.swal2-loading) .swal2-styled:active {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2))
+    }
+
+    div:where(.swal2-container) div:where(.swal2-loader) {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 2.2em;
+      height: 2.2em;
+      margin: 0 1.875em;
+      animation: swal2-rotate-loading 1.5s linear 0s infinite normal;
+      border-width: .25em;
+      border-style: solid;
+      border-radius: 100%;
+      border-color: #2778c4 rgba(0, 0, 0, 0) #2778c4 rgba(0, 0, 0, 0)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled) {
+      margin: .3125em;
+      padding: .625em 1.1em;
+      transition: box-shadow .1s;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0);
+      font-weight: 500
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):not([disabled]) {
+      cursor: pointer
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
+      border: 0;
+      border-radius: .25em;
+      background: initial;
+      background-color: #7066e0;
+      color: #fff;
+      font-size: 1em
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm):focus-visible {
+      box-shadow: 0 0 0 3px rgba(112, 102, 224, .5)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny) {
+      border: 0;
+      border-radius: .25em;
+      background: initial;
+      background-color: #dc3741;
+      color: #fff;
+      font-size: 1em
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny):focus-visible {
+      box-shadow: 0 0 0 3px rgba(220, 55, 65, .5)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel) {
+      border: 0;
+      border-radius: .25em;
+      background: initial;
+      background-color: #6e7881;
+      color: #fff;
+      font-size: 1em
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel):focus-visible {
+      box-shadow: 0 0 0 3px rgba(110, 120, 129, .5)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled).swal2-default-outline:focus-visible {
+      box-shadow: 0 0 0 3px rgba(100, 150, 200, .5)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled):focus-visible {
+      outline: none
+    }
+
+    div:where(.swal2-container) button:where(.swal2-styled)::-moz-focus-inner {
+      border: 0
+    }
+
+    div:where(.swal2-container) div:where(.swal2-footer) {
+      margin: 1em 0 0;
+      padding: 1em 1em 0;
+      border-top: 1px solid var(--swal2-footer-border-color);
+      color: inherit;
+      font-size: 1em;
+      text-align: center;
+      cursor: initial
+    }
+
+    div:where(.swal2-container) .swal2-timer-progress-bar-container {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      grid-column: auto !important;
+      overflow: hidden;
+      border-bottom-right-radius: var(--swal2-border-radius);
+      border-bottom-left-radius: var(--swal2-border-radius)
+    }
+
+    div:where(.swal2-container) div:where(.swal2-timer-progress-bar) {
+      width: 100%;
+      height: .25em;
+      background: rgba(0, 0, 0, .2)
+    }
+
+    div:where(.swal2-container) img:where(.swal2-image) {
+      max-width: 100%;
+      margin: 2em auto 1em;
+      cursor: initial
+    }
+
+    div:where(.swal2-container) button:where(.swal2-close) {
+      z-index: 2;
+      align-items: center;
+      justify-content: center;
+      width: 1.2em;
+      height: 1.2em;
+      margin-top: 0;
+      margin-right: 0;
+      margin-bottom: -1.2em;
+      padding: 0;
+      overflow: hidden;
+      transition: color .1s, box-shadow .1s;
+      border: none;
+      border-radius: var(--swal2-border-radius);
+      background: rgba(0, 0, 0, 0);
+      color: #ccc;
+      font-family: monospace;
+      font-size: 2.5em;
+      cursor: pointer;
+      justify-self: end
+    }
+
+    div:where(.swal2-container) button:where(.swal2-close):hover {
+      transform: none;
+      background: rgba(0, 0, 0, 0);
+      color: #f27474
+    }
+
+    div:where(.swal2-container) button:where(.swal2-close):focus-visible {
+      outline: none;
+      box-shadow: inset 0 0 0 3px rgba(100, 150, 200, .5)
+    }
+
+    div:where(.swal2-container) button:where(.swal2-close)::-moz-focus-inner {
+      border: 0
+    }
+
+    div:where(.swal2-container) div:where(.swal2-html-container) {
+      z-index: 1;
+      justify-content: center;
+      margin: 0;
+      padding: 1em 1.6em .3em;
+      overflow: auto;
+      color: inherit;
+      font-size: 1.125em;
+      font-weight: normal;
+      line-height: normal;
+      text-align: center;
+      word-wrap: break-word;
+      word-break: break-word;
+      cursor: initial
+    }
+
+    div:where(.swal2-container) input:where(.swal2-input),
+    div:where(.swal2-container) input:where(.swal2-file),
+    div:where(.swal2-container) textarea:where(.swal2-textarea),
+    div:where(.swal2-container) select:where(.swal2-select),
+    div:where(.swal2-container) div:where(.swal2-radio),
+    div:where(.swal2-container) label:where(.swal2-checkbox) {
+      margin: 1em 2em 3px
+    }
+
+    div:where(.swal2-container) input:where(.swal2-input),
+    div:where(.swal2-container) input:where(.swal2-file),
+    div:where(.swal2-container) textarea:where(.swal2-textarea) {
+      box-sizing: border-box;
+      width: auto;
+      transition: border-color .1s, box-shadow .1s;
+      border: 1px solid #d9d9d9;
+      border-radius: .1875em;
+      background: var(--swal2-input-background);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .06), 0 0 0 3px rgba(0, 0, 0, 0);
+      color: inherit;
+      font-size: 1.125em
+    }
+
+    div:where(.swal2-container) input:where(.swal2-input).swal2-inputerror,
+    div:where(.swal2-container) input:where(.swal2-file).swal2-inputerror,
+    div:where(.swal2-container) textarea:where(.swal2-textarea).swal2-inputerror {
+      border-color: #f27474 !important;
+      box-shadow: 0 0 2px #f27474 !important
+    }
+
+    div:where(.swal2-container) input:where(.swal2-input):focus,
+    div:where(.swal2-container) input:where(.swal2-file):focus,
+    div:where(.swal2-container) textarea:where(.swal2-textarea):focus {
+      border: 1px solid #b4dbed;
+      outline: none;
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .06), 0 0 0 3px rgba(100, 150, 200, .5)
+    }
+
+    div:where(.swal2-container) input:where(.swal2-input)::placeholder,
+    div:where(.swal2-container) input:where(.swal2-file)::placeholder,
+    div:where(.swal2-container) textarea:where(.swal2-textarea)::placeholder {
+      color: #ccc
+    }
+
+    div:where(.swal2-container) .swal2-range {
+      margin: 1em 2em 3px;
+      background: var(--swal2-background)
+    }
+
+    div:where(.swal2-container) .swal2-range input {
+      width: 80%
+    }
+
+    div:where(.swal2-container) .swal2-range output {
+      width: 20%;
+      color: inherit;
+      font-weight: 600;
+      text-align: center
+    }
+
+    div:where(.swal2-container) .swal2-range input,
+    div:where(.swal2-container) .swal2-range output {
+      height: 2.625em;
+      padding: 0;
+      font-size: 1.125em;
+      line-height: 2.625em
+    }
+
+    div:where(.swal2-container) .swal2-input {
+      height: 2.625em;
+      padding: 0 .75em
+    }
+
+    div:where(.swal2-container) .swal2-file {
+      width: 75%;
+      margin-right: auto;
+      margin-left: auto;
+      background: var(--swal2-input-background);
+      font-size: 1.125em
+    }
+
+    div:where(.swal2-container) .swal2-textarea {
+      height: 6.75em;
+      padding: .75em
+    }
+
+    div:where(.swal2-container) .swal2-select {
+      min-width: 50%;
+      max-width: 100%;
+      padding: .375em .625em;
+      background: var(--swal2-input-background);
+      color: inherit;
+      font-size: 1.125em
+    }
+
+    div:where(.swal2-container) .swal2-radio,
+    div:where(.swal2-container) .swal2-checkbox {
+      align-items: center;
+      justify-content: center;
+      background: var(--swal2-background);
+      color: inherit
+    }
+
+    div:where(.swal2-container) .swal2-radio label,
+    div:where(.swal2-container) .swal2-checkbox label {
+      margin: 0 .6em;
+      font-size: 1.125em
+    }
+
+    div:where(.swal2-container) .swal2-radio input,
+    div:where(.swal2-container) .swal2-checkbox input {
+      flex-shrink: 0;
+      margin: 0 .4em
+    }
+
+    div:where(.swal2-container) label:where(.swal2-input-label) {
+      display: flex;
+      justify-content: center;
+      margin: 1em auto 0
+    }
+
+    div:where(.swal2-container) div:where(.swal2-validation-message) {
+      align-items: center;
+      justify-content: center;
+      margin: 1em 0 0;
+      padding: .625em;
+      overflow: hidden;
+      background: var(--swal2-validation-message-background);
+      color: var(--swal2-validation-message-color);
+      font-size: 1em;
+      font-weight: 300
+    }
+
+    div:where(.swal2-container) div:where(.swal2-validation-message)::before {
+      content: "!";
+      display: inline-block;
+      width: 1.5em;
+      min-width: 1.5em;
+      height: 1.5em;
+      margin: 0 .625em;
+      border-radius: 50%;
+      background-color: #f27474;
+      color: #fff;
+      font-weight: 600;
+      line-height: 1.5em;
+      text-align: center
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps {
+      flex-wrap: wrap;
+      align-items: center;
+      max-width: 100%;
+      margin: 1.25em auto;
+      padding: 0;
+      background: rgba(0, 0, 0, 0);
+      font-weight: 600
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps li {
+      display: inline-block;
+      position: relative
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step {
+      z-index: 20;
+      flex-shrink: 0;
+      width: 2em;
+      height: 2em;
+      border-radius: 2em;
+      background: #2778c4;
+      color: #fff;
+      line-height: 2em;
+      text-align: center
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step {
+      background: #2778c4
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step {
+      background: #add8e6;
+      color: #fff
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step~.swal2-progress-step-line {
+      background: #add8e6
+    }
+
+    div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step-line {
+      z-index: 10;
+      flex-shrink: 0;
+      width: 2.5em;
+      height: .4em;
+      margin: 0 -1px;
+      background: #2778c4
+    }
+
+    div:where(.swal2-icon) {
+      position: relative;
+      box-sizing: content-box;
+      justify-content: center;
+      width: 5em;
+      height: 5em;
+      margin: 2.5em auto .6em;
+      border: .25em solid rgba(0, 0, 0, 0);
+      border-radius: 50%;
+      border-color: #000;
+      font-family: inherit;
+      line-height: 5em;
+      cursor: default;
+      user-select: none
+    }
+
+    div:where(.swal2-icon) .swal2-icon-content {
+      display: flex;
+      align-items: center;
+      font-size: 3.75em
+    }
+
+    div:where(.swal2-icon).swal2-error {
+      border-color: #f27474;
+      color: #f27474
+    }
+
+    div:where(.swal2-icon).swal2-error .swal2-x-mark {
+      position: relative;
+      flex-grow: 1
+    }
+
+    div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line] {
+      display: block;
+      position: absolute;
+      top: 2.3125em;
+      width: 2.9375em;
+      height: .3125em;
+      border-radius: .125em;
+      background-color: #f27474
+    }
+
+    div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line][class$=left] {
+      left: 1.0625em;
+      transform: rotate(45deg)
+    }
+
+    div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line][class$=right] {
+      right: 1em;
+      transform: rotate(-45deg)
+    }
+
+    div:where(.swal2-icon).swal2-error.swal2-icon-show {
+      animation: swal2-animate-error-icon .5s
+    }
+
+    div:where(.swal2-icon).swal2-error.swal2-icon-show .swal2-x-mark {
+      animation: swal2-animate-error-x-mark .5s
+    }
+
+    div:where(.swal2-icon).swal2-warning {
+      border-color: #f8bb86;
+      color: #f8bb86
+    }
+
+    div:where(.swal2-icon).swal2-warning.swal2-icon-show {
+      animation: swal2-animate-error-icon .5s
+    }
+
+    div:where(.swal2-icon).swal2-warning.swal2-icon-show .swal2-icon-content {
+      animation: swal2-animate-i-mark .5s
+    }
+
+    div:where(.swal2-icon).swal2-info {
+      border-color: #3fc3ee;
+      color: #3fc3ee
+    }
+
+    div:where(.swal2-icon).swal2-info.swal2-icon-show {
+      animation: swal2-animate-error-icon .5s
+    }
+
+    div:where(.swal2-icon).swal2-info.swal2-icon-show .swal2-icon-content {
+      animation: swal2-animate-i-mark .8s
+    }
+
+    div:where(.swal2-icon).swal2-question {
+      border-color: #87adbd;
+      color: #87adbd
+    }
+
+    div:where(.swal2-icon).swal2-question.swal2-icon-show {
+      animation: swal2-animate-error-icon .5s
+    }
+
+    div:where(.swal2-icon).swal2-question.swal2-icon-show .swal2-icon-content {
+      animation: swal2-animate-question-mark .8s
+    }
+
+    div:where(.swal2-icon).swal2-success {
+      border-color: #a5dc86;
+      color: #a5dc86
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line] {
+      position: absolute;
+      width: 3.75em;
+      height: 7.5em;
+      border-radius: 50%
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line][class$=left] {
+      top: -0.4375em;
+      left: -2.0635em;
+      transform: rotate(-45deg);
+      transform-origin: 3.75em 3.75em;
+      border-radius: 7.5em 0 0 7.5em
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-circular-line][class$=right] {
+      top: -0.6875em;
+      left: 1.875em;
+      transform: rotate(-45deg);
+      transform-origin: 0 3.75em;
+      border-radius: 0 7.5em 7.5em 0
+    }
+
+    div:where(.swal2-icon).swal2-success .swal2-success-ring {
+      position: absolute;
+      z-index: 2;
+      top: -0.25em;
+      left: -0.25em;
+      box-sizing: content-box;
+      width: 100%;
+      height: 100%;
+      border: .25em solid rgba(165, 220, 134, .3);
+      border-radius: 50%
+    }
+
+    div:where(.swal2-icon).swal2-success .swal2-success-fix {
+      position: absolute;
+      z-index: 1;
+      top: .5em;
+      left: 1.625em;
+      width: .4375em;
+      height: 5.625em;
+      transform: rotate(-45deg)
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-line] {
+      display: block;
+      position: absolute;
+      z-index: 2;
+      height: .3125em;
+      border-radius: .125em;
+      background-color: #a5dc86
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=tip] {
+      top: 2.875em;
+      left: .8125em;
+      width: 1.5625em;
+      transform: rotate(45deg)
+    }
+
+    div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=long] {
+      top: 2.375em;
+      right: .5em;
+      width: 2.9375em;
+      transform: rotate(-45deg)
+    }
+
+    div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-tip {
+      animation: swal2-animate-success-line-tip .75s
+    }
+
+    div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-long {
+      animation: swal2-animate-success-line-long .75s
+    }
+
+    div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-circular-line-right {
+      animation: swal2-rotate-success-circular-line 4.25s ease-in
+    }
+
+    [class^=swal2] {
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+    }
+
+    .swal2-show {
+      animation: swal2-show .3s
+    }
+
+    .swal2-hide {
+      animation: swal2-hide .15s forwards
+    }
+
+    .swal2-noanimation {
+      transition: none
+    }
+
+    .swal2-scrollbar-measure {
+      position: absolute;
+      top: -9999px;
+      width: 50px;
+      height: 50px;
+      overflow: scroll
+    }
+
+    .swal2-rtl .swal2-close {
+      margin-right: initial;
+      margin-left: 0
+    }
+
+    .swal2-rtl .swal2-timer-progress-bar {
+      right: 0;
+      left: auto
+    }
+
+    .swal2-toast {
+      box-sizing: border-box;
+      grid-column: 1/4 !important;
+      grid-row: 1/4 !important;
+      grid-template-columns: min-content auto min-content;
+      padding: 1em;
+      overflow-y: hidden;
+      background: #fff;
+      box-shadow: 0 0 1px rgba(0, 0, 0, .075), 0 1px 2px rgba(0, 0, 0, .075), 1px 2px 4px rgba(0, 0, 0, .075), 1px 3px 8px rgba(0, 0, 0, .075), 2px 4px 16px rgba(0, 0, 0, .075);
+      pointer-events: all
+    }
+
+    .swal2-toast>* {
+      grid-column: 2
+    }
+
+    .swal2-toast h2:where(.swal2-title) {
+      margin: .5em 1em;
+      padding: 0;
+      font-size: 1em;
+      text-align: initial
+    }
+
+    .swal2-toast .swal2-loading {
+      justify-content: center
+    }
+
+    .swal2-toast input:where(.swal2-input) {
+      height: 2em;
+      margin: .5em;
+      font-size: 1em
+    }
+
+    .swal2-toast .swal2-validation-message {
+      font-size: 1em
+    }
+
+    .swal2-toast div:where(.swal2-footer) {
+      margin: .5em 0 0;
+      padding: .5em 0 0;
+      font-size: .8em
+    }
+
+    .swal2-toast button:where(.swal2-close) {
+      grid-column: 3/3;
+      grid-row: 1/99;
+      align-self: center;
+      width: .8em;
+      height: .8em;
+      margin: 0;
+      font-size: 2em
+    }
+
+    .swal2-toast div:where(.swal2-html-container) {
+      margin: .5em 1em;
+      padding: 0;
+      overflow: initial;
+      font-size: 1em;
+      text-align: initial
+    }
+
+    .swal2-toast div:where(.swal2-html-container):empty {
+      padding: 0
+    }
+
+    .swal2-toast .swal2-loader {
+      grid-column: 1;
+      grid-row: 1/99;
+      align-self: center;
+      width: 2em;
+      height: 2em;
+      margin: .25em
+    }
+
+    .swal2-toast .swal2-icon {
+      grid-column: 1;
+      grid-row: 1/99;
+      align-self: center;
+      width: 2em;
+      min-width: 2em;
+      height: 2em;
+      margin: 0 .5em 0 0
+    }
+
+    .swal2-toast .swal2-icon .swal2-icon-content {
+      display: flex;
+      align-items: center;
+      font-size: 1.8em;
+      font-weight: bold
+    }
+
+    .swal2-toast .swal2-icon.swal2-success .swal2-success-ring {
+      width: 2em;
+      height: 2em
+    }
+
+    .swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line] {
+      top: .875em;
+      width: 1.375em
+    }
+
+    .swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=left] {
+      left: .3125em
+    }
+
+    .swal2-toast .swal2-icon.swal2-error [class^=swal2-x-mark-line][class$=right] {
+      right: .3125em
+    }
+
+    .swal2-toast div:where(.swal2-actions) {
+      justify-content: flex-start;
+      height: auto;
+      margin: 0;
+      margin-top: .5em;
+      padding: 0 .5em
+    }
+
+    .swal2-toast button:where(.swal2-styled) {
+      margin: .25em .5em;
+      padding: .4em .6em;
+      font-size: 1em
+    }
+
+    .swal2-toast .swal2-success {
+      border-color: #a5dc86
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-circular-line] {
+      position: absolute;
+      width: 1.6em;
+      height: 3em;
+      border-radius: 50%
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=left] {
+      top: -0.8em;
+      left: -0.5em;
+      transform: rotate(-45deg);
+      transform-origin: 2em 2em;
+      border-radius: 4em 0 0 4em
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-circular-line][class$=right] {
+      top: -0.25em;
+      left: .9375em;
+      transform-origin: 0 1.5em;
+      border-radius: 0 4em 4em 0
+    }
+
+    .swal2-toast .swal2-success .swal2-success-ring {
+      width: 2em;
+      height: 2em
+    }
+
+    .swal2-toast .swal2-success .swal2-success-fix {
+      top: 0;
+      left: .4375em;
+      width: .4375em;
+      height: 2.6875em
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-line] {
+      height: .3125em
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-line][class$=tip] {
+      top: 1.125em;
+      left: .1875em;
+      width: .75em
+    }
+
+    .swal2-toast .swal2-success [class^=swal2-success-line][class$=long] {
+      top: .9375em;
+      right: .1875em;
+      width: 1.375em
+    }
+
+    .swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip {
+      animation: swal2-toast-animate-success-line-tip .75s
+    }
+
+    .swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long {
+      animation: swal2-toast-animate-success-line-long .75s
+    }
+
+    .swal2-toast.swal2-show {
+      animation: swal2-toast-show .5s
+    }
+
+    .swal2-toast.swal2-hide {
+      animation: swal2-toast-hide .1s forwards
+    }
+
+    @keyframes swal2-show {
+      0% {
+        transform: scale(0.7)
+      }
+
+      45% {
+        transform: scale(1.05)
+      }
+
+      80% {
+        transform: scale(0.95)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    @keyframes swal2-hide {
+      0% {
+        transform: scale(1);
+        opacity: 1
+      }
+
+      100% {
+        transform: scale(0.5);
+        opacity: 0
+      }
+    }
+
+    @keyframes swal2-animate-success-line-tip {
+      0% {
+        top: 1.1875em;
+        left: .0625em;
+        width: 0
+      }
+
+      54% {
+        top: 1.0625em;
+        left: .125em;
+        width: 0
+      }
+
+      70% {
+        top: 2.1875em;
+        left: -0.375em;
+        width: 3.125em
+      }
+
+      84% {
+        top: 3em;
+        left: 1.3125em;
+        width: 1.0625em
+      }
+
+      100% {
+        top: 2.8125em;
+        left: .8125em;
+        width: 1.5625em
+      }
+    }
+
+    @keyframes swal2-animate-success-line-long {
+      0% {
+        top: 3.375em;
+        right: 2.875em;
+        width: 0
+      }
+
+      65% {
+        top: 3.375em;
+        right: 2.875em;
+        width: 0
+      }
+
+      84% {
+        top: 2.1875em;
+        right: 0;
+        width: 3.4375em
+      }
+
+      100% {
+        top: 2.375em;
+        right: .5em;
+        width: 2.9375em
+      }
+    }
+
+    @keyframes swal2-rotate-success-circular-line {
+      0% {
+        transform: rotate(-45deg)
+      }
+
+      5% {
+        transform: rotate(-45deg)
+      }
+
+      12% {
+        transform: rotate(-405deg)
+      }
+
+      100% {
+        transform: rotate(-405deg)
+      }
+    }
+
+    @keyframes swal2-animate-error-x-mark {
+      0% {
+        margin-top: 1.625em;
+        transform: scale(0.4);
+        opacity: 0
+      }
+
+      50% {
+        margin-top: 1.625em;
+        transform: scale(0.4);
+        opacity: 0
+      }
+
+      80% {
+        margin-top: -0.375em;
+        transform: scale(1.15)
+      }
+
+      100% {
+        margin-top: 0;
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    @keyframes swal2-animate-error-icon {
+      0% {
+        transform: rotateX(100deg);
+        opacity: 0
+      }
+
+      100% {
+        transform: rotateX(0deg);
+        opacity: 1
+      }
+    }
+
+    @keyframes swal2-rotate-loading {
+      0% {
+        transform: rotate(0deg)
+      }
+
+      100% {
+        transform: rotate(360deg)
+      }
+    }
+
+    @keyframes swal2-animate-question-mark {
+      0% {
+        transform: rotateY(-360deg)
+      }
+
+      100% {
+        transform: rotateY(0)
+      }
+    }
+
+    @keyframes swal2-animate-i-mark {
+      0% {
+        transform: rotateZ(45deg);
+        opacity: 0
+      }
+
+      25% {
+        transform: rotateZ(-25deg);
+        opacity: .4
+      }
+
+      50% {
+        transform: rotateZ(15deg);
+        opacity: .8
+      }
+
+      75% {
+        transform: rotateZ(-5deg);
+        opacity: 1
+      }
+
+      100% {
+        transform: rotateX(0);
+        opacity: 1
+      }
+    }
+
+    @keyframes swal2-toast-show {
+      0% {
+        transform: translateY(-0.625em) rotateZ(2deg)
+      }
+
+      33% {
+        transform: translateY(0) rotateZ(-2deg)
+      }
+
+      66% {
+        transform: translateY(0.3125em) rotateZ(2deg)
+      }
+
+      100% {
+        transform: translateY(0) rotateZ(0deg)
+      }
+    }
+
+    @keyframes swal2-toast-hide {
+      100% {
+        transform: rotateZ(1deg);
+        opacity: 0
+      }
+    }
+
+    @keyframes swal2-toast-animate-success-line-tip {
+      0% {
+        top: .5625em;
+        left: .0625em;
+        width: 0
+      }
+
+      54% {
+        top: .125em;
+        left: .125em;
+        width: 0
+      }
+
+      70% {
+        top: .625em;
+        left: -0.25em;
+        width: 1.625em
+      }
+
+      84% {
+        top: 1.0625em;
+        left: .75em;
+        width: .5em
+      }
+
+      100% {
+        top: 1.125em;
+        left: .1875em;
+        width: .75em
+      }
+    }
+
+    @keyframes swal2-toast-animate-success-line-long {
+      0% {
+        top: 1.625em;
+        right: 1.375em;
+        width: 0
+      }
+
+      65% {
+        top: 1.25em;
+        right: .9375em;
+        width: 0
+      }
+
+      84% {
+        top: .9375em;
+        right: 0;
+        width: 1.125em
+      }
+
+      100% {
+        top: .9375em;
+        right: .1875em;
+        width: 1.375em
+      }
+    }
+  </style>
 </head>
 
 <body data-aos-easing="ease" data-aos-duration="400" data-aos-delay="0">
   <div class="site-wrapper overflow-hidden">
     <header
-      wire:snapshot="{&quot;data&quot;:[],&quot;memo&quot;:{&quot;id&quot;:&quot;A5CZIZZg1avo7khAYGod&quot;,&quot;name&quot;:&quot;partials.header&quot;,&quot;path&quot;:&quot;find-work&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;a3acdefb84c3cce0076671ae6961ffac0a2df733e446502a7f4ef853d463ec9f&quot;}"
-      wire:effects="[]" wire:id="A5CZIZZg1avo7khAYGod"
-      class="site-header site-header--menu-right dynamic-sticky-bg py-7 py-lg-0 site-header--absolute site-header--sticky ">
-      <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]-->
-      <!-- <div class="top_the_slt">
-        <div class="container">
-          <div class="tit_swich"><a href="https://gigstm.com/"><i class="fa fa-user font-size-3"></i> Find Work</a>
-          </div>
-        </div>
-      </div> -->
-      <!--[if ENDBLOCK]><![endif]--> <!--[if ENDBLOCK]><![endif]-->
+      wire:snapshot="{&quot;data&quot;:[],&quot;memo&quot;:{&quot;id&quot;:&quot;gdr9Tvyad3Mmh3EFBqhj&quot;,&quot;name&quot;:&quot;partials.header&quot;,&quot;path&quot;:&quot;gigs-categories&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;d48073a7a865409797d8a7051253e94c761bc0cc1929eeb6ed959cfb6fb10b50&quot;}"
+      wire:effects="[]" wire:id="gdr9Tvyad3Mmh3EFBqhj"
+      class="site-header site-header--menu-right dynamic-sticky-bg py-7 py-lg-0 site-header--absolute site-header--sticky other-pages">
+      <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+      <!--[if ENDBLOCK]><![endif]-->
       <div class="container scrl_none">
         <nav class="navbar site-navbar offcanvas-active navbar-expand-lg  px-0 py-0">
           <!-- Brand Logo-->
           <div class="brand-logo">
             <a href="index.html">
               <!-- light version logo (logo must be black)-->
-              <img src="./GigsTm_files/lgo_project1.png" alt="GigsTm" class="light-version-logo default-logo">
+              <img src="/gigs-categories_files/lgo_project1.png" alt="GigsTm" class="light-version-logo default-logo">
               <!-- Dark version logo (logo must be White)-->
-              <img src="./GigsTm_files/lgo_project1.png" alt="GigsTm" class="dark-version-logo">
+              <img src="/gigs-categories_files/lgo_project1.png" alt="GigsTm" class="dark-version-logo">
             </a>
           </div>
-          <div class="collapse navbar-collapse" id="mobile-menu">
+          <div class="navbar-collapse collapse show" id="mobile-menu" style="">
             <div class="navbar-nav-wrapper">
-              <ul class="navbar-nav main-menu">                
-                <li class="nav-item "><a class="nav-link" href="gigs-categories.html">Gigs Categories</a></li>                
+              <ul class="navbar-nav main-menu">
+                <!--[if BLOCK]><![endif]-->
+                <li class="nav-item "><a class="nav-link" href="https://gigstm.com/gigs-categories"
+                    wire:navigate="">Gigs Categories</a></li>
+                <!--[if ENDBLOCK]><![endif]-->
               </ul>
             </div>
             <button class="d-block d-lg-none offcanvas-btn-close focus-reset" type="button" data-toggle="collapse"
@@ -93,49 +3226,22 @@
               <i class="gr-cross-icon"></i>
             </button>
           </div>
+          <!--[if BLOCK]><![endif]-->
           <div class="header-btns header-btn-devider ml-auto pr-2 ml-lg-6 d-none d-xs-flex">
-            <!-- Login/Signup Buttons (shown when not logged in) -->
-            <div class="auth-links">
-              <a class="btn btn-transparent text-uppercase font-size-3 heading-default-color focus-reset login-button"
-                href="login.html">
-                Log in
-              </a>
-              <a class="btn btn-primary text-uppercase font-size-3" href="login.html">
-                Sign up
-              </a>
-            </div>
-
-            <!-- User Menu (shown when logged in) -->
-            <div class="user-menu" style="display: none;">
-              <div class="dropdown">
-                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <div
-                    class="user-avatar rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mr-2"
-                    style="width: 36px; height: 36px; font-size: 14px; font-weight: 600;">
-                    U
-                  </div>
-                  <span class="d-none d-lg-inline">My Account</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                  <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Profile</a>
-                  <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Settings</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item sign-out-btn" href="#"><i class="fas fa-sign-out-alt mr-2"></i>Sign Out</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Mobile Login Button -->
-          <div class="d-block d-lg-none mr-1">
-            <a class="btn btn-primary btn-sm px-2" href="login.html" style="min-width: 60px; margin-left: 120px;">
-              <i class="fas fa-sign-in-alt">&nbsp;login</i>
+            <a class="btn btn-transparent text-uppercase font-size-3 heading-default-color focus-reset"
+              href="login.html">
+              Log in
+            </a>
+            <a class="btn btn-primary text-uppercase font-size-3" href="login.html" onclick="showTab('signup', event)">
+              Sign up
             </a>
           </div>
+          <!--[if ENDBLOCK]><![endif]-->
           <!-- Mobile Menu Hamburger-->
           <button class="navbar-toggler btn-close-off-canvas hamburger-icon border-0" type="button"
-            data-toggle="collapse" data-target="#mobile-menu" aria-controls="mobile-menu" aria-expanded="false"
+            data-toggle="collapse" data-target="#mobile-menu" aria-controls="mobile-menu" aria-expanded="true"
             aria-label="Toggle navigation">
+            <!-- <i class="icon icon-simple-remove icon-close"></i> -->
             <span class="hamburger hamburger--squeeze js-hamburger">
               <span class="hamburger-box">
                 <span class="hamburger-inner"></span>
@@ -146,62 +3252,75 @@
         </nav>
       </div>
     </header>
-    <main>
-      <div id="login" class="modal fade all_modalss_p" role="dialog">
+    <main
+      wire:snapshot="{&quot;data&quot;:[],&quot;memo&quot;:{&quot;id&quot;:&quot;dMD6sZUJAYQYFSZdJ1lf&quot;,&quot;name&quot;:&quot;auth.master&quot;,&quot;path&quot;:&quot;gigs-categories&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:{&quot;lw-3950356765-0&quot;:[&quot;div&quot;,&quot;CfWLcU6fkSx30TVkF4rw&quot;],&quot;lw-3950356765-1&quot;:[&quot;div&quot;,&quot;n0HPnMoQ4avkpJUOm88b&quot;]},&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;5d1930e720d7a798790c0752a8900944281b3714f18e66f1ff7c7ef68b5189c8&quot;}"
+      wire:effects="[]" wire:id="dMD6sZUJAYQYFSZdJ1lf">
+      <div
+        wire:snapshot="{&quot;data&quot;:{&quot;emailMobile&quot;:null,&quot;login_password&quot;:null,&quot;remember&quot;:null},&quot;memo&quot;:{&quot;id&quot;:&quot;CfWLcU6fkSx30TVkF4rw&quot;,&quot;name&quot;:&quot;auth.login&quot;,&quot;path&quot;:&quot;gigs-categories&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;dc47282fe0740cde769e91349cc7e514fe6eede608067d1ef834418418c4c4e3&quot;}"
+        wire:effects="[]" wire:id="CfWLcU6fkSx30TVkF4rw" id="login" class="modal fade all_modalss_p" role="dialog"
+        wire:ignore.self="">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal">×</button>
             </div>
             <div class="modal-body">
+              <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+              <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
               <div class="frm_area_bx pageform" id="login">
                 <h2>Welcome Back</h2>
                 <p>Log in to continue your account and explore new jobs.</p>
 
-                <form id="login-form">
+                <form wire:submit.prevent="loginSubmit">
                   <div class="row">
                     <div class="col-lg-12 mb-5">
-                      <label for="login-email"
-                        class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">Email</label>
-                      <input type="email" id="login-email" class="form-control" placeholder="Enter your email" required>
+                      <label for=""
+                        class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">E-mail/Mobile</label>
+                      <input type="text" class="form-control" placeholder="Enter your email/mobile"
+                        wire:model="emailMobile">
+                      <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
                     </div>
                     <div class="col-lg-12 mb-0">
                       <div class="mange_iconss">
-                        <label for="login-password"
+                        <label for=""
                           class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">Password</label>
-                        <input type="password" id="login-password" class="form-control"
-                          placeholder="Enter your password" required>
+                        <input type="password" id="login_password" class="form-control" placeholder="Password"
+                          value="password" wire:model="login_password">
                         <i class="toggle-password fa fa-fw fa-eye-slash"></i>
+                        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <div class="col-lg-6 col-md-6 col-6">
                         <div class="form-group checks">
-                          <input id="remember" class="checkbox-custom" type="checkbox">
-                          <label for="remember" class="checkbox-custom-label">
-                            <span class="tx_mngs">Remember Me</span>
-                          </label>
+                          <input id="remember" class="checkbox-custom" type="checkbox" wire:model="remember">
+                          <label for="checkbox-1" class="checkbox-custom-label"> <span class="tx_mngs">Remember
+                              Me</span></label>
                         </div>
                       </div>
 
                       <div class="col-lg-6 col-md-6 col-6">
                         <div class="form-group tx_forgets">
-                          <a href="#" id="forgot-password">Forgot Password?</a>
+                          <a href="javascript:void(0);" data-toggle="modal" data-target="#forgetpassword"
+                            data-dismiss="modal">Forgot Password ? </a>
                         </div>
                       </div>
                     </div>
 
                     <div class="col-lg-12 pt-4">
                       <button type="submit" class="btn all_suprt_btn text-uppercase w-100 h-px-48">
-                        Log in
+                        <span wire:loading.remove="" wire:target="loginSubmit">
+                          Log in
+                        </span>
+                        <span wire:loading="" wire:target="loginSubmit">
+                          <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                          </div>
+                        </span>
                       </button>
                     </div>
-                    <div class="botm_text_area">Don't have an account?
-                      <a href="#" data-toggle="modal" data-target="#createaccount" data-dismiss="modal">
-                        Create a free account
-                      </a>
-                    </div>
+                    <div class="botm_text_area">Don’t have an account? <a href="javascript:void(0);"
+                        onclick="toggleLoginRegister(false,true);">Create a free account</a></div>
                   </div>
                 </form>
               </div>
@@ -209,7 +3328,10 @@
           </div>
         </div>
       </div>
-      <div id="createaccount" class="modal fade all_modalss_p" role="dialog">
+      <div
+        wire:snapshot="{&quot;data&quot;:{&quot;name&quot;:null,&quot;email&quot;:null,&quot;mobile&quot;:null,&quot;password&quot;:null,&quot;confirm_password&quot;:null,&quot;is_accept_terms&quot;:null},&quot;memo&quot;:{&quot;id&quot;:&quot;n0HPnMoQ4avkpJUOm88b&quot;,&quot;name&quot;:&quot;auth.register&quot;,&quot;path&quot;:&quot;gigs-categories&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;d055416a2b88faa308c537ec9c24b211045df239041c4cd247a1b27fb91e1784&quot;}"
+        wire:effects="[]" wire:id="n0HPnMoQ4avkpJUOm88b" id="createaccount" class="modal fade all_modalss_p"
+        role="dialog" wire:ignore.self="">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
@@ -219,1032 +3341,474 @@
               <div class="frm_area_bx pageform">
                 <h2>Create a free account today</h2>
                 <p>Create your account to continue and explore new jobs.</p>
-                <form id="register-form">
+                <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                <form wire:submit.prevent="registerSubmit">
                   <div class="row">
                     <div class="col-lg-12 mb-5">
-                      <label for="register-name"
-                        class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">
-                        Full Name
-                      </label>
-                      <input type="text" id="register-name" class="form-control" placeholder="Enter Your Name" required>
+                      <label for="" class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">Full
+                        Name</label>
+                      <input type="text" class="form-control" placeholder="Enter Your Name" id="name" wire:model="name">
+                      <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
                     </div>
                     <div class="col-lg-12 mb-5">
-                      <label for="register-email"
-                        class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">
-                        Email
-                      </label>
-                      <input type="email" id="register-email" class="form-control" placeholder="Enter Your Email"
-                        required>
-                    </div>
-                    <div class="col-lg-12 mb-5">
-                      <label for="register-password"
-                        class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">
-                        Password
-                      </label>
-                      <input type="password" id="register-password" class="form-control" placeholder="Create a Password"
-                        required>
-                    </div>
-                    <div class="col-lg-12 mb-5">
-                      <label for="register-confirm-password"
-                        class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">
-                        Confirm Password
-                      </label>
-                      <input type="password" id="register-confirm-password" class="form-control"
-                        placeholder="Confirm Your Password" required>
-                    </div>
-                  </div>
-                  <div class="col-lg-12 mb-5">
-                    <label for=""
-                      class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">E-mail</label><input type="text" class="form-control" placeholder="Enter Email">
-                  </div>
-                  <div class="col-lg-12 mb-5">
-                    <label for=""
-                      class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">Mobile</label><input type="text" class="form-control" placeholder="Enter Mobile Number">
-                  </div>
-                  <div class="col-lg-12 mb-0">
-                    <div class="mange_iconss">
                       <label for=""
-                        class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">Password</label><input type="password" id="password" class="form-control" placeholder="Enter Password" value="Enter Password">
-                      <i class="toggle-password fa fa-fw fa-eye-slash"></i>
+                        class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">E-mail</label>
+                      <input type="text" class="form-control" placeholder="Enter Email" wire:model="email">
+                      <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
                     </div>
-                  </div>
-                  <div class="col-lg-12 mb-0">
-                    <div class="mange_iconss">
-                      <label for="" class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">Confirm
-                        Password</label><input type="password" id="confirm_password" class="form-control" placeholder="Enter Confirm Password" value="Enter Confirm Password">
-                      <i class="toggle-password fa fa-fw fa-eye-slash"></i>
+                    <div class="col-lg-12 mb-5">
+                      <label for=""
+                        class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">Mobile</label>
+                      <input type="text" class="form-control" placeholder="Enter Mobile Number" wire:model="mobile">
+                      <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
                     </div>
-                  </div>
+                    <div class="col-lg-12 mb-0">
+                      <div class="mange_iconss">
+                        <label for=""
+                          class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Enter Password"
+                          value="Enter Password" wire:model="password">
+                        <i class="toggle-password fa fa-fw fa-eye-slash"></i>
+                      </div>
+                      <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                    </div>
+                    <div class="col-lg-12 mb-0">
+                      <div class="mange_iconss">
+                        <label for=""
+                          class="font-size-4 font-weight-semibold text-black-2 mb-5 line-height-reset">Confirm
+                          Password</label>
+                        <input type="password" id="confirm_password" class="form-control"
+                          placeholder="Enter Confirm Password" value="Enter Confirm Password"
+                          wire:model="confirm_password">
+                        <i class="toggle-password fa fa-fw fa-eye-slash"></i>
+                      </div>
+                      <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                    </div>
 
-                  <div class="row mb-3">
-                    <div class="col-lg-12 col-md-12 col-12">
-                      <div class="form-group checks">
-                        <input id="checkbox-2" class="checkbox-custom" name="checkbox-2" type="checkbox">
-                        <label for="checkbox-2" class="checkbox-custom-label"> <span class="tx_mngs">Agree to the <a
-                              href="javascript:void(0);">Terms &amp; Conditions</a></span></label>
+                    <div class="row mb-3">
+                      <div class="col-lg-12 col-md-12 col-12">
+                        <div class="form-group checks">
+                          <input id="checkbox-2" class="checkbox-custom" name="checkbox-2" type="checkbox"
+                            wire:model="is_accept_terms">
+                          <label for="checkbox-2" class="checkbox-custom-label"> <span class="tx_mngs">Agree to the <a
+                                href="javascript:void(0);">Terms &amp; Conditions</a></span></label>
+                        </div>
+                        <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12 pt-4">
+                      <button type="submit" class="btn all_suprt_btn text-uppercase w-100 h-px-48">
+                        <span wire:loading.remove="" wire:target="registerSubmit">
+                          Sign Up
+                        </span>
+                        <span wire:loading="" wire:target="registerSubmit">
+                          <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                          </div>
+                        </span>
+                      </button>
+                    </div>
+                    <div class="botm_text_area">Do have an account? <a href="javascript:void(0);"
+                        onclick="toggleLoginRegister(true,false);">Login</a></div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <main
+      wire:snapshot="{&quot;data&quot;:{&quot;perPage&quot;:10,&quot;paginators&quot;:[{&quot;page&quot;:1},{&quot;s&quot;:&quot;arr&quot;}]},&quot;memo&quot;:{&quot;id&quot;:&quot;iiZIYAwu82xdGDoN68q7&quot;,&quot;name&quot;:&quot;category-component&quot;,&quot;path&quot;:&quot;gigs-categories&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;f00cbe2306361dd9c72757cd75f170e15b55bbfe6cd7782dc6bff5c2515352ae&quot;}"
+      wire:effects="{&quot;url&quot;:{&quot;paginators.page&quot;:{&quot;as&quot;:&quot;page&quot;,&quot;use&quot;:&quot;push&quot;,&quot;alwaysShow&quot;:false,&quot;except&quot;:null}}}"
+      wire:id="iiZIYAwu82xdGDoN68q7">
+      <div class="al_support_ctr">
+        <img src="/gigs-categories_files/job_ctr.jpg" alt="" class="">
+      </div>
+
+      <div class="bg-default-1 pt-26 pt-lg-5 pb-13 pb-lg-5">
+        <div class="container">
+          <div class="row">
+            <!-- Main Body -->
+            <div class="col-12 col-xl-12 col-lg-12">
+              <!-- form -->
+
+              <div class="row pt-12">
+
+                <!--[if BLOCK]><![endif]--> <!--[if BLOCK]><![endif]-->
+                <div class="col-md-6 mb-8">
+                  <!-- Single Featured Job -->
+                  <div class="pt-7 px-xl-7 px-lg-7 px-7 pb-7 light-mode-texts bg-white rounded hover-shadow-3"
+                    id="categryess_ess">
+
+                    <div class="row">
+                      <div class="col-md-10">
+                        <div class="media align-items-center manag_box_mg_tx">
+                          <div class="square-40 d-block mr-8">
+                            <img src="/gigs-categories_files/01JWMYAQEM8DZSMC0ZVJ768JT7.png"
+                              alt="Audits &amp; Survey Gigs" class="category-listing-icon">
+                          </div>
+                          <div>
+                            <h3 class="mb-0"><a class="font-size-4 heading-default-color"
+                                href="https://gigstm.com/gigs/audits-survey-gigs" wire:navigate="">Audits &amp; Survey
+                                Gigs</a></h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-2 text-right pt-7 pt-md-5">
+                        <div class="media justify-content-md-end">
+                          <p class="font-weight-bold font-size-4 text-hit-gray mb-0"><span class="text-black-2">0
+                              Jobs</span></p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row pt-2">
+                      <div class="col-md-12 dis_criptionss">
+                        <p></p>
+                        <p>You can manage the movement of a record through a process from start to finish. You can
+                          instruct individuals to act on records, ensure that individuals act in a timely manner, and
+                          ensure that an audit trail exists for each record and process.</p>
+                        <p></p>
                       </div>
                     </div>
                   </div>
+                  <!-- End Single Featured Job -->
+                </div>
+                <div class="col-md-6 mb-8">
+                  <!-- Single Featured Job -->
+                  <div class="pt-7 px-xl-7 px-lg-7 px-7 pb-7 light-mode-texts bg-white rounded hover-shadow-3"
+                    id="categryess_ess">
 
-                  <div class="col-lg-12 pt-4">
-                    <button type="submit" class="btn all_suprt_btn text-uppercase w-100 h-px-48">
-                      <span wire:loading.remove="" wire:target="registerSubmit">
-                        Sign Up
-                      </span>
-                      <span wire:loading="" wire:target="registerSubmit">
-                        <div class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                    <div class="row">
+                      <div class="col-md-10">
+                        <div class="media align-items-center manag_box_mg_tx">
+                          <div class="square-40 d-block mr-8">
+                            <img src="/gigs-categories_files/01JVPQEAHCRM4W9RGE8B9Q8WMH.png" alt="Delivery Partner"
+                              class="category-listing-icon">
+                          </div>
+                          <div>
+                            <h3 class="mb-0"><a class="font-size-4 heading-default-color"
+                                href="https://gigstm.com/gigs/delivery-partner" wire:navigate="">Delivery Partner</a>
+                            </h3>
+                          </div>
                         </div>
-                      </span>
-                    </button>
+                      </div>
+                      <div class="col-md-2 text-right pt-7 pt-md-5">
+                        <div class="media justify-content-md-end">
+                          <p class="font-weight-bold font-size-4 text-hit-gray mb-0"><span class="text-black-2">0
+                              Jobs</span></p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row pt-2">
+                      <div class="col-md-12 dis_criptionss">
+                        <p></p>
+                        <p>A "delivery partner" is an individual or company that provides delivery services for another
+                          business, often in the e-commerce or food delivery industry. These partners handle the
+                          logistics of picking up packages or food orders and delivering them to customers.&nbsp;</p>
+                        <p></p>
+                      </div>
+                    </div>
                   </div>
-                  <div class="botm_text_area">Do have an account? <a href="javascript:void(0);"
-                      onclick="toggleLoginRegister(true,false);">Login</a></div>
+                  <!-- End Single Featured Job -->
+                </div>
+                <div class="col-md-6 mb-8">
+                  <!-- Single Featured Job -->
+                  <div class="pt-7 px-xl-7 px-lg-7 px-7 pb-7 light-mode-texts bg-white rounded hover-shadow-3"
+                    id="categryess_ess">
+
+                    <div class="row">
+                      <div class="col-md-10">
+                        <div class="media align-items-center manag_box_mg_tx">
+                          <div class="square-40 d-block mr-8">
+                            <img src="/gigs-categories_files/01JVPQ51X6ZJCH5EBJA09NPVSK.png"
+                              alt="Sales &amp; Marketing" class="category-listing-icon">
+                          </div>
+                          <div>
+                            <h3 class="mb-0"><a class="font-size-4 heading-default-color"
+                                href="https://gigstm.com/gigs/sales-marketing" wire:navigate="">Sales &amp;
+                                Marketing</a></h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-2 text-right pt-7 pt-md-5">
+                        <div class="media justify-content-md-end">
+                          <p class="font-weight-bold font-size-4 text-hit-gray mb-0"><span class="text-black-2">0
+                              Jobs</span></p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row pt-2">
+                      <div class="col-md-12 dis_criptionss">
+                        <p></p>
+                        <p>Sales &amp; Marketing gigs encompass a wide range of roles that focus on attracting customers
+                          and generating revenue for businesses</p>
+                        <p></p>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Single Featured Job -->
+                </div>
+                <div class="col-md-6 mb-8">
+                  <!-- Single Featured Job -->
+                  <div class="pt-7 px-xl-7 px-lg-7 px-7 pb-7 light-mode-texts bg-white rounded hover-shadow-3"
+                    id="categryess_ess">
+
+                    <div class="row">
+                      <div class="col-md-10">
+                        <div class="media align-items-center manag_box_mg_tx">
+                          <div class="square-40 d-block mr-8">
+                            <img src="/gigs-categories_files/01JVPPWXYSCCP8ST3WHB1S97EV.png" alt="Tele Calling Jobs"
+                              class="category-listing-icon">
+                          </div>
+                          <div>
+                            <h3 class="mb-0"><a class="font-size-4 heading-default-color"
+                                href="https://gigstm.com/gigs/tele-calling-jobs" wire:navigate="">Tele Calling Jobs</a>
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-2 text-right pt-7 pt-md-5">
+                        <div class="media justify-content-md-end">
+                          <p class="font-weight-bold font-size-4 text-hit-gray mb-0"><span class="text-black-2">0
+                              Jobs</span></p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row pt-2">
+                      <div class="col-md-12 dis_criptionss">
+                        <p></p>
+                        <p>Telecalling gigs involve making outbound calls to prospects or customers, typically for tasks
+                          like sales, marketing, customer service, or information gathering.</p>
+                        <p></p>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Single Featured Job -->
+                </div>
+                <div class="col-md-6 mb-8">
+                  <!-- Single Featured Job -->
+                  <div class="pt-7 px-xl-7 px-lg-7 px-7 pb-7 light-mode-texts bg-white rounded hover-shadow-3"
+                    id="categryess_ess">
+
+                    <div class="row">
+                      <div class="col-md-10">
+                        <div class="media align-items-center manag_box_mg_tx">
+                          <div class="square-40 d-block mr-8">
+                            <img src="/gigs-categories_files/01JVPPN7K0G5VQZX51FJRC5ZTN.png" alt="Digital Gigs Job"
+                              class="category-listing-icon">
+                          </div>
+                          <div>
+                            <h3 class="mb-0"><a class="font-size-4 heading-default-color"
+                                href="https://gigstm.com/gigs/digital-gigs-job" wire:navigate="">Digital Gigs Job</a>
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-2 text-right pt-7 pt-md-5">
+                        <div class="media justify-content-md-end">
+                          <p class="font-weight-bold font-size-4 text-hit-gray mb-0"><span class="text-black-2">0
+                              Jobs</span></p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row pt-2">
+                      <div class="col-md-12 dis_criptionss">
+                        <p></p>
+                        <p>Digital gigs are short-term, flexible jobs performed via digital platforms. They are a part
+                          of the gig economy, where individuals offer services on a freelance or contractual basis for
+                          temporary work opportunities.</p>
+                        <p></p>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Single Featured Job -->
+                </div>
+                <div class="col-md-6 mb-8">
+                  <!-- Single Featured Job -->
+                  <div class="pt-7 px-xl-7 px-lg-7 px-7 pb-7 light-mode-texts bg-white rounded hover-shadow-3"
+                    id="categryess_ess">
+
+                    <div class="row">
+                      <div class="col-md-10">
+                        <div class="media align-items-center manag_box_mg_tx">
+                          <div class="square-40 d-block mr-8">
+                            <img src="/gigs-categories_files/01JVP8J0Y4HMJ08AG3GF3Z1MSZ.jpg"
+                              alt="Field Sales - E commerce  Marketplace" class="category-listing-icon">
+                          </div>
+                          <div>
+                            <h3 class="mb-0"><a class="font-size-4 heading-default-color"
+                                href="https://gigstm.com/gigs/field-sales-e-commerce-marketplace" wire:navigate="">Field
+                                Sales - E commerce Marketplace</a></h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-2 text-right pt-7 pt-md-5">
+                        <div class="media justify-content-md-end">
+                          <p class="font-weight-bold font-size-4 text-hit-gray mb-0"><span class="text-black-2">3
+                              Jobs</span></p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row pt-2">
+                      <div class="col-md-12 dis_criptionss">
+                        <p></p>
+                        <p>A Field Sales Representative, or Field Sales Rep, is a Salesperson who visits customers in
+                          their workplaces, homes and offices to sell in person. Their duties include attracting new
+                          customers to a company, nurturing relationships with them and maximising the profit within
+                          their territory.</p>
+                        <p></p>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Single Featured Job -->
+                </div>
+                <!--[if ENDBLOCK]><![endif]-->
+
+                <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                <!--[if ENDBLOCK]><![endif]-->
               </div>
-              </form>
+              <!-- form end -->
             </div>
           </div>
         </div>
       </div>
-  </div>
-  </main>
-  <main>
-    <div class="bg-gradient-1 position-relative" id="bnr_areaa">
-      <!-- Background Text -->
-      <div class="background-container">
-        <div class="sliding-text text-row-1">
-          PASSION OPPORTUNITY SKILLS TALENT GIG
-        </div>
-        <div class="sliding-text text-row-2">
-          FREELANCE CREATIVE REMOTE FLEXIBLE WORK
-        </div>
-        <div class="sliding-text text-row-3">
-          CAREER INCOME SKILLS GROWTH SUCCESS
-        </div>
-      </div>
-
-      <!-- Floating Cursor -->
-      <div class="cursor" id="floating-cursor" style="left: 1314px; top: 75px;"></div>
-
-      <!-- Main Content -->
-      <div class="content">
-        <h1 class="main-title">
-          Find on <span class="purple-text">GigsTM</span>
-        </h1>
-        <p class="subtitle">We Don't Post Jobs. We Build Projects</p>
-        <button class="get-started-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="white"></path>
-          </svg>
-          Get Started
-        </button>
-      </div>
-
-      <!-- Job Tags -->
-      <div id="job-tags-container">
-        <span class="job-tag" data-offset-x="-120" data-offset-y="-80" style="left: 1208.49px; top: 25.214px;">Graphic
-          Designer</span>
-        <span class="job-tag" data-offset-x="100" data-offset-y="-120" style="left: 1409.65px; top: -14.786px;">Data
-          Entry</span>
-        <span class="job-tag" data-offset-x="-200" data-offset-y="-40" style="left: 1090.81px; top: 65.214px;">Institute
-          Coordinator</span>
-        <span class="job-tag" data-offset-x="-80" data-offset-y="100" style="left: 1239.07px; top: 205.214px;">Social
-          Media Manager</span>
-        <span class="job-tag" data-offset-x="150" data-offset-y="80"
-          style="left: 1450.23px; top: 185.214px;">Marketing</span>
-        <span class="job-tag" data-offset-x="0" data-offset-y="-180"
-          style="left: 1337.91px; top: -74.786px;">Accounts</span>
-      </div>
-    </div>
-
-    <!---- Why Join GigsTM Early? ---->
-    <div class="pt-11 pt-lg-16 pb-lg-16 aos-init" id="manages_box" data-aos="fade-up">
-      <div class="container">
-        <div class="al_titl_areaa mb-4">
-          <h3>Why Join GigsTM Early?</h3>
-        </div>
-        <div class="row j_center">
-          <!---- Box Area ---->
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <div class="meddilss">
-                <h3>1. First Access to Gigs</h3>
-                <p>Get exclusive early access to the best gigs across industries like e-commerce, fintech, ed-tech,
-                  logistics, and more.</p>
-              </div>
-            </div>
-          </div>
-          <!---- End Box Area ---->
-          <!---- Box Area ---->
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <div class="meddilss">
-                <h3>2. Grow with Us</h3>
-                <p>Be part of a platform designed around real user needs — your feedback will directly help shape the
-                  future of GigsTM.</p>
-              </div>
-            </div>
-          </div>
-          <!---- End Box Area ---->
-          <!---- Box Area ---->
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <div class="meddilss">
-                <h3>3. Skill-Building Opportunities</h3>
-                <p>Get priority for training, certifications, and gigs that can boost your income and your career.</p>
-              </div>
-            </div>
-          </div>
-          <!---- End Box Area ---->
-          <!---- Box Area ---->
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <div class="meddilss">
-                <h3>4. Community and Recognition</h3>
-                <p>Early adopters will get featured badges, exclusive rewards, and recognition as GigsTM community
-                  builders.</p>
-              </div>
-            </div>
-          </div>
-          <!---- End Box Area ---->
-        </div>
-      </div>
-    </div>
-    <!---- Why Join GigsTM Early? ---->
-
-    <!---- Our Clients ---->
-    <div class="pt-11 pt-lg-16 pb-lg-16 light_area p_b_30 aos-init" data-aos="fade-up">
-      <div class="container">
-        <div class="al_titl_areaa">
-          <h3>Our Clients</h3>
-        </div>
-        <div id="clients_lgo">
-          <div class="clientslogo slick-initialized slick-slider">
-            <div class="slick-list draggable">
-              <div class="slick-track" style="opacity: 1; width: 7395px; transform: translate3d(-2805px, 0px, 0px);">
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="-5" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user8.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="-4" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user9.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="-3" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user10.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="-2" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user11.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="-1" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user12.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide" data-slick-index="0" aria-hidden="true" style="width: 235px;"
-                  tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user1.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide" data-slick-index="1" aria-hidden="true" style="width: 235px;"
-                  tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user2.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide" data-slick-index="2" aria-hidden="true" style="width: 235px;"
-                  tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user3.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide" data-slick-index="3" aria-hidden="true" style="width: 235px;"
-                  tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user4.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide" data-slick-index="4" aria-hidden="true" style="width: 235px;"
-                  tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user5.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide" data-slick-index="5" aria-hidden="true" style="width: 235px;"
-                  tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user6.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-current slick-active" data-slick-index="6"
-                  aria-hidden="false" style="width: 235px;" tabindex="0">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user7.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-active" data-slick-index="7" aria-hidden="false"
-                  style="width: 235px;" tabindex="0">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user8.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-active" data-slick-index="8" aria-hidden="false"
-                  style="width: 235px;" tabindex="0">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user9.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-active" data-slick-index="9" aria-hidden="false"
-                  style="width: 235px;" tabindex="0">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user10.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-active" data-slick-index="10" aria-hidden="false"
-                  style="width: 235px;" tabindex="0">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user11.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide" data-slick-index="11" aria-hidden="true" style="width: 235px;"
-                  tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user12.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="12" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user1.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="13" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user2.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="14" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user3.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="15" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user4.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="16" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user5.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="17" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user6.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="18" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user7.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="19" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user8.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="20" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user9.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="21" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user10.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="22" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user11.jpg" alt=""></div>
-                </div>
-                <div class="single-slider slick-slide slick-cloned" data-slick-index="23" id="" aria-hidden="true"
-                  style="width: 235px;" tabindex="-1">
-                  <div class="prt_logo_areaa"><img src="./GigsTm_files/lgo_n_user12.jpg" alt=""></div>
+    </main>
+    <main
+      wire:snapshot="{&quot;data&quot;:[],&quot;memo&quot;:{&quot;id&quot;:&quot;brVvkxe5SjLXIAcY6tV5&quot;,&quot;name&quot;:&quot;partials.footer&quot;,&quot;path&quot;:&quot;gigs-categories&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;scripts&quot;:[],&quot;assets&quot;:[],&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;20c5ecb2e83dd82419b3190ceb4a83decf7e4c48a19cedddef423ed5e62e5e6b&quot;}"
+      wire:effects="[]" wire:id="brVvkxe5SjLXIAcY6tV5">
+      <footer class="footer bg-ebony-clay dark-mode-texts">
+        <div class="container pt-10 pt-lg-16 pb-10 pb-lg-10">
+          <div class="row">
+            <div class="col-lg-3 col-sm-6 mb-lg-0 mb-9">
+              <!-- media start -->
+              <div class="media mb-11">
+                <div class="contt_areaa media-body pl-5">
+                  <h5>Contact us at</h5>
+                  <p><a href="mailto:support@gigstm.com"><i class="fa fa-envelope"></i> support@gigstm.com</a></p>
+                  <p><a href="tel:+91-+91-7081266668"><i class="fa fa-phone"></i> +91-+91-7081266668</a></p>
                 </div>
               </div>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-          </div>
-        </div>
-      </div>
-    </div> <!---- Our Clients ---->
-
-    <!-- What is GigsTM? -->
-    <section class="pt-7 pt-lg-16 pb-2 pb-lg-16" id="manages_box">
-      <div class="container">
-        <div class="al_titl_areaa">
-          <h3>What is GigsTM?</h3>
-        </div>
-        <div class="row pb-lg-6 justify-content-center">
-          <div class="col-xl-5 col-lg-5 col-md-10 col-sm-11">
-            <div class="position-relative what_w_do">
-              <img src="./GigsTm_files/workflo.png" alt="" class="w-100 rounded overflow-hidden">
-            </div>
-          </div>
-          <div class="col-xl-6 col-lg-7 col-md-8">
-            <div class="d-flex flex-column justify-content-center h-100 pl-7">
-              <div class="what_w_d_text">
-                <h2 class="font-size-8 mb-4">
-                  GigsTM is a Task-Based Work Platform
-                </h2>
-                <p>Where businesses list flexible gigs — and you, the Gigger, pick and complete them based on your
-                  schedule and skills.</p>
-
-                <ul class="tik_titlss">
-                  <li><i class="fa fa-check"></i> No long contracts.</li>
-                  <li><i class="fa fa-check"></i> No complicated processes.</li>
-                  <li><i class="fa fa-check"></i> Just work, earn, and grow — simple and transparent.</li>
+              <!-- media start -->
+              <!-- widget social icon start -->
+              <div class="social-icons">
+                <ul class="pl-0 list-unstyled d-flex align-items-end ">
+                  <li class="d-flex flex-column justify-content-center px-3 mr-3 font-size-4 heading-default-color">
+                    Follow us on:</li>
+                  <li class="d-flex flex-column justify-content-center px-3 mr-0"><a href="http://www.google.com/"
+                      target="_blank" class="hover-color-primary heading-default-color"><i
+                        class="fab fa-facebook-f font-size-3 pt-2"></i></a></li>
+                  <li class="d-flex flex-column justify-content-center px-3 mr-0"><a href="http://www.google.com/"
+                      target="_blank" class="hover-color-primary heading-default-color"><i
+                        class="fab fa-twitter font-size-3 pt-2"></i></a></li>
+                  <li class="d-flex flex-column justify-content-center px-3 mr-0"><a href="http://www.google.com/"
+                      target="_blank" class="hover-color-primary heading-default-color"><i
+                        class="fab fa-linkedin-in font-size-3 pt-2"></i></a></li>
                 </ul>
               </div>
-
-              <div class="what_w_d_text mt-5">
-                <h2 class="font-size-8 mb-4">
-                  Join The Movement
-                </h2>
-                <p>Whether you're a student looking for part-time gigs, a freelancer seeking flexible work, or someone
-                  who simply wants to hustle smarter —
-                  GigsTM is your launchpad.</p>
-                <ul class="tik_titlss">
-                  <li>👉 Sign up for early access. Let’s build the future of work, together.</li>
-                </ul>
-              </div>
-
+              <!-- widget social icon end -->
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- End What is GigsTM? -->
-
-    <!-- What You Can Do -->
-    <section class="pt-7 pt-lg-16 pb-2 pb-lg-16 light_area" id="manages_box">
-      <div class="container">
-        <div class="al_titl_areaa">
-          <h3>What You Can Do</h3>
-        </div>
-        <div class="row pb-lg-6 justify-content-center">
-          <div class="col-xl-6 col-lg-7 col-md-8">
-            <div class="d-flex flex-column justify-content-center h-100 pl-7">
-              <div class="what_w_d_text">
-                <p>GigsTM gives you real, verified work from India’s top companies. Choose projects that fit your
-                  skills, schedule, and city whether part-time, full-time, or weekend-only.</p>
-
-                <ul class="tik_titlss">
-                  <li><i class="fa fa-check"></i> Support e-commerce sellers</li>
-                  <li><i class="fa fa-check"></i> Generate leads and do field visits</li>
-                  <li><i class="fa fa-check"></i> Assist in product launches</li>
-                  <li><i class="fa fa-check"></i> Join proctoring or marketing gigs</li>
-                  <li><i class="fa fa-check"></i> Or work in remote calling roles</li>
-                </ul>
-              </div>
-
-            </div>
-          </div>
-          <div class="col-xl-5 col-lg-5 col-md-10 col-sm-11">
-            <div class="position-relative what_w_do">
-              <img src="./GigsTm_files/what_can.png" alt="" class="w-100 rounded overflow-hidden">
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- End What You Can Do -->
-
-    <!-- Explore by category -->
-    <section class="pt-7 pt-lg-16 pb-2 pb-lg-16" id="manages_box">
-      <div class="container">
-        <div class="al_titl_areaa">
-          <h3>Explore by category</h3>
-        </div>
-        <div class="row j_center a_center">
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <a href="https://gigstm.com/gigs-categories" wire:navigate="">
-                <div class="meddilss">
-                  <span class="icon_bxx"><img src="./GigsTm_files/01JWMYAQEM8DZSMC0ZVJ768JT7.png"
-                      alt="Audits &amp; Survey Gigs" class="category-icons"></span>
-                  <h3>Audits &amp; Survey Gigs</h3>
-                  <p>0 Vacancy</p>
-                </div>
-              </a>
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <a href="https://gigstm.com/gigs-categories" wire:navigate="">
-                <div class="meddilss">
-                  <span class="icon_bxx"><img src="./GigsTm_files/01JVPPN7K0G5VQZX51FJRC5ZTN.png" alt="Digital Gigs Job"
-                      class="category-icons"></span>
-                  <h3>Digital Gigs Job</h3>
-                  <p>0 Vacancy</p>
-                </div>
-              </a>
-            </div>
-            <!---- Box Area ---->
-            <div class="single_sld_area_tx worker">
-              <a href="https://gigstm.com/gigs-categories" wire:navigate="">
-                <div class="meddilss">
-                  <span class="icon_bxx"><img src="./GigsTm_files/01JVPQEAHCRM4W9RGE8B9Q8WMH.png" alt="Delivery Partner"
-                      class="category-icons"></span>
-                  <h3>Delivery Partner</h3>
-                  <p>0 Vacancy</p>
-                </div>
-              </a>
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <a href="https://gigstm.com/gigs-categories" wire:navigate="">
-                <div class="meddilss">
-                  <span class="icon_bxx"><img src="./GigsTm_files/01JVP8J0Y4HMJ08AG3GF3Z1MSZ.jpg"
-                      alt="Field Sales - E commerce  Marketplace" class="category-icons"></span>
-                  <h3>Field Sales - E commerce Marketplace</h3>
-                  <p>3 Vacancy</p>
-                </div>
-              </a>
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <a href="https://gigstm.com/gigs-categories" wire:navigate="">
-                <div class="meddilss">
-                  <span class="icon_bxx"><img src="./GigsTm_files/01JVPPWXYSCCP8ST3WHB1S97EV.png"
-                      alt="Tele Calling Jobs" class="category-icons"></span>
-                  <h3>Tele Calling Jobs</h3>
-                  <p>0 Vacancy</p>
-                </div>
-              </a>
-            </div>
-            <!---- Box Area ---->
-            <div class="single_sld_area_tx worker">
-              <a href="https://gigstm.com/gigs-categories" wire:navigate="">
-                <div class="meddilss">
-                  <span class="icon_bxx"><img src="./GigsTm_files/01JVPQ51X6ZJCH5EBJA09NPVSK.png"
-                      alt="Sales &amp; Marketing" class="category-icons"></span>
-                  <h3>Sales &amp; Marketing</h3>
-                  <p>0 Vacancy</p>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section><!-- Explore by category -->
-
-
-    <!-- Featured Jobs -->
-    <section class="pt-7 pt-lg-16 pb-2 pb-lg-16 light_area" id="jobs_hm_boxss">
-      <div class="container">
-        <div class="al_titl_areaa">
-          <h3>Featured Jobs</h3>
-        </div>
-
-        <div class="featuredjobs slick-initialized slick-slider slick-dotted" id="al_suprt_icons">
-          <div class="slick-list draggable">
-            <div class="slick-track" style="opacity: 1; width: 1272px; transform: translate3d(0px, 0px, 0px);">
-              <div class="single-slider slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false"
-                style="width: 404px;" tabindex="0" role="tabpanel" id="slick-slide00"
-                aria-describedby="slick-slide-control00">
-                <!---- Box Area ---->
-                <div class="fea_jb_boxx">
-                  <div class="lgo_areaa"><img src="./GigsTm_files/01JY92EVPF536NTN4DVPAFTKCW.svg"
-                      alt="Seller Acquisition For Amazon"></div>
-                  <div class="un_txt_titl">
-                    <p>White Collar</p>
-                    <h3>Seller Acquisition For Amazon</h3>
-                    <div class="pan_txtx">
-                      <span class="tx_arebxx"><i class="fa fa-map-marker"></i> PAN INDIA</span>
-                      <span class="tx_arebxx"><i class="fa fa-shopping-bag"></i>Remote, Part time, Freelance, Contract
-                        Basis</span>
-                    </div>
-                    <ul>
-                      <li>₹200 /per gig
-                      </li>
-                      <li>Basic Requirements: 18years above</li>
-                      <li>No. of positions: 10</li>
-                      <li>4 weeks ago</li>
+            <div class="col-lg-9 col-md-6">
+              <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-3 col-xs-6">
+                  <div class="footer-widget widget2 mb-md-0 mb-13">
+                    <p class="widget-title font-size-4 text-wait mb-md-5 mb-7 contt_areaa">Company</p>
+                    <ul class="widget-links pl-0 list-unstyled list-hover-primary">
+                      <li><a href="javacript:void(0);"><i class="fa fa-angle-right"></i> Who We Are</a></li>
+                      <li><a href="https://gigstm.com/page/how-it-works" wire:navigate=""><i
+                            class="fa fa-angle-right"></i> How GigsTm Work</a></li>
                     </ul>
                   </div>
-                  <a href="https://gigstm.com/gig-detail/GIG002" class="aply_nw" wire:navigate="" tabindex="0">Apply
-                    Now</a>
                 </div>
-                <!---- End Box Area ---->
-              </div>
-              <div class="single-slider slick-slide slick-active" data-slick-index="1" aria-hidden="false"
-                style="width: 404px;" tabindex="0" role="tabpanel" id="slick-slide01"
-                aria-describedby="slick-slide-control01">
-                <!---- Box Area ---->
-                <div class="fea_jb_boxx">
-                  <div class="lgo_areaa"><img src="./GigsTm_files/01JY92J5X0FFVHWK3HMYFA77DS.jpg"
-                      alt="Seller Acquisition For Jio Mart"></div>
-                  <div class="un_txt_titl">
-                    <p>White Collar</p>
-                    <h3>Seller Acquisition For Jio Mart</h3>
-                    <div class="pan_txtx">
-                      <span class="tx_arebxx"><i class="fa fa-map-marker"></i> PAN INDIA</span>
-                      <span class="tx_arebxx"><i class="fa fa-shopping-bag"></i>Remote, Part time, Freelance, Contract
-                        Basis</span>
-                    </div>
-                    <ul>
-                      <li>₹500 /per gig
-                      </li>
-                      <li>Basic Requirements: </li>
-                      <li>No. of positions: 10</li>
-                      <li>4 weeks ago</li>
+
+                <div class="col-lg-4 col-md-6 col-sm-3 col-xs-6">
+                  <div class="footer-widget widget2 mb-md-0 mb-13">
+                    <p class="widget-title font-size-4 text-wait mb-md-5 mb-7 contt_areaa">Categories</p>
+                    <ul class="widget-links pl-0 list-unstyled list-hover-primary">
+                      <!--[if BLOCK]><![endif]-->
+                      <li><a href="https://gigstm.com/gigs/field-sales-e-commerce-marketplace" wire:navigate=""><i
+                            class="fa fa-angle-right"></i> Field Sales - E commerce Marketplace</a></li>
+                      <!--[if ENDBLOCK]><![endif]-->
+                      <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                      <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                      <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                      <!--[if BLOCK]><![endif]--><!--[if ENDBLOCK]><![endif]-->
+                      <!--[if ENDBLOCK]><![endif]-->
+                      <!--[if ENDBLOCK]><![endif]-->
                     </ul>
                   </div>
-                  <a href="https://gigstm.com/gig-detail/GIG003" class="aply_nw" wire:navigate="" tabindex="0">Apply
-                    Now</a>
                 </div>
-                <!---- End Box Area ---->
-              </div>
-              <div class="single-slider slick-slide slick-active" data-slick-index="2" aria-hidden="false"
-                style="width: 404px;" tabindex="0" role="tabpanel" id="slick-slide02"
-                aria-describedby="slick-slide-control02">
-                <!---- Box Area ---->
-                <div class="fea_jb_boxx">
-                  <div class="lgo_areaa"><img src="./GigsTm_files/01JVPBC0DDDPZCT1J6Y89WCHPC.png"
-                      alt="Seller Acquisition for Flipkart"></div>
-                  <div class="un_txt_titl">
-                    <p>White Collar</p>
-                    <h3>Seller Acquisition for Flipkart</h3>
-                    <div class="pan_txtx">
-                      <span class="tx_arebxx"><i class="fa fa-map-marker"></i> Pan India</span>
-                      <span class="tx_arebxx"><i class="fa fa-shopping-bag"></i>Remote, Part time, Freelance, Contract
-                        Basis, Off Role</span>
-                    </div>
-                    <ul>
-                      <li>₹400 /per gig
-                      </li>
-                      <li>Basic Requirements: Incentive for Orders</li>
-                      <li>No. of positions: 10</li>
-                      <li>2 months ago</li>
+                <div class="col-lg-4 col-md-6 col-sm-3 col-xs-6">
+                  <div class="footer-widget widget3 mb-sm-0 mb-13">
+                    <p class="widget-title font-size-4 text-wait mb-md-5 mb-7 contt_areaa">Legal</p>
+                    <ul class="widget-links pl-0 list-unstyled list-hover-primary">
+                      <li><a href="https://gigstm.com/" wire:navigate=""><i class="fa fa-angle-right"></i> Home</a></li>
+                      <li><a href="javacript:void(0);"><i class="fa fa-angle-right"></i> Blog</a></li>
+                      <li><a href="https://gigstm.com/page/privacy-policy" wire:navigate=""><i
+                            class="fa fa-angle-right"></i> Privacy Policy</a></li>
+                      <li><a href="https://gigstm.com/page/terms-conditions" wire:navigate=""><i
+                            class="fa fa-angle-right"></i> Terms &amp; Conditions</a></li>
+                      <li><a href="https://gigstm.com/contact-us" wire:navigate=""><i class="fa fa-angle-right"></i>
+                          Contact Us</a></li>
                     </ul>
                   </div>
-                  <a href="https://gigstm.com/gig-detail/GIG001" class="aply_nw" wire:navigate="" tabindex="0">Apply
-                    Now</a>
-                </div>
-                <!---- End Box Area ---->
-              </div>
-            </div>
-          </div>
-
-
-          <ul class="slick-dots" role="tablist">
-            <li class="slick-active" role="presentation"><button type="button" role="tab" id="slick-slide-control00"
-                aria-controls="slick-slide00" aria-label="1 of 1" tabindex="0" aria-selected="true">1</button></li>
-          </ul>
-        </div>
-      </div>
-    </section> <!-- Featured Jobs -->
-
-    <!-- Why Join GigsTM -->
-    <section class="pt-7 pt-lg-16 pb-2 pb-lg-16" id="manages_box">
-      <div class="container">
-        <div class="al_titl_areaa mb-3">
-          <h3>Why Join GigsTM?</h3>
-        </div>
-        <div class="row j_center">
-          <!---- Box Area ---->
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <div class="meddilss">
-                <span class="icon_bxx"><img src="./GigsTm_files/why_join_ic1.png" alt=""></span>
-                <h3>Work at your convenience—choose your time.</h3>
-              </div>
-            </div>
-          </div>
-          <!---- End Box Area ---->
-
-          <!---- Box Area ---->
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <div class="meddilss">
-                <span class="icon_bxx"><img src="./GigsTm_files/why_join_ic2.png" alt=""></span>
-                <h3>Get training and skill development</h3>
-              </div>
-            </div>
-          </div>
-          <!---- End Box Area ---->
-
-          <!---- Box Area ---->
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <div class="meddilss">
-                <span class="icon_bxx"><img src="./GigsTm_files/why_join_ic3.png" alt=""></span>
-                <h3>Earn payouts on successful task completions</h3>
-              </div>
-            </div>
-          </div>
-          <!---- End Box Area ---->
-
-          <!---- Box Area ---->
-          <div class="col-lg-3">
-            <div class="single_sld_area_tx worker">
-              <div class="meddilss">
-                <span class="icon_bxx"><img src="./GigsTm_files/why_join_ic4.png" alt=""></span>
-                <h3>Build experience with leading brands</h3>
-              </div>
-            </div>
-          </div>
-          <!---- End Box Area ---->
-        </div>
-      </div>
-    </section>
-    <!-- End Why Join GigsTM -->
-
-    <!---- Testomonial ---->
-
-    <div class="al_titl_areaa mb-3">
-      <h3>How its works / Our Approach</h3>
-    </div>
-
-    <div class="workflow-container">
-      <div class="workflow-step" id="signup-step">
-        <div class="step-icon signup-icon">
-          <div class="pulse-effect"></div>
-          📝
-        </div>
-        <div class="step-title">Sign Up</div>
-        <div class="step-description">
-          Create your account and fill your basic details.
-        </div>
-        <div class="connection-line">
-          <div class="connection-arrow"></div>
-        </div>
-      </div>
-
-      <div class="workflow-step" id="browse-step">
-        <div class="step-icon browse-icon">
-          <div class="pulse-effect"></div>
-          🔍
-        </div>
-        <div class="step-title">Browse Gigs</div>
-        <div class="step-description">
-          Check available gig based on your skill and location.
-        </div>
-        <div class="connection-line">
-          <div class="connection-arrow"></div>
-        </div>
-      </div>
-
-      <div class="workflow-step" id="apply-step">
-        <div class="step-icon apply-icon">
-          <div class="pulse-effect"></div>
-          👥
-        </div>
-        <div class="step-title">Apply For Match</div>
-        <div class="step-description">
-          Found a match, Just Hit apply
-        </div>
-        <div class="step-subtitle">Apply For Match</div>
-        <div class="connection-line">
-          <div class="connection-arrow"></div>
-        </div>
-      </div>
-
-      <div class="workflow-step" id="training-step">
-        <div class="step-icon training-icon">
-          <div class="pulse-effect"></div>
-          🎓
-        </div>
-        <div class="step-title">Get Trained (If Needed)</div>
-        <div class="step-description">
-          Some gigs need quick training don't worry will train you.
-        </div>
-        <div class="step-subtitle">Get Trained (If Needed)</div>
-        <div class="connection-line">
-          <div class="connection-arrow"></div>
-        </div>
-      </div>
-
-      <div class="workflow-step" id="task-step">
-        <div class="step-icon task-icon">
-          <div class="pulse-effect"></div>
-          📋
-        </div>
-        <div class="step-title">Do The Task</div>
-        <div class="step-description">
-          Complete your gig at your time and pace
-        </div>
-        <div class="step-subtitle">Do The Task</div>
-        <div class="connection-line">
-          <div class="connection-arrow"></div>
-        </div>
-      </div>
-
-      <div class="workflow-step" id="submit-step">
-        <div class="step-icon submit-icon">
-          <div class="pulse-effect"></div>
-          📤
-        </div>
-        <div class="step-title">Submit & Wait For Proposal</div>
-        <div class="step-description">
-          Send your work we or our partner will check & approve.
-        </div>
-        <div class="step-subtitle">Submit & Wait For Proposal</div>
-        <div class="connection-line">
-          <div class="connection-arrow"></div>
-        </div>
-      </div>
-
-      <div class="workflow-step" id="payment-step">
-        <div class="step-icon payment-icon">
-          <div class="pulse-effect"></div>
-          💰
-        </div>
-        <div class="step-title">Get Paid</div>
-        <div class="step-description">
-          Payment is made once your task is approved
-        </div>
-        <div class="step-subtitle">Get Paid</div>
-        <div class="connection-line">
-          <div class="connection-arrow"></div>
-        </div>
-      </div>
-
-      <div class="workflow-step" id="growth-step">
-        <div class="step-icon growth-icon">
-          <div class="pulse-effect"></div>
-          📈
-        </div>
-        <div class="step-title">Repeat & Grow</div>
-        <div class="step-description">
-          Take more gigs, earn more, level up your profile
-        </div>
-        <div class="step-subtitle">Repeat & Grow</div>
-      </div>
-    </div>
-
-    <div class="pt-11 pt-lg-16 pb-lg-16 light_area" id="testimonial_pgs">
-      <div class="container">
-        <div class="content">
-          <div class="text-content">
-            <h1 class="heading"> Be Part of Something New: <span class="highlight">GigsTM</span>
-              is Launching Soon!
-            </h1>
-            <p class="description">
-              We’re building GigsTM — a fresh way for you to find flexible work opportunities, earn on your own terms,
-              and build skills that shape your future.
-            </p>
-
-            <p class="description">
-              As we prepare for launch, we’re inviting early users — students, freelancers, side hustlers — to be part
-              of the first wave of Giggers who will redefine the future of work.
-            </p>
-          </div>
-
-          <div class="card-slider-container">
-            <div class="card-slider" id="cardSlider">
-              <div class="card active" id="card1">
-                <div class="profile-pic"
-                  style="background-image: url(&#39;https://gigstm.com/website/image/img1.jpeg&#39;)"></div>
-                <p class="testimonial">
-                  "I earned my first income through this platform—an experience
-                  I'll never forget. Over the last two years, the quality of jobs
-                  keeps improving, and I've become a loyal user."
-                </p>
-                <p class="name">Amisha Kumari</p>
-              </div>
-
-              <div class="card next" id="card2">
-                <div class="profile-pic"
-                  style="background-image: url(&#39;https://gigstm.com/website/image/img2.jpeg&#39;)"></div>
-                <p class="testimonial">
-                  "This platform helped me develop my skills. Now I'm confident
-                  enough to take on bigger projects and near my own financial
-                  goals."
-                </p>
-                <p class="name">Alex Smith</p>
-              </div>
-
-              <div class="card prev" id="card3">
-                <div class="profile-pic"
-                  style="background-image: url(&#39;https://gigstm.com/website/image/img3.jpeg&#39;)"></div>
-                <p class="testimonial">
-                  "I recommended this to a friend and now we both are getting gigs
-                  like never before. The community is amazing. Now I'm earning
-                  consistently."
-                </p>
-                <p class="name">Maya Johnson</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!---- End Testomonial ---->
-
-
-    <!-- How its works Our approach -->
-    <!-- <section class="pt-7 pt-lg-16 pb-2 pb-lg-16">
-        <div class="container">
-          <div class="al_titl_areaa mb-3">
-            <h3>How its works / Our Approach</h3>
-          </div>
-
-
-          <div class="timeline">
-            <ol
-              style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
-              <li>
-                <div class="scene" style="height: 100px;">
-                  <time>Sign Up</time>
-                  <p>Create your account and fill in basic details.</p>
-                </div>
-              </li>
-              <li>
-                <div class="scene" style="height: 100px;">
-                  <time>Browse Gigs</time>
-                  <p>Check available gigs based on your skills and location.</p>
-                </div>
-              </li>
-              <li>
-                <div class="scene" style="height: 100px;">
-                  <time>Apply for a Gig</time>
-                  <p>Found a match? Just hit apply.</p>
-                </div>
-              </li>
-              <li>
-                <div class="scene" style="height: 100px;">
-                  <time>Get Trained (if needed)</time>
-                  <p>Some gigs need quick training—don’t worry, we’ll guide you.</p>
-                </div>
-              </li>
-              <li>
-                <div class="scene" style="height: 100px;">
-                  <time>Do the Task</time>
-                  <p>Complete your gig at your time and pace.</p>
-                </div>
-              </li>
-
-              <li>
-                <div class="scene" style="height: 100px;">
-                  <time>Submit &amp; Wait for Approval</time>
-                  <p>Send your work. We or our partner will check and approve.</p>
-                </div>
-              </li>
-
-              <li>
-                <div class="scene" style="height: 100px;">
-                  <time>Get Paid</time>
-                  <p>Payment is made once your task is approved.</p>
-                </div>
-              </li>
-
-              <li>
-                <div class="scene" style="height: 100px;">
-                  <time>Repeat &amp; Grow</time>
-                  <p>Take more gigs, earn more, level up your profile.</p>
-                </div>
-              </li>
-
-              <li></li>
-            </ol>
-
-
-            <div class="arrows">
-              <button class="arrow arrow__prev disabled" disabled="">
-                <img src="./GigsTm_files/arrow_prev.svg" alt="prev timeline arrow">
-              </button>
-              <button class="arrow arrow__next">
-                <img src="./GigsTm_files/arrow_next.svg" alt="next timeline arrow">
-              </button>
-            </div>
-          </div>
-        </div>
-      </section> -->
-    <!-- End How its works Our Approach -->
-
-  </main>
-  <main>
-    <footer class="footer bg-ebony-clay dark-mode-texts">
-      <div class="container pt-10 pt-lg-16 pb-10 pb-lg-10">
-        <div class="row">
-          <div class="col-lg-3 col-sm-6 mb-lg-0 mb-9">
-            <!-- media start -->
-            <div class="media mb-11">
-              <div class="contt_areaa media-body pl-5">
-                <h5>Contact us at</h5>
-                <p><a href="mailto:support@gigstm.com"><i class="fa fa-envelope"></i> support@gigstm.com</a></p>
-                <p><a href="tel:+91-+91-7081266668"><i class="fa fa-phone"></i> +91-+91-7081266668</a></p>
-              </div>
-            </div>
-            <!-- media start -->
-            <!-- widget social icon start -->
-            <div class="social-icons">
-              <ul class="pl-0 list-unstyled d-flex align-items-end ">
-                <li class="d-flex flex-column justify-content-center px-3 mr-3 font-size-4 heading-default-color">
-                  Follow us on:</li>
-                <li class="d-flex flex-column justify-content-center px-3 mr-0"><a href="http://www.google.com/"
-                    target="_blank" class="hover-color-primary heading-default-color"><i
-                      class="fab fa-facebook-f font-size-3 pt-2"></i></a></li>
-                <li class="d-flex flex-column justify-content-center px-3 mr-0"><a href="http://www.google.com/"
-                    target="_blank" class="hover-color-primary heading-default-color"><i
-                      class="fab fa-twitter font-size-3 pt-2"></i></a></li>
-                <li class="d-flex flex-column justify-content-center px-3 mr-0"><a href="http://www.google.com/"
-                    target="_blank" class="hover-color-primary heading-default-color"><i
-                      class="fab fa-linkedin-in font-size-3 pt-2"></i></a></li>
-              </ul>
-            </div>
-            <!-- widget social icon end -->
-          </div>
-          <div class="col-lg-9 col-md-6">
-            <div class="row">
-              <div class="col-lg-4 col-md-6 col-sm-3 col-xs-6">
-                <div class="footer-widget widget2 mb-md-0 mb-13">
-                  <p class="widget-title font-size-4 text-wait mb-md-5 mb-7 contt_areaa">Company</p>
-                  <ul class="widget-links pl-0 list-unstyled list-hover-primary">
-                    <li><a href="javacript:void(0);"><i class="fa fa-angle-right"></i> Who We Are</a></li>
-                    <li><a href="https://gigstm.com/page/how-it-works" wire:navigate=""><i
-                          class="fa fa-angle-right"></i> How GigsTm Work</a></li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-6 col-sm-3 col-xs-6">
-                <div class="footer-widget widget2 mb-md-0 mb-13">
-                  <p class="widget-title font-size-4 text-wait mb-md-5 mb-7 contt_areaa">Categories</p>
-                  <ul class="widget-links pl-0 list-unstyled list-hover-primary">
-                    <li><a href="https://gigstm.com/gigs/field-sales-e-commerce-marketplace" wire:navigate=""><i
-                          class="fa fa-angle-right"></i> Field Sales - E commerce Marketplace</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-6 col-sm-3 col-xs-6">
-                <div class="footer-widget widget3 mb-sm-0 mb-13">
-                  <p class="widget-title font-size-4 text-wait mb-md-5 mb-7 contt_areaa">Legal</p>
-                  <ul class="widget-links pl-0 list-unstyled list-hover-primary">
-                    <li><a href="https://gigstm.com/" wire:navigate=""><i class="fa fa-angle-right"></i> Home</a></li>
-                    <li><a href="javacript:void(0);"><i class="fa fa-angle-right"></i> Blog</a></li>
-                    <li><a href="https://gigstm.com/page/privacy-policy" wire:navigate=""><i
-                          class="fa fa-angle-right"></i> Privacy Policy</a></li>
-                    <li><a href="https://gigstm.com/page/terms-conditions" wire:navigate=""><i
-                          class="fa fa-angle-right"></i> Terms &amp; Conditions</a></li>
-                    <li><a href="https://gigstm.com/contact-us" wire:navigate=""><i class="fa fa-angle-right"></i>
-                        Contact Us</a></li>
-                  </ul>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="copy_rites">Copyright © 2025 gigstm.com | All Rights Reserved.</div>
-    </footer>
+        <div class="copy_rites">Copyright © 2025 gigstm.com | All Rights Reserved.</div>
+      </footer>
 
-    <!---- Backtop ----->
-    <a href="javascript:void(0);" id="backtop"></a>
-    <!---- End Backtop ----->
-  </main>
+      <!---- Backtop ----->
+      <a href="javascript:void(0);" id="backtop" class=""></a>
+      <!---- End Backtop ----->
+    </main>
   </div>
 
 
 
+  <script src="/gigs-categories_files/livewire.js.download" data-csrf="7Ha9MilcwGr4crujLofyuhlOrJOdywH7TGzYL3vP"
+    data-update-uri="/livewire/update" data-navigate-once="true"></script>
+  <link rel="stylesheet" type="text/css" href="/gigs-categories_files/styles">
+  <script type="module" src="/gigs-categories_files/scripts" data-navigate-once="" defer=""
+    data-navigate-track=""></script>
+  <link rel="preload" as="style" href="/gigs-categories_files/app-Dm5toNUv.css">
+  <link rel="modulepreload" href="/gigs-categories_files/app-DZhrBgNj.js.download">
+  <link rel="stylesheet" href="/gigs-categories_files/app-Dm5toNUv.css" data-navigate-track="reload">
+  <script type="module" src="/gigs-categories_files/app-DZhrBgNj.js.download" data-navigate-track="reload"></script>
   <!-- Vendor Scripts -->
-  <script src="./GigsTm_files/vendor.min.js.download"></script>
+  <script src="/gigs-categories_files/vendor.min.js.download"></script>
   <!-- Plugin's Scripts -->
-  <script src="./GigsTm_files/jquery.fancybox.min.js.download"></script>
+  <script src="/gigs-categories_files/jquery.fancybox.min.js.download"></script>
 
-  <script src="./GigsTm_files/aos.min.js.download"></script>
-  <script src="./GigsTm_files/slick.min.js.download"></script>
-  <script src="./GigsTm_files/jquery.counterup.min.js.download"></script>
-  <script src="./GigsTm_files/jquery.waypoints.min.js.download"></script>
-  <script src="./GigsTm_files/jquery-ui.js.download"></script>
-  <script src="./GigsTm_files/sweetalert2.all.min.js.download"></script>
-  <script src="./GigsTm_files/custom.js.download"></script>
-  <script src="./GigsTm_files/main.js.download"></script>
-  <script src="./GigsTm_files/core.js.download"></script>
-  <script src="./GigsTm_files/maps.js.download"></script>
-  <script src="./GigsTm_files/india2019High.js.download"></script>
-  <script src="./GigsTm_files/animated.js.download"></script>
-  <script src="./GigsTm_files/maps(1).js.download"></script>
+  <script src="/gigs-categories_files/aos.min.js.download"></script>
+  <script src="/gigs-categories_files/slick.min.js.download"></script>
+  <script src="/gigs-categories_files/jquery.counterup.min.js.download"></script>
+  <script src="/gigs-categories_files/jquery.waypoints.min.js.download"></script>
+  <script src="/gigs-categories_files/jquery-ui.js.download"></script>
+  <script src="/gigs-categories_files/sweetalert2.all.min.js.download"></script>
+  <!-- Activation Script -->
+  <!-- <script src="js/drag-n-drop.js"></script> -->
+  <script src="/gigs-categories_files/custom.js.download"></script>
+  <script src="/gigs-categories_files/main.js.download"></script>
+  <script src="/gigs-categories_files/core.js.download"></script>
+  <script src="/gigs-categories_files/maps.js.download"></script>
+  <script src="/gigs-categories_files/india2019High.js.download"></script>
+  <script src="/gigs-categories_files/animated.js.download"></script>
+  <script src="/gigs-categories_files/maps(1).js.download"></script>
+  <script src="/gigs-categories_files/gsap.min.js.download"></script>
+  <script src="/gigs-categories_files/typed.min.js.download"></script>
+  <script>
+  </script>
+
   <div style="width: 200px; height: 200px; top: 0px; left: 0px; visibility: hidden; position: absolute;">
     <div style="width: 100%; height: 100%; position: relative; overflow: hidden;"><svg version="1.1"
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="group"
@@ -1852,15 +4416,6 @@
         </defs>
       </svg></div>
   </div>
-  <!-- External JavaScript Libraries -->
-  <script src="./GigsTm_files/gsap.min.js.download"></script>
-  <script src="./GigsTm_files/typed.min.js.download"></script>
-  <script src="./GigsTm_files/hammer.min.js.download"></script>
-
-  <!-- Custom JavaScript Files -->
-  <script src="./GigsTm_files/home.js.download"></script>
-  <script src="main.js"></script>
-
 </body><!-- Livewire Scripts -->
 
 </html>

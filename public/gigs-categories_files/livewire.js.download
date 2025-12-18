@@ -4253,7 +4253,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   async function sendRequest(pool) {
     let [payload, handleSuccess, handleFailure] = pool.payload();
     let options = {
-      method: "POST",
+      method: "POST",  credentials: "include",
+
       body: JSON.stringify({
         _token: getCsrfToken(),
         components: payload

@@ -68,24 +68,19 @@ exports.isLoggedIn = (req, res, next) => {
 
 // Logout user
 exports.logout = (req, res) => {
-  if (req.session) {
-    req.session.destroy(err => {
-      if (err) {
-        return res.status(400).json({
-          status: 'error',
-          message: 'Logout failed'
-        });
-      }
-      res.clearCookie('connect.sid');
-      res.status(200).json({
-        status: 'success',
-        message: 'Logged out successfully!'
-      });
-    });
-  } else {
-    res.end();
-  }
+  res.cookie("jwt", "loggedout", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    expires: new Date(Date.now() + 1000) // expires immediately
+  });
+
+  res.status(200).json({
+    status: "success",
+    message: "Logged out successfully!"
+  });
 };
+
 
 
 // Change user password

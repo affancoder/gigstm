@@ -13,18 +13,30 @@ const verifyToken = (token) => {
 
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
-  
+
+  // 🍪 Cookie options
+  const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",        // ← allow navigation
+  path: "/",              // ← REQUIRED
+  maxAge: 7 * 24 * 60 * 60 * 1000
+}
+
+  // ✅ Set cookie
+  res.cookie("jwt", token, cookieOptions);
+
   // Remove password from output
   user.password = undefined;
 
   res.status(statusCode).json({
-    status: 'success',
-    token,
+    status: "success",
     data: {
       user
     }
   });
 };
+
 
 module.exports = {
   signToken,

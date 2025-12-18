@@ -72,7 +72,8 @@ async function handleLogin(event) {
 		loginBtn.innerHTML =
 			'<i class="fas fa-spinner fa-spin"></i> Signing in...';
 		const res = await fetch(`${API_URL}/auth/login`, {
-			method: "POST",
+			method: "POST",  credentials: "include",
+
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
 				email: loginEmail.value,
@@ -141,7 +142,8 @@ async function handleSignUp(event) {
 
 		// Make signup request
 		const signupResponse = await fetch(`${API_URL}/auth/signup`, {
-			method: "POST",
+			method: "POST",  credentials: "include",
+
 			headers: {
 				"Content-Type": "application/json",
 				Accept: "application/json",
@@ -170,7 +172,8 @@ async function handleSignUp(event) {
 		// Auto login after successful signup
 		console.log("Signup successful, attempting auto-login...");
 		const loginResponse = await fetch(`${API_URL}/auth/login`, {
-			method: "POST",
+			method: "POST",  credentials: "include",
+
 			headers: {
 				"Content-Type": "application/json",
 				Accept: "application/json",
@@ -247,7 +250,8 @@ async function handlePasswordReset() {
 		showLoader("Sending reset link...");
 
 		const response = await fetch(`${API_URL}/auth/reset-password`, {
-			method: "POST",
+			method: "POST",  credentials: "include",
+
 			headers: {
 				"Content-Type": "application/json",
 				Accept: "application/json",

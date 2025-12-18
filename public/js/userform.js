@@ -262,7 +262,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         const response = await fetch("/api/user/profile", {
-          method: "POST",
+          method: "POST",  credentials: "include",
+
           headers: {
             Authorization: `Bearer ${token}`, // Include JWT in Authorization header
             // 'Content-Type': 'multipart/form-data' // DO NOT set this manually; FormData handles it
@@ -332,7 +333,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         const response = await fetch("/api/user/experience", {
-          method: "POST",
+          method: "POST",  credentials: "include",
+
           headers: {
             Authorization: `Bearer ${token}`,
             // DO NOT SET Content-Type manually
@@ -394,7 +396,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         const response = await fetch("/api/user/kyc", {
-          method: "POST",
+          method: "POST",  credentials: "include",
+
           headers: {
             Authorization: `Bearer ${token}`,
             // DO NOT set content-type manually
@@ -490,7 +493,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
       const response = await fetch("/api/auth/change-password", {
-        method: "POST",
+        method: "POST",  credentials: "include",
+
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
