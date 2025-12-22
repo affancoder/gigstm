@@ -23,20 +23,11 @@ function fmtExp(y, m) {
 
 function rowHTML(item) {
   const p = item.profile || {};
-  const e = item.experience || {};
-  const k = item.kyc || {};
   return `<tr>
     <td>${item.user?.name || ""}</td>
-    <td>${item.user?.role ? `<span class="role-badge">${item.user.role}</span>` : ""}</td>
     <td>${item.user?.email || ""}</td>
     <td>${p.mobile || ""}</td>
     <td>${p.jobRole || ""}</td>
-    <td>${fmtExp(e.experienceYears, e.experienceMonths)}</td>
-    <td>${e.employmentType || ""}</td>
-    <td>${e.occupation || ""}</td>
-    <td><span class="badge">${k.bankName || ""}</span></td>
-    <td class="masked">${k.accountNumber || ""}</td>
-    <td class="masked">${k.ifscCode || ""}</td>
     <td><button class="btn-view" data-id="${item.user?.id}">View</button></td>
   </tr>`;
 }
