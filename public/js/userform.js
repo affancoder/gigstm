@@ -1,7 +1,30 @@
 console.log("userform.js loaded");
 
+// Function to toggle password visibility
+function togglePasswordVisibility(inputId) {
+  const input = document.getElementById(inputId);
+  if (input) {
+    input.type = input.type === 'password' ? 'text' : 'password';
+    const icon = document.querySelector(`[data-target="#${inputId}"] i`);
+    if (icon) {
+      icon.classList.toggle('fa-eye');
+      icon.classList.toggle('fa-eye-slash');
+    }
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM fully loaded");
+
+  // Add click event listeners for all password toggle buttons
+  document.addEventListener('click', function(e) {
+    const toggleBtn = e.target.closest('.toggle-visibility');
+    if (toggleBtn) {
+      e.preventDefault();
+      const targetId = toggleBtn.getAttribute('data-target').replace('#', '');
+      togglePasswordVisibility(targetId);
+    }
+  });
 
   // Get all tab links and panels
   const tabLinks = document.querySelectorAll(".tab-link");
@@ -464,57 +487,64 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // ===== Handle Change Password Form Submission =====
-  const submitBtn = document.getElementById("change-password-btn");
-
-  submitBtn.addEventListener("click", async function (e) {
-    e.preventDefault();
-
-    // Get form values
-    const newPassword = document.getElementById("newPassword").value.trim();
-    const confirmPassword = document.getElementById("confirmPassword").value.trim();
-
-    // Basic validation
-    if (!newPassword || !confirmPassword) {
-      alert("Please fill in both password fields.");
+  document.getElementById("change-password-btn").addEventListener("click", async function() {
+    const currentPassword = document.getElementById("currentPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    
+    // Validate fields
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      alert("Please fill in all password fields.");
       return;
     }
+    
+    if (newPassword.length < 6) {
+      alert("New password must be at least 6 characters long.");
+      return;
+    }
+    
     if (newPassword !== confirmPassword) {
-      alert("Passwords do not match.");
+      alert("New passwords do not match.");
       return;
     }
 
     // Get JWT Token
     const token = localStorage.getItem("jwt_token");
     if (!token) {
-      alert("Authentication token missing. Please login.");
+      alert("Authentication token missing. Please login again.");
+      window.location.href = "/login.html";
       return;
     }
 
-
     try {
+      showLoader();
       const response = await fetch("/api/auth/change-password", {
-        method: "POST",  credentials: "include",
-
+        method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify({newPassword,confirmPassword}),
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+          confirmPassword
+        })
       });
 
       const result = await response.json();
+      hideLoader();
 
       if (response.ok) {
-        alert("Password changed successfully!");
-        console.log(result);
-        window.location.href = "/login.html"; // redirect after success
+        alert("Password changed successfully! Please login again with your new password.");
+        // Clear token and redirect to login
+        localStorage.removeItem("jwt_token");
+        window.location.href = "/login.html";
       } else {
-        alert("Error: " + (result.message || "Something went wrong"));
-        console.error(result);
+        throw new Error(result.message || "Failed to change password");
       }
     } catch (error) {
-      console.error("Fetch error:", error);
-      alert("An error occurred while changing password.");
+      console.error("Password change error:", error);
+      alert(error.message || "An error occurred while changing password. Please try again.");
     }
   });
 });

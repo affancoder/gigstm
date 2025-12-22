@@ -85,34 +85,52 @@ exports.logout = (req, res) => {
 
 // Change user password
 exports.changePassword = catchAsync(async (req, res, next) => {
-  const userId = req.user.id; // Assuming user is authenticated and req.user is set
-  console.log("req : ", req.body)
-  const { newPassword, confirmPassword } = req.body;
+  const userId = req.user.id; // User is authenticated and req.user is set by the protect middleware
+  const { currentPassword, newPassword, confirmPassword } = req.body;
 
   // 1) Validate input
-  if (!newPassword || !confirmPassword) {
-    return next(new AppError('Please provide both new password and confirmation', 400));
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    return next(new AppError('Please provide all required fields', 400));
   }
 
   if (newPassword !== confirmPassword) {
-    return next(new AppError('Passwords do not match', 400));
+    return next(new AppError('New passwords do not match', 400));
   }
 
-  // 2) Fetch user from DB
-  const user = await User.findById(userId).select('+password');
+  if (newPassword.length < 6) {
+    return next(new AppError('Password must be at least 6 characters long', 400));
+  }
 
+  // 2) Fetch user from DB with password
+  const user = await User.findById(userId).select('+password');
   if (!user) {
     return next(new AppError('User not found', 404));
   }
 
-  // 3) Update password
-  user.password = newPassword; // assume User model hashes password in pre-save hook
+  // 3) Verify current password
+  const isPasswordCorrect = await user.correctPassword(currentPassword, user.password);
+  if (!isPasswordCorrect) {
+    return next(new AppError('Your current password is incorrect', 401));
+  }
+
+  // 4) Check if new password is different from current
+  if (currentPassword === newPassword) {
+    return next(new AppError('New password must be different from current password', 400));
+  }
+
+  // 5) Update password (password is hashed in the User model pre-save hook)
+  user.password = newPassword;
+  user.passwordChangedAt = Date.now() - 1000; // Ensure token is still valid
   await user.save();
 
-  // 4) Optionally, invalidate old JWTs (e.g., by changing passwordChangedAt)
+  // 6) Log out all sessions by sending a cookie that expires immediately
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 1),
+    httpOnly: true
+  });
 
   res.status(200).json({
     status: 'success',
-    message: 'Password changed successfully',
+    message: 'Password changed successfully. Please login again with your new password.'
   });
 });
