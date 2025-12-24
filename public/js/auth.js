@@ -324,6 +324,11 @@ function checkForSuccessMessage() {
 	}
 }
 
+function showPasswordReset(event) {
+  event.preventDefault();
+  document.getElementById("forgot-password-modal").style.display = "flex";
+}
+
 // ==========================
 // EVENT LISTENERS
 // ==========================
@@ -340,4 +345,23 @@ document.addEventListener("DOMContentLoaded", () => {
 		document.getElementById("logout-btn") ||
 		document.getElementById("logout-button");
 	if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
+
+    // Password visibility toggle
+    document.querySelectorAll(".toggle-password").forEach((toggle) => {
+        toggle.addEventListener("click", function () {
+            const targetId = this.dataset.target;
+            const passwordInput = document.getElementById(targetId);
+
+            // Toggle the type attribute
+            const type =
+                passwordInput.getAttribute("type") === "password"
+                    ? "text"
+                    : "password";
+            passwordInput.setAttribute("type", type);
+
+            // Toggle the eye icon
+            this.classList.toggle("fa-eye");
+            this.classList.toggle("fa-eye-slash");
+        });
+    });
 });

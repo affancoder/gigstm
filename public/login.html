@@ -119,15 +119,17 @@
 							/>
 						</div>
 						<div class="form-group">
-							<label for="login-password">Password</label>
-							<input
-								type="password"
-								id="login-password"
-								placeholder="Enter your password"
-								required
-							/>
-						</div>
-						<button
+						    <label for="login-password">Password</label>
+						    <div class="password-input-container">
+						        <input
+						            type="password"
+						            id="login-password"
+						            placeholder="Enter your password"
+						            required
+						        />
+						        <i class="fas fa-eye-slash toggle-password" data-target="login-password"></i>
+						    </div>
+						</div>						<button
 							type="submit"
 							id="login-btn"
 							class="auth-button"
@@ -260,28 +262,33 @@
 							/>
 						</div>
 						<div class="form-group">
-							<label for="signup-password"
-								>Password <span class="required">*</span></label
-							>
-							<input
-								type="password"
-								id="signup-password"
-								placeholder="Create a password"
-								required
-								minlength="8"
-							/>
-						</div>
-						<div class="form-group">
+						    <label for="signup-password"
+						        >Password <span class="required">*</span></label
+						    >
+						    <div class="password-input-container">
+						        <input
+						            type="password"
+						            id="signup-password"
+						            placeholder="Create a password"
+						            required
+						            minlength="8"
+						        />
+						        <i class="fas fa-eye-slash toggle-password" data-target="signup-password"></i>
+						    </div>
+						</div>						<div class="form-group">
 							<label for="confirm-password"
 								>Confirm Password
 								<span class="required">*</span></label
 							>
-							<input
-								type="password"
-								id="signup-confirm-password"
-								placeholder="Confirm your password"
-								required
-							/>
+							<div class="password-input-container">
+								<input
+									type="password"
+									id="signup-confirm-password"
+									placeholder="Confirm your password"
+									required
+								/>
+								<i class="fas fa-eye-slash toggle-password" data-target="signup-confirm-password"></i>
+							</div>
 						</div>
 						<button
 							type="submit"

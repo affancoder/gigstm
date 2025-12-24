@@ -458,3 +458,29 @@ main {
 .footer p {
     margin: 0;
 }
+
+/* Password input toggle styles */
+.password-input-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-container input[type="password"],
+.password-input-container input[type="text"] {
+    padding-right: 2.5rem; /* Make space for the icon */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 1rem;
+    cursor: pointer;
+    color: #adb4b7;
+    transition: color 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.toggle-password:hover {
+    color: #026bae;
+}
