@@ -56,6 +56,10 @@ app.use(
 // ----------------- ROUTES ----------------- //
 app.use("/", routes);
 
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/v1/auth', authRoutes);
+
+
 // ----------------- ERROR HANDLER ----------------- //
 app.use((err, req, res, next) => {
   console.error("Error:", err.stack);

@@ -1,136 +1,291 @@
-const User = require('../models/user');
-const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
-const { createSendToken } = require('../utils/jwtUtils');
+const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 
-// Signup a new user
-exports.signup = catchAsync(async (req, res, next) => {
-  const { name, email, password, passwordConfirm } = req.body;
-
-  // 1) Check if user exists
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    return next(new AppError('Email already in use', 400));
-  }
-
-   if (password !== passwordConfirm) {
-    return next(new AppError('Passwords do not match', 400));
-  }
-
-  // 2) Create new user
-  const newUser = await User.create({
-    name,
-    email,
-    password
+// Generate JWT Token
+const signToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN || '90d'
   });
+};
 
-  // 3) Remove password from output
-  newUser.password = undefined;
+// Send response with token
+const createSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
 
-  // 4) Generate token and send response
-  createSendToken(newUser, 201, res);
-});
+  const cookieOptions = {
+    expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production'
+  };
 
-// Login user
-exports.login = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
+  res.cookie('jwt', token, cookieOptions);
 
-  // 1) Check if email and password exist
-  if (!email || !password) {
-    return next(new AppError('Please provide email and password!', 400));
-  }
+  user.password = undefined;
 
-  // 2) Check if user exists && password is correct
-  const user = await User.findOne({ email }).select('+password');
-  
-  if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Incorrect email or password', 401));
-  }
+  res.status(statusCode).json({
+    status: 'success',
+    token,
+    data: {
+      user
+    }
+  });
+};
 
-  // 3) If everything ok, send token to client
-  createSendToken(user, 200, res);
-});
+// Register
+exports.register = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
 
-// Check if user is logged in
-exports.isLoggedIn = (req, res, next) => {
-  if (req.session && req.session.user) {
-    return res.status(200).json({
-      status: 'success',
-      isLoggedIn: true,
-      user: req.session.user
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Email already registered'
+      });
+    }
+
+    const newUser = await User.create({
+      name,
+      email,
+      password
+    });
+
+    createSendToken(newUser, 201, res);
+  } catch (error) {
+    console.error('Register error:', error);
+    res.status(400).json({
+      status: 'error',
+      message: error.message
     });
   }
-  return res.status(200).json({
-    status: 'success',
-    isLoggedIn: false
-  });
 };
 
-// Logout user
+// Login
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Please provide email and password'
+      });
+    }
+
+    const user = await User.findOne({ email }).select('+password');
+
+    if (!user || !(await user.correctPassword(password, user.password))) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Incorrect email or password'
+      });
+    }
+
+    createSendToken(user, 200, res);
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(400).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+};
+
+// Forgot Password
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    console.log('🔍 Password reset requested for:', email);
+
+    // 1) Validate email input
+    if (!email) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Please provide an email address'
+      });
+    }
+
+    // 2) Get user based on email
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
+      console.log('❌ User not found:', email);
+      return res.status(404).json({
+        status: 'error',
+        message: 'No user found with that email address'
+      });
+    }
+
+    console.log('✅ User found:', user.name, user.email);
+
+    // 3) Generate random reset token
+    const resetToken = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
+    console.log('✅ Reset token generated');
+
+    // 4) Send it to user's email
+    const resetURL = `${req.protocol}://${req.get('host')}/reset-password.html?token=${resetToken}`;
+
+    console.log('📧 Attempting to send email...');
+    console.log('Email config:', {
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      user: process.env.EMAIL_USERNAME,
+      hasPassword: !!process.env.EMAIL_PASSWORD,
+      passwordLength: process.env.EMAIL_PASSWORD ? process.env.EMAIL_PASSWORD.length : 0
+    });
+
+    try {
+      // Configure email transporter
+      const transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port: parseInt(process.env.EMAIL_PORT),
+        secure: process.env.EMAIL_PORT === '465', // true for 465, false for other ports
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD
+        },
+        tls: {
+          rejectUnauthorized: false // For development
+        },
+        debug: true, // Enable debug output
+        logger: true // Log to console
+      });
+
+      // Verify connection configuration
+      console.log('🔄 Verifying SMTP connection...');
+      await transporter.verify();
+      console.log('✅ SMTP connection verified successfully');
+
+      const mailOptions = {
+        from: `"GigsTm" <${process.env.EMAIL_USERNAME}>`,
+        to: user.email,
+        subject: 'Password Reset Request (Valid for 10 minutes)',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #026bae;">Password Reset Request</h2>
+            <p>Hi ${user.name},</p>
+            <p>You requested to reset your password. Click the button below to reset it:</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${resetURL}" 
+                 style="background-color: #026bae; color: white; padding: 12px 30px; 
+                        text-decoration: none; border-radius: 5px; display: inline-block;">
+                Reset Password
+              </a>
+            </div>
+            <p>Or copy and paste this link into your browser:</p>
+            <p style="color: #666; word-break: break-all;">${resetURL}</p>
+            <p><strong>This link will expire in 10 minutes.</strong></p>
+            <p>If you didn't request this, please ignore this email.</p>
+            <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+            <p style="color: #999; font-size: 12px;">GigsTm - All rights reserved</p>
+          </div>
+        `
+      };
+
+      console.log('📤 Sending email to:', user.email);
+      const info = await transporter.sendMail(mailOptions);
+      console.log('✅ Email sent successfully!');
+      console.log('Message ID:', info.messageId);
+      console.log('Response:', info.response);
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Password reset link sent to your email'
+      });
+    } catch (err) {
+      console.error('❌ Email sending error:');
+      console.error('Error message:', err.message);
+      console.error('Error code:', err.code);
+      console.error('Error command:', err.command);
+      console.error('Full error:', err);
+
+      // Rollback token
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      return res.status(500).json({
+        status: 'error',
+        message: 'Error sending email. Please try again later.',
+        ...(process.env.NODE_ENV === 'development' && {
+          debug: {
+            error: err.message,
+            code: err.code
+          }
+        })
+      });
+    }
+  } catch (error) {
+    console.error('❌ Forgot password error:', error);
+    res.status(400).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+};
+
+// Reset Password
+exports.resetPassword = async (req, res) => {
+  try {
+    console.log('🔄 Password reset attempt with token');
+
+    // 1) Get user based on token
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(req.params.token)
+      .digest('hex');
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() }
+    });
+
+    // 2) If token valid and not expired, set new password
+    if (!user) {
+      console.log('❌ Invalid or expired token');
+      return res.status(400).json({
+        status: 'error',
+        message: 'Token is invalid or has expired'
+      });
+    }
+
+    console.log('✅ Valid token found for user:', user.email);
+
+    // Validate password
+    if (!req.body.password || req.body.password.length < 8) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Password must be at least 8 characters long'
+      });
+    }
+
+    user.password = req.body.password;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+
+    console.log('✅ Password reset successful for:', user.email);
+
+    // 3) Log the user in, send JWT
+    createSendToken(user, 200, res);
+  } catch (error) {
+    console.error('❌ Reset password error:', error);
+    res.status(400).json({
+      status: 'error',
+      message: error.message
+    });
+  }
+};
+
+// Logout
 exports.logout = (req, res) => {
-  res.cookie("jwt", "loggedout", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    expires: new Date(Date.now() + 1000) // expires immediately
-  });
-
-  res.status(200).json({
-    status: "success",
-    message: "Logged out successfully!"
-  });
-};
-
-
-
-// Change user password
-exports.changePassword = catchAsync(async (req, res, next) => {
-  const userId = req.user.id; // User is authenticated and req.user is set by the protect middleware
-  const { currentPassword, newPassword, confirmPassword } = req.body;
-
-  // 1) Validate input
-  if (!currentPassword || !newPassword || !confirmPassword) {
-    return next(new AppError('Please provide all required fields', 400));
-  }
-
-  if (newPassword !== confirmPassword) {
-    return next(new AppError('New passwords do not match', 400));
-  }
-
-  if (newPassword.length < 6) {
-    return next(new AppError('Password must be at least 6 characters long', 400));
-  }
-
-  // 2) Fetch user from DB with password
-  const user = await User.findById(userId).select('+password');
-  if (!user) {
-    return next(new AppError('User not found', 404));
-  }
-
-  // 3) Verify current password
-  const isPasswordCorrect = await user.correctPassword(currentPassword, user.password);
-  if (!isPasswordCorrect) {
-    return next(new AppError('Your current password is incorrect', 401));
-  }
-
-  // 4) Check if new password is different from current
-  if (currentPassword === newPassword) {
-    return next(new AppError('New password must be different from current password', 400));
-  }
-
-  // 5) Update password (password is hashed in the User model pre-save hook)
-  user.password = newPassword;
-  user.passwordChangedAt = Date.now() - 1000; // Ensure token is still valid
-  await user.save();
-
-  // 6) Log out all sessions by sending a cookie that expires immediately
   res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 1),
+    expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true
   });
-
-  res.status(200).json({
-    status: 'success',
-    message: 'Password changed successfully. Please login again with your new password.'
-  });
-});
+  res.status(200).json({ status: 'success' });
+};

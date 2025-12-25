@@ -51,9 +51,13 @@ function hideLoader() {
 // ==========================
 // MESSAGE HANDLER
 // ==========================
-function showMessage() {
-	// This function is intentionally empty to prevent any error messages from showing
-	return;
+function showMessage(elementId, message, type = "error") {
+	const messageElement = document.getElementById(elementId);
+	if (messageElement) {
+		messageElement.textContent = message;
+		messageElement.className = `auth-message ${type}`;
+		messageElement.style.display = "block";
+	}
 }
 
 // ==========================
@@ -365,3 +369,90 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+// ==========================
+// PASSWORD RESET
+// ==========================
+async function handlePasswordReset() {
+	const email = document.getElementById("reset-email").value.trim();
+	const resetMessage = document.getElementById("reset-message");
+	const resetBtn = document.getElementById("reset-password-btn");
+	const originalBtnText = resetBtn.innerHTML;
+
+	if (!email) {
+		resetMessage.textContent = "Please enter your email address";
+		resetMessage.className = "auth-message error";
+		return;
+	}
+
+	try {
+		// Show loading state
+		resetBtn.disabled = true;
+		resetBtn.innerHTML =
+			'<i class="fas fa-spinner fa-spin"></i> Sending...';
+		showLoader("Sending reset link...");
+
+		// FIXED: Changed endpoint from /reset-password to /forgot-password
+		const response = await fetch(`${API_URL}/auth/forgot-password`, {
+			method: "POST",
+			credentials: "include",
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+			},
+			body: JSON.stringify({ email }),
+		});
+
+		const data = await response.json();
+		console.log("Password reset response:", data);
+
+		if (!response.ok) {
+			throw new Error(
+				data.message || "Failed to send reset link. Please try again."
+			);
+		}
+
+		// Show success message
+		resetMessage.textContent = data.message || "Reset link sent to your email!";
+		resetMessage.className = "auth-message success";
+		
+		// Clear the email input
+		document.getElementById("reset-email").value = "";
+		
+		// Close modal after 3 seconds
+		setTimeout(() => {
+			document.getElementById("forgot-password-modal").style.display = "none";
+			resetMessage.textContent = "";
+			resetMessage.className = "auth-message";
+		}, 3000);
+
+	} catch (error) {
+		console.error("Password reset error:", error);
+		resetMessage.textContent =
+			error.message || "Failed to send reset link. Please try again.";
+		resetMessage.className = "auth-message error";
+	} finally {
+		// Reset button state and hide loader
+		hideLoader();
+		if (resetBtn) {
+			resetBtn.disabled = false;
+			resetBtn.innerHTML = originalBtnText;
+		}
+	}
+}
+
+// Show success message after signup redirect or password reset
+function checkForSuccessMessage() {
+	const signupSuccess = sessionStorage.getItem("signupSuccess");
+	const passwordResetSuccess = sessionStorage.getItem("passwordResetSuccess");
+	
+	if (signupSuccess) {
+		showMessage("login-message", signupSuccess, "success");
+		sessionStorage.removeItem("signupSuccess");
+	}
+	
+	if (passwordResetSuccess) {
+		showMessage("login-message", passwordResetSuccess, "success");
+		sessionStorage.removeItem("passwordResetSuccess");
+	}
+}
