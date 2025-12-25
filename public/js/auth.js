@@ -145,7 +145,7 @@ async function handleSignUp(event) {
 		showLoader("Creating your account...");
 
 		// Make signup request
-		const signupResponse = await fetch(`${API_URL}/auth/signup`, {
+		const signupResponse = await fetch(`${API_URL}/auth/register`, {
 			method: "POST",  credentials: "include",
 
 			headers: {

@@ -229,6 +229,43 @@ exports.forgotPassword = async (req, res) => {
 };
 
 // Reset Password
+// Change Password
+exports.changePassword = async (req, res) => {
+  try {
+    // 1) Get user from collection
+    const user = await User.findById(req.user.id).select('+password');
+
+    // 2) Check if current password is correct
+    if (!(await user.correctPassword(req.body.currentPassword, user.password))) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Your current password is incorrect'
+      });
+    }
+
+    // 3) Check if new passwords match
+    if (req.body.newPassword !== req.body.confirmPassword) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'New passwords do not match'
+      });
+    }
+
+    // 4) Update password
+    user.password = req.body.newPassword;
+    await user.save();
+
+    // 5) Log user in, send JWT
+    createSendToken(user, 200, res);
+  } catch (error) {
+    console.error('Change password error:', error);
+    res.status(400).json({
+      status: 'error',
+      message: 'Error changing password. Please try again.'
+    });
+  }
+};
+
 exports.resetPassword = async (req, res) => {
   try {
     console.log('🔄 Password reset attempt with token');

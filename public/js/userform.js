@@ -404,7 +404,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return; // Stop if validation fails
       }
       
-      showLoader(); // Show loader when form is submitted
+      showLoader();
 
       const form = e.target;
       const formData = new FormData(form);
@@ -412,35 +412,42 @@ document.addEventListener("DOMContentLoaded", function () {
       // Get JWT Token
       const token = localStorage.getItem("jwt_token");
       if (!token) {
-        hideLoader(); // Hide loader on error
-        alert("Authentication token missing. Please login.");
+        hideLoader();
+        alert("Authentication token missing. Please login again.");
+        window.location.href = "/login.html";
         return;
       }
 
       try {
+        // Use the correct endpoint for KYC submission
         const response = await fetch("/api/user/kyc", {
-          method: "POST",  credentials: "include",
-
+          method: "POST",
           headers: {
-            Authorization: `Bearer ${token}`,
-            // DO NOT set content-type manually
+            "Authorization": `Bearer ${token}`
+            // Let the browser set Content-Type with boundary for FormData
           },
           body: formData,
+          credentials: 'include' // Important for cookies/sessions if used
         });
 
         const result = await response.json();
+        hideLoader();
 
         if (response.ok) {
           alert("KYC details saved successfully!");
-          console.log(result);
-          window.location.href = "/success.html";
+          console.log("KYC Response:", result);
+          // Optionally redirect or update UI
+          if (result.redirect) {
+            window.location.href = result.redirect;
+          }
         } else {
-          alert("Error: " + (result.message || "Something went wrong"));
-          console.error(result);
+          throw new Error(result.message || "Failed to save KYC details");
         }
       } catch (error) {
-        console.error("Fetch error:", error);
-        alert("An error occurred while submitting KYC details.");
+        console.error("KYC submission error:", error);
+        alert(error.message || "An error occurred while saving KYC details. Please try again.");
+      } finally {
+        hideLoader();
       }
     });
 
@@ -518,7 +525,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
       showLoader();
-      const response = await fetch("/api/auth/change-password", {
+      const response = await fetch("/api/v1/auth/change-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

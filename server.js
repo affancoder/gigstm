@@ -54,10 +54,14 @@ app.use(
 );
 
 // ----------------- ROUTES ----------------- //
-app.use("/", routes);
-
+// API Routes
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/user', userRoutes);
+
+app.use("/", routes);
 
 
 // ----------------- ERROR HANDLER ----------------- //
