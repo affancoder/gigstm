@@ -16,6 +16,9 @@ function togglePasswordVisibility(inputId) {
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM fully loaded");
 
+  // Call populateForm to pre-fill data
+  populateForm();
+
   // Add click event listeners for all password toggle buttons
   document.addEventListener('click', function(e) {
     const toggleBtn = e.target.closest('.toggle-visibility');
@@ -554,4 +557,126 @@ document.addEventListener("DOMContentLoaded", function () {
       alert(error.message || "An error occurred while changing password. Please try again.");
     }
   });
+
+  // ==========================================
+  // Persistent Form Filling Logic
+  // ==========================================
+
+  function setFieldValue(id, value) {
+    if (value === undefined || value === null) return;
+    const element = document.getElementById(id);
+    if (element) {
+      element.value = value;
+    }
+  }
+
+  function setFileStatus(id, path) {
+    const element = document.getElementById(id);
+    if (element && path) {
+      // Extract filename from path
+      const filename = path.split(/[\\/]/).pop();
+      element.textContent = "Uploaded: " + filename;
+      element.style.color = "green";
+      element.style.fontWeight = "bold";
+    }
+  }
+
+  async function populateForm() {
+    const token = localStorage.getItem("jwt_token");
+    if (!token) return;
+
+    try {
+      showLoader();
+
+      const response = await fetch("/api/user/me/combined", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
+      }
+
+      const result = await response.json();
+      const { user, profile, experience, kyc } = result.data || {};
+
+      console.log("Fetched user data:", result.data);
+
+      // 1. Populate Profile
+      if (profile) {
+        setFieldValue("name", profile.name);
+        setFieldValue("email", profile.email || user?.email);
+        setFieldValue("mobile", profile.mobile);
+        setFieldValue("job-role", profile.jobRole);
+        setFieldValue("gender", profile.gender);
+        
+        if (profile.dob) {
+           const dobDate = new Date(profile.dob);
+           if (!isNaN(dobDate)) {
+               setFieldValue("dob", dobDate.toISOString().split('T')[0]);
+           }
+        }
+        
+        setFieldValue("aadhaar", profile.aadhaar);
+        setFieldValue("pan", profile.pan);
+        setFieldValue("country", profile.country);
+        setFieldValue("state", profile.state);
+        setFieldValue("city", profile.city);
+        setFieldValue("address1", profile.address1);
+        setFieldValue("address2", profile.address2);
+        setFieldValue("pincode", profile.pincode);
+        setFieldValue("about", profile.about);
+
+        // Files
+        if (profile.profileImage) {
+            setFileStatus("profile-status", profile.profileImage);
+            const avatar = document.getElementById("user-photo");
+            if (avatar) avatar.src = profile.profileImage;
+        }
+        if (profile.aadhaarFile) setFileStatus("aadhaar-status", profile.aadhaarFile);
+        if (profile.panFile) setFileStatus("pan-status", profile.panFile);
+        if (profile.resumeFile) setFileStatus("resume-status", profile.resumeFile);
+        
+        // Sidebar email
+        const emailDisplay = document.getElementById("user-email");
+        if(emailDisplay) emailDisplay.textContent = profile.email || user?.email;
+      } else if (user) {
+          setFieldValue("name", user.name);
+          setFieldValue("email", user.email);
+          const emailDisplay = document.getElementById("user-email");
+          if(emailDisplay) emailDisplay.textContent = user.email;
+      }
+
+      // 2. Populate Experience
+      if (experience) {
+        setFieldValue("experienceYears", experience.experienceYears);
+        setFieldValue("experienceMonths", experience.experienceMonths);
+        setFieldValue("employmentType", experience.employmentType);
+        setFieldValue("occupation", experience.occupation);
+        setFieldValue("jobRequirement", experience.jobRequirement);
+        setFieldValue("heardAbout", experience.heardAbout);
+        setFieldValue("interestType", experience.interestType);
+        
+        if (experience.resumeStep2) setFileStatus("resumeStep2-status", experience.resumeStep2);
+      }
+
+      // 3. Populate KYC
+      if (kyc) {
+        setFieldValue("bankName", kyc.bankName);
+        setFieldValue("accountNumber", kyc.accountNumber);
+        setFieldValue("ifscCode", kyc.ifscCode);
+        
+        if (kyc.aadhaarFront) setFileStatus("aadhaarFront-status", kyc.aadhaarFront);
+        if (kyc.aadhaarBack) setFileStatus("aadhaarBack-status", kyc.aadhaarBack);
+        if (kyc.panCardUpload) setFileStatus("panCardUpload-status", kyc.panCardUpload);
+        if (kyc.passbookUpload) setFileStatus("passbookUpload-status", kyc.passbookUpload);
+      }
+
+    } catch (error) {
+      console.error("Error fetching user data for pre-fill:", error);
+    } finally {
+      hideLoader();
+    }
+  }
 });
