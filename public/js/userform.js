@@ -16,8 +16,102 @@ function togglePasswordVisibility(inputId) {
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM fully loaded");
 
+  // Function to calculate and update progress bar
+  function updateProgressBar() {
+    const form = document.getElementById('user-profile');
+    if (!form) return;
+
+    // Define sections and their panels
+    const sections = [
+      { name: 'Personal Details', panelId: 'step1-panel' },
+      { name: 'Experience', panelId: 'step2-panel' },
+      { name: 'KYC Details', panelId: 'kyc-panel' }
+    ];
+
+    let totalFields = 0;
+    let totalFilledFields = 0;
+
+    // Calculate progress for each section
+    sections.forEach(section => {
+      const panel = document.getElementById(section.panelId);
+      if (!panel) return;
+
+      // Get all input and select fields in this panel (excluding hidden fields and buttons)
+      const fields = panel.querySelectorAll('input:not([type="hidden"]):not([type="button"]):not([type="submit"]), select, textarea');
+      
+      fields.forEach(field => {
+        totalFields++;
+        if (field.value && field.value.trim() !== '') {
+          totalFilledFields++;
+        }
+      });
+    });
+
+    // Calculate percentage
+    const percentage = totalFields > 0 ? Math.round((totalFilledFields / totalFields) * 100) : 0;
+    
+    // Update progress bar
+    const progressBar = document.getElementById('progress-bar');
+    const progressPercentage = document.getElementById('progress-percentage');
+    if (progressBar) {
+      progressBar.style.width = percentage + '%';
+    }
+    if (progressPercentage) {
+      progressPercentage.textContent = percentage + '%';
+    }
+
+    // Update unlock button state
+    const unlockButton = document.getElementById('unlock-button');
+    if (unlockButton) {
+      if (percentage === 100) {
+        unlockButton.disabled = false;
+        unlockButton.innerHTML = '<i class="fas fa-unlock"></i> Unlocked - Job Categories';
+        unlockButton.title = 'All fields completed! Click to proceed to job categories.';
+      } else {
+        unlockButton.disabled = true;
+        unlockButton.innerHTML = `<i class="fas fa-lock"></i> ${percentage}% Complete`;
+        unlockButton.title = `Complete all fields to unlock (${percentage}%)`;
+      }
+    }
+
+    // If progress reaches 100%, save data
+    if (percentage === 100) {
+      saveProfileData();
+    }
+  }
+
+  // Function to save all form data
+  async function saveProfileData() {
+    try {
+      // Collect all form data
+      const formData = new FormData(document.getElementById('user-profile'));
+      
+      // Save profile data
+      const profileResponse = await fetch("/api/user/profile", {
+        method: "POST",
+        credentials: "include",
+        body: formData
+      });
+
+      if (!profileResponse.ok) {
+        console.error("Failed to save profile");
+      }
+
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
+  }
+
+  // Function to redirect to job-categories
+  function goToJobCategories() {
+    window.location.href = '/job-categories.html';
+  }
+
   // Call populateForm to pre-fill data
   populateForm();
+
+  // Update progress bar after form is populated
+  setTimeout(updateProgressBar, 100);
 
   // Add click event listeners for all password toggle buttons
   document.addEventListener('click', function(e) {
@@ -28,6 +122,16 @@ document.addEventListener("DOMContentLoaded", function () {
       togglePasswordVisibility(targetId);
     }
   });
+
+  // Add click event listener for unlock button
+  const unlockButton = document.getElementById('unlock-button');
+  if (unlockButton) {
+    unlockButton.addEventListener('click', function() {
+      if (!this.disabled) {
+        goToJobCategories();
+      }
+    });
+  }
 
   // Get all tab links and panels
   const tabLinks = document.querySelectorAll(".tab-link");
@@ -302,7 +406,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (response.ok) {
           alert("Profile submitted successfully!");
-          window.location.href = "/success.html";
+          // window.location.href = "/success.html";
           console.log(result);
         } else {
           alert("Error: " + (result.message || "Something went wrong"));
@@ -374,7 +478,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (response.ok) {
           alert("Experience details saved successfully!");
           console.log(result);
-          window.location.href = "/success.html";
+          // window.location.href = "/success.html";
         } else {
           alert("Error: " + (result.message || "Something went wrong"));
           console.error(result);
@@ -678,5 +782,21 @@ document.addEventListener("DOMContentLoaded", function () {
     } finally {
       hideLoader();
     }
+  }
+
+  // Add event listeners to all form fields in Personal Details, Experience, and KYC sections to update progress bar
+  const form = document.getElementById('user-profile');
+  if (form) {
+    const sections = ['step1-panel', 'step2-panel', 'kyc-panel'];
+    sections.forEach(sectionId => {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        const fields = section.querySelectorAll('input:not([type="hidden"]):not([type="button"]):not([type="submit"]), select, textarea');
+        fields.forEach(field => {
+          field.addEventListener('input', updateProgressBar);
+          field.addEventListener('change', updateProgressBar);
+        });
+      }
+    });
   }
 });
