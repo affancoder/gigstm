@@ -4,11 +4,11 @@ console.log("userform.js loaded");
 function togglePasswordVisibility(inputId) {
   const input = document.getElementById(inputId);
   if (input) {
-    input.type = input.type === 'password' ? 'text' : 'password';
+    input.type = input.type === "password" ? "text" : "password";
     const icon = document.querySelector(`[data-target="#${inputId}"] i`);
     if (icon) {
-      icon.classList.toggle('fa-eye');
-      icon.classList.toggle('fa-eye-slash');
+      icon.classList.toggle("fa-eye");
+      icon.classList.toggle("fa-eye-slash");
     }
   }
 }
@@ -18,55 +18,60 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to calculate and update progress bar
   function updateProgressBar() {
-    const form = document.getElementById('user-profile');
+    const form = document.getElementById("user-profile");
     if (!form) return;
 
     // Define sections and their panels
     const sections = [
-      { name: 'Personal Details', panelId: 'step1-panel' },
-      { name: 'Experience', panelId: 'step2-panel' },
-      { name: 'KYC Details', panelId: 'kyc-panel' }
+      { name: "Personal Details", panelId: "step1-panel" },
+      { name: "Experience", panelId: "step2-panel" },
+      { name: "KYC Details", panelId: "kyc-panel" },
     ];
 
     let totalFields = 0;
     let totalFilledFields = 0;
 
     // Calculate progress for each section
-    sections.forEach(section => {
+    sections.forEach((section) => {
       const panel = document.getElementById(section.panelId);
       if (!panel) return;
 
       // Get all input and select fields in this panel (excluding hidden fields and buttons)
-      const fields = panel.querySelectorAll('input:not([type="hidden"]):not([type="button"]):not([type="submit"]), select, textarea');
-      
-      fields.forEach(field => {
+      const fields = panel.querySelectorAll(
+        'input:not([type="hidden"]):not([type="button"]):not([type="submit"]), select, textarea'
+      );
+
+      fields.forEach((field) => {
         totalFields++;
-        if (field.value && field.value.trim() !== '') {
+        if (field.value && field.value.trim() !== "") {
           totalFilledFields++;
         }
       });
     });
 
     // Calculate percentage
-    const percentage = totalFields > 0 ? Math.round((totalFilledFields / totalFields) * 100) : 0;
-    
+    const percentage =
+      totalFields > 0 ? Math.round((totalFilledFields / totalFields) * 100) : 0;
+
     // Update progress bar
-    const progressBar = document.getElementById('progress-bar');
-    const progressPercentage = document.getElementById('progress-percentage');
+    const progressBar = document.getElementById("progress-bar");
+    const progressPercentage = document.getElementById("progress-percentage");
     if (progressBar) {
-      progressBar.style.width = percentage + '%';
+      progressBar.style.width = percentage + "%";
     }
     if (progressPercentage) {
-      progressPercentage.textContent = percentage + '%';
+      progressPercentage.textContent = percentage + "%";
     }
 
     // Update unlock button state
-    const unlockButton = document.getElementById('unlock-button');
+    const unlockButton = document.getElementById("unlock-button");
     if (unlockButton) {
       if (percentage === 100) {
         unlockButton.disabled = false;
-        unlockButton.innerHTML = '<i class="fas fa-unlock"></i> Unlocked - Job Categories';
-        unlockButton.title = 'All fields completed! Click to proceed to job categories.';
+        unlockButton.innerHTML =
+          '<i class="fas fa-unlock"></i> Unlocked - Job Categories';
+        unlockButton.title =
+          "All fields completed! Click to proceed to job categories.";
       } else {
         unlockButton.disabled = true;
         unlockButton.innerHTML = `<i class="fas fa-lock"></i> ${percentage}% Complete`;
@@ -84,19 +89,18 @@ document.addEventListener("DOMContentLoaded", function () {
   async function saveProfileData() {
     try {
       // Collect all form data
-      const formData = new FormData(document.getElementById('user-profile'));
-      
+      const formData = new FormData(document.getElementById("user-profile"));
+
       // Save profile data
       const profileResponse = await fetch("/api/user/profile", {
         method: "POST",
         credentials: "include",
-        body: formData
+        body: formData,
       });
 
       if (!profileResponse.ok) {
         console.error("Failed to save profile");
       }
-
     } catch (error) {
       console.error("Error saving data:", error);
     }
@@ -104,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to redirect to job-categories
   function goToJobCategories() {
-    window.location.href = '/job-categories.html';
+    window.location.href = "/job-categories.html";
   }
 
   // Call populateForm to pre-fill data
@@ -114,19 +118,19 @@ document.addEventListener("DOMContentLoaded", function () {
   setTimeout(updateProgressBar, 100);
 
   // Add click event listeners for all password toggle buttons
-  document.addEventListener('click', function(e) {
-    const toggleBtn = e.target.closest('.toggle-visibility');
+  document.addEventListener("click", function (e) {
+    const toggleBtn = e.target.closest(".toggle-visibility");
     if (toggleBtn) {
       e.preventDefault();
-      const targetId = toggleBtn.getAttribute('data-target').replace('#', '');
+      const targetId = toggleBtn.getAttribute("data-target").replace("#", "");
       togglePasswordVisibility(targetId);
     }
   });
 
   // Add click event listener for unlock button
-  const unlockButton = document.getElementById('unlock-button');
+  const unlockButton = document.getElementById("unlock-button");
   if (unlockButton) {
-    unlockButton.addEventListener('click', function() {
+    unlockButton.addEventListener("click", function () {
       if (!this.disabled) {
         goToJobCategories();
       }
@@ -206,69 +210,84 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to show loader
   function showLoader() {
-    const loader = document.getElementById('loader-overlay');
+    const loader = document.getElementById("loader-overlay");
     if (loader) {
-      loader.style.display = 'flex';
-      document.body.style.overflow = 'hidden'; // Prevent scrolling while loading
+      loader.style.display = "flex";
+      document.body.style.overflow = "hidden"; // Prevent scrolling while loading
     }
   }
 
   // Function to validate form fields
   function validateForm(formId) {
     const form = document.getElementById(formId);
-    const requiredFields = form.querySelectorAll('[required]');
+    const requiredFields = form.querySelectorAll("[required]");
     const errors = [];
 
-    requiredFields.forEach(field => {
+    requiredFields.forEach((field) => {
       // Skip hidden fields and disabled fields
       if (field.offsetParent === null || field.disabled) return;
-      
+
       // Check if field is empty
       if (!field.value.trim()) {
-        const fieldName = field.labels?.[0]?.textContent?.replace('*', '').trim() || field.name || 'This field';
+        const fieldName =
+          field.labels?.[0]?.textContent?.replace("*", "").trim() ||
+          field.name ||
+          "This field";
         errors.push(`- ${fieldName} is required`);
       }
-      
+
       // Special validation for email fields
-      if (field.type === 'email' && field.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) {
+      if (
+        field.type === "email" &&
+        field.value.trim() &&
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)
+      ) {
         errors.push(`- Please enter a valid email address`);
       }
-      
+
       // Special validation for phone numbers
-      if (field.type === 'tel' && field.value.trim() && !/^[0-9]{10,15}$/.test(field.value)) {
+      if (
+        field.type === "tel" &&
+        field.value.trim() &&
+        !/^[0-9]{10,15}$/.test(field.value)
+      ) {
         errors.push(`- Please enter a valid phone number`);
       }
-      
+
       // Special validation for file inputs
-      if (field.type === 'file' && field.required && !field.files.length) {
-        const fieldName = field.labels?.[0]?.textContent?.replace('*', '').trim() || field.name || 'This file';
+      if (field.type === "file" && field.required && !field.files.length) {
+        const fieldName =
+          field.labels?.[0]?.textContent?.replace("*", "").trim() ||
+          field.name ||
+          "This file";
         errors.push(`- ${fieldName} is required`);
       }
     });
 
     // If there are errors, show them and return false
     if (errors.length > 0) {
-      showError(errors.join('\n'));
+      showError(errors.join("\n"));
       return false;
     }
-    
+
     return true;
   }
 
   // Function to show error messages in a toast notification
   function showError(message) {
     // Create toast container if it doesn't exist
-    let toastContainer = document.getElementById('toast-container');
+    let toastContainer = document.getElementById("toast-container");
     if (!toastContainer) {
-      toastContainer = document.createElement('div');
-      toastContainer.id = 'toast-container';
-      toastContainer.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 400px;';
+      toastContainer = document.createElement("div");
+      toastContainer.id = "toast-container";
+      toastContainer.style.cssText =
+        "position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 400px;";
       document.body.appendChild(toastContainer);
     }
 
     // Create toast element
-    const toast = document.createElement('div');
-    toast.className = 'error-toast';
+    const toast = document.createElement("div");
+    toast.className = "error-toast";
     toast.style.cssText = `
       background-color: #ffebee;
       color: #c62828;
@@ -285,8 +304,8 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
 
     // Add close button
-    const closeButton = document.createElement('button');
-    closeButton.innerHTML = '&times;';
+    const closeButton = document.createElement("button");
+    closeButton.innerHTML = "&times;";
     closeButton.style.cssText = `
       position: absolute;
       top: 5px;
@@ -298,14 +317,14 @@ document.addEventListener("DOMContentLoaded", function () {
       color: #c62828;
       padding: 0 5px;
     `;
-    closeButton.onclick = function() {
-      toast.style.animation = 'fadeOut 0.3s ease-out';
+    closeButton.onclick = function () {
+      toast.style.animation = "fadeOut 0.3s ease-out";
       setTimeout(() => toast.remove(), 300);
     };
 
     // Add message content
-    const messageDiv = document.createElement('div');
-    messageDiv.style.cssText = 'padding-right: 20px;';
+    const messageDiv = document.createElement("div");
+    messageDiv.style.cssText = "padding-right: 20px;";
     messageDiv.innerHTML = `
       <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px;">
         <i class="fas fa-exclamation-circle" style="font-size: 20px; margin-top: 2px;"></i>
@@ -317,7 +336,7 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
 
     // Add progress bar
-    const progressBar = document.createElement('div');
+    const progressBar = document.createElement("div");
     progressBar.style.cssText = `
       height: 4px;
       background: rgba(198, 40, 40, 0.3);
@@ -335,12 +354,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Auto-remove toast after 5 seconds
     setTimeout(() => {
-      toast.style.animation = 'fadeOut 0.3s ease-out';
+      toast.style.animation = "fadeOut 0.3s ease-out";
       setTimeout(() => toast.remove(), 300);
     }, 5000);
 
     // Add CSS animations
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.textContent = `
       @keyframes slideIn {
         from { transform: translateX(100%); opacity: 0; }
@@ -359,10 +378,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to hide loader
   function hideLoader() {
-    const loader = document.getElementById('loader-overlay');
+    const loader = document.getElementById("loader-overlay");
     if (loader) {
-      loader.style.display = 'none';
-      document.body.style.overflow = 'auto'; // Re-enable scrolling
+      loader.style.display = "none";
+      document.body.style.overflow = "auto"; // Re-enable scrolling
     }
   }
 
@@ -371,12 +390,12 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("user-profile")
     .addEventListener("submit", async function (e) {
       e.preventDefault(); // Prevent default form submission
-      
+
       // Validate form before submission
-      if (!validateForm('user-profile')) {
+      if (!validateForm("user-profile")) {
         return; // Stop if validation fails
       }
-      
+
       showLoader(); // Show loader when form is submitted
 
       const form = e.target;
@@ -392,7 +411,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         const response = await fetch("/api/user/profile", {
-          method: "POST",  credentials: "include",
+          method: "POST",
+          credentials: "include",
 
           headers: {
             Authorization: `Bearer ${token}`, // Include JWT in Authorization header
@@ -442,12 +462,12 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("user-experience")
     .addEventListener("submit", async function (e) {
       e.preventDefault();
-      
+
       // Validate form before submission
-      if (!validateForm('user-experience')) {
+      if (!validateForm("user-experience")) {
         return; // Stop if validation fails
       }
-      
+
       showLoader(); // Show loader when form is submitted
 
       const form = e.target;
@@ -463,7 +483,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       try {
         const response = await fetch("/api/user/experience", {
-          method: "POST",  credentials: "include",
+          method: "POST",
+          credentials: "include",
 
           headers: {
             Authorization: `Bearer ${token}`,
@@ -505,12 +526,12 @@ document.addEventListener("DOMContentLoaded", function () {
     .getElementById("user-kyc")
     .addEventListener("submit", async function (e) {
       e.preventDefault();
-      
+
       // Validate form before submission
-      if (!validateForm('user-kyc')) {
+      if (!validateForm("user-kyc")) {
         return; // Stop if validation fails
       }
-      
+
       showLoader();
 
       const form = e.target;
@@ -530,11 +551,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const response = await fetch("/api/user/kyc", {
           method: "POST",
           headers: {
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
             // Let the browser set Content-Type with boundary for FormData
           },
           body: formData,
-          credentials: 'include' // Important for cookies/sessions if used
+          credentials: "include", // Important for cookies/sessions if used
         });
 
         const result = await response.json();
@@ -552,7 +573,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       } catch (error) {
         console.error("KYC submission error:", error);
-        alert(error.message || "An error occurred while saving KYC details. Please try again.");
+        alert(
+          error.message ||
+            "An error occurred while saving KYC details. Please try again."
+        );
       } finally {
         hideLoader();
       }
@@ -580,7 +604,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-
   // ------------------------------
   // Change Password Button Handler
   // ------------------------------
@@ -601,66 +624,73 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // ===== Handle Change Password Form Submission =====
-  document.getElementById("change-password-btn").addEventListener("click", async function() {
-    const currentPassword = document.getElementById("currentPassword").value;
-    const newPassword = document.getElementById("newPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-    
-    // Validate fields
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      alert("Please fill in all password fields.");
-      return;
-    }
-    
-    if (newPassword.length < 6) {
-      alert("New password must be at least 6 characters long.");
-      return;
-    }
-    
-    if (newPassword !== confirmPassword) {
-      alert("New passwords do not match.");
-      return;
-    }
+  document
+    .getElementById("change-password-btn")
+    .addEventListener("click", async function () {
+      const currentPassword = document.getElementById("currentPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
 
-    // Get JWT Token
-    const token = localStorage.getItem("jwt_token");
-    if (!token) {
-      alert("Authentication token missing. Please login again.");
-      window.location.href = "/login.html";
-      return;
-    }
-
-    try {
-      showLoader();
-      const response = await fetch("/api/v1/auth/change-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          currentPassword,
-          newPassword,
-          confirmPassword
-        })
-      });
-
-      const result = await response.json();
-      hideLoader();
-
-      if (response.ok) {
-        alert("Password changed successfully! Please login again with your new password.");
-        // Clear token and redirect to login
-        localStorage.removeItem("jwt_token");
-        window.location.href = "/login.html";
-      } else {
-        throw new Error(result.message || "Failed to change password");
+      // Validate fields
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        alert("Please fill in all password fields.");
+        return;
       }
-    } catch (error) {
-      console.error("Password change error:", error);
-      alert(error.message || "An error occurred while changing password. Please try again.");
-    }
-  });
+
+      if (newPassword.length < 6) {
+        alert("New password must be at least 6 characters long.");
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        alert("New passwords do not match.");
+        return;
+      }
+
+      // Get JWT Token
+      const token = localStorage.getItem("jwt_token");
+      if (!token) {
+        alert("Authentication token missing. Please login again.");
+        window.location.href = "/login.html";
+        return;
+      }
+
+      try {
+        showLoader();
+        const response = await fetch("/api/v1/auth/change-password", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            currentPassword,
+            newPassword,
+            confirmPassword,
+          }),
+        });
+
+        const result = await response.json();
+        hideLoader();
+
+        if (response.ok) {
+          alert(
+            "Password changed successfully! Please login again with your new password."
+          );
+          // Clear token and redirect to login
+          localStorage.removeItem("jwt_token");
+          window.location.href = "/login.html";
+        } else {
+          throw new Error(result.message || "Failed to change password");
+        }
+      } catch (error) {
+        console.error("Password change error:", error);
+        alert(
+          error.message ||
+            "An error occurred while changing password. Please try again."
+        );
+      }
+    });
 
   // ==========================================
   // Persistent Form Filling Logic
@@ -674,14 +704,40 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // function setFileStatus(id, path) {
+  //   const element = document.getElementById(id);
+  //   if (element && path) {
+  //     // Extract filename from path
+  //     const filename = path.split(/[\\/]/).pop();
+  //     element.textContent = "Uploaded: " + filename;
+  //     element.style.color = "green";
+  //     element.style.fontWeight = "bold";
+  //   }
+  // }
+
   function setFileStatus(id, path) {
     const element = document.getElementById(id);
+    const fileInput = document.getElementById(
+      id.replace("-status", "") + "-file"
+    ); // Assuming file input has similar ID
+
+    const profileImage = document.getElementById("profile-image");
+
     if (element && path) {
       // Extract filename from path
       const filename = path.split(/[\\/]/).pop();
+
       element.textContent = "Uploaded: " + filename;
       element.style.color = "green";
       element.style.fontWeight = "bold";
+
+      // ✅ REMOVE required attribute if file already exists
+      if (fileInput) {
+        fileInput.removeAttribute("required");
+      }
+      if (profileImage && id === "profile-status") {
+        profileImage.removeAttribute("required");
+      }
     }
   }
 
@@ -694,8 +750,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const response = await fetch("/api/user/me/combined", {
         headers: {
-          "Authorization": `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) {
@@ -714,14 +770,14 @@ document.addEventListener("DOMContentLoaded", function () {
         setFieldValue("mobile", profile.mobile);
         setFieldValue("job-role", profile.jobRole);
         setFieldValue("gender", profile.gender);
-        
+
         if (profile.dob) {
-           const dobDate = new Date(profile.dob);
-           if (!isNaN(dobDate)) {
-               setFieldValue("dob", dobDate.toISOString().split('T')[0]);
-           }
+          const dobDate = new Date(profile.dob);
+          if (!isNaN(dobDate)) {
+            setFieldValue("dob", dobDate.toISOString().split("T")[0]);
+          }
         }
-        
+
         setFieldValue("aadhaar", profile.aadhaar);
         setFieldValue("pan", profile.pan);
         setFieldValue("country", profile.country);
@@ -734,22 +790,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Files
         if (profile.profileImage) {
-            setFileStatus("profile-status", profile.profileImage);
-            const avatar = document.getElementById("user-photo");
-            if (avatar) avatar.src = profile.profileImage;
+          setFileStatus("profile-status", profile.profileImage);
+          const avatar = document.getElementById("user-photo");
+          if (avatar) avatar.src = profile.profileImage;
         }
-        if (profile.aadhaarFile) setFileStatus("aadhaar-status", profile.aadhaarFile);
+        if (profile.aadhaarFile)
+          setFileStatus("aadhaar-status", profile.aadhaarFile);
         if (profile.panFile) setFileStatus("pan-status", profile.panFile);
-        if (profile.resumeFile) setFileStatus("resume-status", profile.resumeFile);
-        
+        if (profile.resumeFile)
+          setFileStatus("resume-status", profile.resumeFile);
+
         // Sidebar email
         const emailDisplay = document.getElementById("user-email");
-        if(emailDisplay) emailDisplay.textContent = profile.email || user?.email;
+        if (emailDisplay)
+          emailDisplay.textContent = profile.email || user?.email;
       } else if (user) {
-          setFieldValue("name", user.name);
-          setFieldValue("email", user.email);
-          const emailDisplay = document.getElementById("user-email");
-          if(emailDisplay) emailDisplay.textContent = user.email;
+        setFieldValue("name", user.name);
+        setFieldValue("email", user.email);
+        const emailDisplay = document.getElementById("user-email");
+        if (emailDisplay) emailDisplay.textContent = user.email;
       }
 
       // 2. Populate Experience
@@ -761,8 +820,9 @@ document.addEventListener("DOMContentLoaded", function () {
         setFieldValue("jobRequirement", experience.jobRequirement);
         setFieldValue("heardAbout", experience.heardAbout);
         setFieldValue("interestType", experience.interestType);
-        
-        if (experience.resumeStep2) setFileStatus("resumeStep2-status", experience.resumeStep2);
+
+        if (experience.resumeStep2)
+          setFileStatus("resumeStep2-status", experience.resumeStep2);
       }
 
       // 3. Populate KYC
@@ -770,13 +830,16 @@ document.addEventListener("DOMContentLoaded", function () {
         setFieldValue("bankName", kyc.bankName);
         setFieldValue("accountNumber", kyc.accountNumber);
         setFieldValue("ifscCode", kyc.ifscCode);
-        
-        if (kyc.aadhaarFront) setFileStatus("aadhaarFront-status", kyc.aadhaarFront);
-        if (kyc.aadhaarBack) setFileStatus("aadhaarBack-status", kyc.aadhaarBack);
-        if (kyc.panCardUpload) setFileStatus("panCardUpload-status", kyc.panCardUpload);
-        if (kyc.passbookUpload) setFileStatus("passbookUpload-status", kyc.passbookUpload);
-      }
 
+        if (kyc.aadhaarFront)
+          setFileStatus("aadhaarFront-status", kyc.aadhaarFront);
+        if (kyc.aadhaarBack)
+          setFileStatus("aadhaarBack-status", kyc.aadhaarBack);
+        if (kyc.panCardUpload)
+          setFileStatus("panCardUpload-status", kyc.panCardUpload);
+        if (kyc.passbookUpload)
+          setFileStatus("passbookUpload-status", kyc.passbookUpload);
+      }
     } catch (error) {
       console.error("Error fetching user data for pre-fill:", error);
     } finally {
@@ -785,16 +848,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Add event listeners to all form fields in Personal Details, Experience, and KYC sections to update progress bar
-  const form = document.getElementById('user-profile');
+  const form = document.getElementById("user-profile");
   if (form) {
-    const sections = ['step1-panel', 'step2-panel', 'kyc-panel'];
-    sections.forEach(sectionId => {
+    const sections = ["step1-panel", "step2-panel", "kyc-panel"];
+    sections.forEach((sectionId) => {
       const section = document.getElementById(sectionId);
       if (section) {
-        const fields = section.querySelectorAll('input:not([type="hidden"]):not([type="button"]):not([type="submit"]), select, textarea');
-        fields.forEach(field => {
-          field.addEventListener('input', updateProgressBar);
-          field.addEventListener('change', updateProgressBar);
+        const fields = section.querySelectorAll(
+          'input:not([type="hidden"]):not([type="button"]):not([type="submit"]), select, textarea'
+        );
+        fields.forEach((field) => {
+          field.addEventListener("input", updateProgressBar);
+          field.addEventListener("change", updateProgressBar);
         });
       }
     });
