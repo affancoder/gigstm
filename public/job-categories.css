@@ -29,7 +29,7 @@
     color: white;
     font-weight: 600;
     background-color: #008dbf;
-    padding: 0.9rem 2.1rem;
+    padding: 0.9rem 1.6rem;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -109,7 +109,7 @@
 
 .card-jobs {
   font-size: 1rem;
-  color: #ff6b6b;
+  color: #008dbf;
   font-weight: 700;
   margin-bottom: 1rem;
 }
